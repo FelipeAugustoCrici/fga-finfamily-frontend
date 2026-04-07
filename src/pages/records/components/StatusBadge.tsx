@@ -52,7 +52,10 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
 
   useEffect(() => {
     if (!isOpen) return;
-    const close = () => setIsOpen(false);
+    const close = (e: MouseEvent) => {
+      if (btnRef.current?.contains(e.target as Node)) return;
+      setIsOpen(false);
+    };
     document.addEventListener('mousedown', close);
     window.addEventListener('scroll', close, true);
     return () => {
@@ -116,7 +119,8 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
               return (
                 <button
                   key={key}
-                  onClick={() => { onChange(key); setIsOpen(false); }}
+                  onClick={(e) => { e.stopPropagation(); onChange(key); setIsOpen(false); }}
+                  onMouseDown={(e) => e.stopPropagation()}
                   className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium transition-colors duration-150"
                   style={{
                     color: cfg.style.color,

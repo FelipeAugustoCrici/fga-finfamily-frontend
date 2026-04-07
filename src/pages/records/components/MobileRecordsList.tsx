@@ -248,7 +248,7 @@ function RecordCard({ record, getPersonName, onDelete, deleteLoading, onStatusCh
           <StatusBadge
             status={record.status || 'PENDING'}
             onChange={s => onStatusChange(record.id, s)}
-            disabled={updateLoading}
+            disabled={updateLoading || record.originalType !== 'expense'}
           />
           <span style={{
             fontSize: 11, color: t.text.muted,

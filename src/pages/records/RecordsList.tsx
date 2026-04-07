@@ -57,13 +57,8 @@ const { data: families = [] } = useQuery({
 
   const people = families.flatMap((f) => f.members || []);
 
-  const filteredRecords = _.orderBy(
-    records.filter((item) => {
-      const matchesSearch = item.description?.toLowerCase().includes(filters.search.toLowerCase());
-      return matchesSearch;
-    }),
-    [(t) => new Date(t.date).getTime()],
-    ['desc'],
+  const filteredRecords = records.filter((item) =>
+    item.description?.toLowerCase().includes(filters.search.toLowerCase())
   );
 
 const shouldUseFrontendPagination = filters.search.length > 0;
@@ -285,7 +280,7 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
                           <StatusBadge
                             status={tx.status || 'PENDING'}
                             onChange={(newStatus) => handleStatusChange(tx.id, newStatus)}
-                            disabled={updateStatus.isPending}
+                            disabled={updateStatus.isPending || tx.originalType !== 'expense'}
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -370,7 +365,7 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
               getPersonName={getPersonName}
               onDelete={handleDeleteClick}
               deleteLoading={deleteRecord.isPending}
-              onStatusChange={handleStatusChange}
+              onStatusChange={(id, status) => handleStatusChange(id, status)}
               updateLoading={updateStatus.isPending}
             />
           )}
