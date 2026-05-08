@@ -39,4 +39,8 @@ export const familyService = {
   async deleteMember(memberId: string): Promise<void> {
     await api.delete(`/finance/persons/${memberId}`);
   },
+
+  async resendInvite(memberId: string): Promise<void> {
+    await api.post(`/finance/persons/${memberId}/resend-invite`);
+  },
 };

@@ -71,6 +71,7 @@ if (!phone.startsWith('55')) {
         variant: 'success',
       });
       setIsEditing(false);
+      reset();
     },
     onError: (error) => {
       console.error('Erro ao atualizar perfil:', error);

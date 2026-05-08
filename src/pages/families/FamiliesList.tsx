@@ -9,7 +9,7 @@ import { SkeletonList } from '@/components/ui/Skeleton';
 import { useTokens } from '@/hooks/useTokens';
 import {
   Plus, Users, Trash2, Edit, UserPlus, Loader2, AlertTriangle,
-  ShieldCheck, MoreVertical, UserX, CheckCircle2,
+  ShieldCheck, MoreVertical, UserX, CheckCircle2, Send,
 } from 'lucide-react';
 import { useFamilies } from './hooks/useFamilies';
 import { useCreateFamily } from './hooks/useCreateFamily';
@@ -48,6 +48,17 @@ export function FamiliesList() {
     },
     onError: () => {
       showToast({ title: 'Erro', description: 'Erro ao remover membro', variant: 'error' });
+    },
+  });
+
+  const resendInvite = useMutation({
+    mutationFn: (memberId: string) => familyService.resendInvite(memberId),
+    onSuccess: () => {
+      showToast({ title: 'Convite reenviado', description: 'O email de convite foi reenviado com sucesso!', variant: 'success' });
+      setOpenMenuId(null);
+    },
+    onError: () => {
+      showToast({ title: 'Erro', description: 'Não foi possível reenviar o convite', variant: 'error' });
     },
   });
 
@@ -305,6 +316,30 @@ export function FamiliesList() {
                             minWidth: 160,
                             overflow: 'hidden',
                           }}>
+                            {member.hasAccess && (
+                              <button
+                                onClick={() => resendInvite.mutate(member.id)}
+                                disabled={resendInvite.isPending}
+                                style={{
+                                  width: '100%', padding: '10px 14px',
+                                  display: 'flex', alignItems: 'center', gap: 8,
+                                  background: 'transparent', border: 'none',
+                                  fontSize: 13, color: t.text.link,
+                                  cursor: resendInvite.isPending ? 'not-allowed' : 'pointer',
+                                  textAlign: 'left',
+                                  transition: 'background 0.15s',
+                                  opacity: resendInvite.isPending ? 0.6 : 1,
+                                }}
+                                onMouseEnter={e => (e.currentTarget.style.background = isDark ? 'rgba(99,102,241,0.1)' : 'rgba(99,102,241,0.06)')}
+                                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                              >
+                                {resendInvite.isPending
+                                  ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
+                                  : <Send size={14} />
+                                }
+                                Reenviar convite
+                              </button>
+                            )}
                             <button
                               onClick={() => {
                                 setOpenMenuId(null);

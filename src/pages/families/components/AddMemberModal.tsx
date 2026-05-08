@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -8,7 +7,15 @@ import { Button } from '@/components/ui/Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/useToast';
 import { familyService } from '../services/families.service';
-import { User, Mail, Phone, Lock, ShieldCheck } from 'lucide-react';
+import { User, Mail, Phone, Lock, ShieldCheck, Check, X } from 'lucide-react';
+
+const passwordRules = [
+  { label: 'Mínimo 8 caracteres', test: (v: string) => v.length >= 8 },
+  { label: 'Uma letra minúscula', test: (v: string) => /[a-z]/.test(v) },
+  { label: 'Uma letra maiúscula', test: (v: string) => /[A-Z]/.test(v) },
+  { label: 'Um número', test: (v: string) => /[0-9]/.test(v) },
+  { label: 'Um caractere especial', test: (v: string) => /[^a-zA-Z0-9]/.test(v) },
+];
 
 const schema = z
   .object({
@@ -23,8 +30,8 @@ const schema = z
     { message: 'E-mail é obrigatório para acesso à plataforma', path: ['email'] },
   )
   .refine(
-    (d) => !d.hasAccess || !d.temporaryPassword || d.temporaryPassword.length >= 8,
-    { message: 'Senha temporária deve ter no mínimo 8 caracteres', path: ['temporaryPassword'] },
+    (d) => !d.hasAccess || !d.temporaryPassword || passwordRules.every((r) => r.test(d.temporaryPassword!)),
+    { message: 'A senha não atende todos os requisitos', path: ['temporaryPassword'] },
   );
 
 type FormData = z.infer<typeof schema>;
@@ -45,6 +52,7 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
   });
 
   const hasAccess = watch('hasAccess');
+  const temporaryPassword = watch('temporaryPassword') ?? '';
 
   const mutation = useMutation({
     mutationFn: (data: FormData) =>
@@ -69,6 +77,9 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
   });
 
   const onSubmit = (data: FormData) => mutation.mutate(data);
+
+  const passedRules = passwordRules.filter((r) => r.test(temporaryPassword)).length;
+  const showStrength = hasAccess && temporaryPassword.length > 0;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Adicionar Membro">
@@ -132,14 +143,71 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               Configurações de acesso
             </p>
+
             <Input
               label="Senha temporária (opcional)"
               type="password"
-              placeholder="Mínimo 8 caracteres"
+              placeholder="Digite uma senha segura"
               {...register('temporaryPassword')}
               error={errors.temporaryPassword?.message}
               icon={<Lock size={16} className="text-primary-400" />}
             />
+
+            {/* Barra de força */}
+            {showStrength && (
+              <div className="space-y-2">
+                <div className="flex gap-1">
+                  {passwordRules.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                        i < passedRules
+                          ? passedRules <= 2
+                            ? 'bg-danger-500'
+                            : passedRules <= 3
+                              ? 'bg-yellow-400'
+                              : passedRules <= 4
+                                ? 'bg-blue-400'
+                                : 'bg-green-500'
+                          : 'bg-slate-200'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className={`text-xs font-medium ${
+                  passedRules <= 2 ? 'text-danger-500' :
+                  passedRules <= 3 ? 'text-yellow-500' :
+                  passedRules <= 4 ? 'text-blue-500' : 'text-green-600'
+                }`}>
+                  {passedRules <= 2 ? 'Senha fraca' :
+                   passedRules <= 3 ? 'Senha razoável' :
+                   passedRules <= 4 ? 'Senha boa' : 'Senha forte'}
+                </p>
+              </div>
+            )}
+
+            {/* Checklist de requisitos */}
+            {showStrength && (
+              <ul className="space-y-1">
+                {passwordRules.map((rule) => {
+                  const ok = rule.test(temporaryPassword);
+                  return (
+                    <li key={rule.label} className="flex items-center gap-2">
+                      <span className={`flex items-center justify-center w-4 h-4 rounded-full shrink-0 transition-all ${ok ? 'bg-green-500' : 'bg-slate-200'}`}>
+                        {ok
+                          ? <Check size={10} className="text-white" strokeWidth={3} />
+                          : <X size={10} className="text-slate-400" strokeWidth={3} />
+                        }
+                      </span>
+                      <span className={`text-xs transition-colors ${ok ? 'text-green-700' : 'text-slate-400'}`}>
+                        {rule.label}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
             <p className="text-xs text-slate-400">
               Se não informada, o Cognito enviará um e-mail de convite automaticamente.
             </p>
