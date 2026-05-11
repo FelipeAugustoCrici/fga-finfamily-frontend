@@ -16,6 +16,7 @@ import {
   Loader2,
   Eye,
   Download,
+  MessageSquarePlus,
 } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import { ActionButton } from '@/components/ui/ActionButton';
