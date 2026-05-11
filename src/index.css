@@ -336,3 +336,13 @@ button, a { transition: all 0.2s ease-in-out; }
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* Record form: collapse to single column on small screens */
+@media (max-width: 767px) {
+  .record-form-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .record-form-preview {
+    display: none;
+  }
+}

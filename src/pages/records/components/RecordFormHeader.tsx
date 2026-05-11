@@ -8,29 +8,22 @@ export function RecordFormHeader({ isEdit, isLoading }: { isEdit: boolean; isLoa
   const t = useTokens();
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-      <div>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: t.text.primary, marginBottom: 2 }}>
-          {isEdit ? 'Editar Lançamento' : 'Novo Lançamento'}
-        </h2>
-        <p style={{ fontSize: 13, color: t.text.muted }}>
-          {isEdit
-            ? 'Atualize os dados do lançamento'
-            : 'Preencha as informações do novo lançamento'}
-        </p>
-      </div>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+      <h2 style={{ fontSize: 16, fontWeight: 700, color: t.text.primary, margin: 0 }}>
+        {isEdit ? 'Editar Lançamento' : 'Novo Lançamento'}
+      </h2>
 
-      <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
-        <Button type="button" variant="secondary" onClick={() => navigate(-1)}>
-          <X size={16} style={{ marginRight: 6 }} />
+      <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+        <Button type="button" variant="secondary" onClick={() => navigate(-1)} style={{ padding: '6px 14px', fontSize: 13 }}>
+          <X size={14} style={{ marginRight: 5 }} />
           Cancelar
         </Button>
 
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading} style={{ padding: '6px 14px', fontSize: 13 }}>
           {isLoading ? (
-            <Loader2 size={16} style={{ marginRight: 6 }} className="animate-spin" />
+            <Loader2 size={14} style={{ marginRight: 5 }} className="animate-spin" />
           ) : (
-            <Save size={16} style={{ marginRight: 6 }} />
+            <Save size={14} style={{ marginRight: 5 }} />
           )}
           {isEdit ? 'Atualizar' : 'Salvar'}
         </Button>
