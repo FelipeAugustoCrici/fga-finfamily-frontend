@@ -8,10 +8,10 @@ const mapFormTypeToBackendType = (formType: string, isRecurring: boolean): strin
     return isRecurring ? 'fixed' : 'variable';
   }
   if (formType === 'salary') {
-    return 'fixed'; 
+    return 'fixed';
   }
   if (formType === 'income') {
-    return 'temporary'; 
+    return 'temporary';
   }
   return 'variable';
 };
@@ -26,8 +26,8 @@ export function useUpdateRecord() {
 
       const data: any = {
         ...formData,
-        formType: formData.type, 
-        type: backendType, 
+        formType: formData.type,
+        type: backendType,
         value: Number(formData.value),
         durationMonths: formData.durationMonths ? Number(formData.durationMonths) : undefined,
       };

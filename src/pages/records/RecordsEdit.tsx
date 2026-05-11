@@ -24,7 +24,7 @@ export function RecordsEdit() {
 
   const { data: categories = [] } = useCategories();
 
-const people = families[0]?.members || [];
+  const people = families[0]?.members || [];
 
   if (isLoading) {
     return (
@@ -46,19 +46,19 @@ const people = families[0]?.members || [];
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <PageHeader />
       <RecordForm
-      initialData={item}
-      families={families}
-      categories={categories}
-      people={people}
-      onSubmit={(data) =>
-        updateRecord.mutate(
-          { id: id!, data: data as any },
-          {
-            onSuccess: () => navigate('/record'),
-          },
-        )
-      }
-      isLoading={updateRecord.isPending}
+        initialData={item}
+        families={families}
+        categories={categories}
+        people={people}
+        onSubmit={(data) =>
+          updateRecord.mutate(
+            { id: id!, data: data as any },
+            {
+              onSuccess: () => navigate('/record'),
+            },
+          )
+        }
+        isLoading={updateRecord.isPending}
       />
     </div>
   );

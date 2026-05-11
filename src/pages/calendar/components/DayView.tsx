@@ -6,7 +6,15 @@ import type { CalendarDaySummary } from '../types/calendar.types';
 const fmt = (v: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
 
-const WEEKDAYS = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+const WEEKDAYS = [
+  'Domingo',
+  'Segunda-feira',
+  'Terça-feira',
+  'Quarta-feira',
+  'Quinta-feira',
+  'Sexta-feira',
+  'Sábado',
+];
 const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
 function toKey(d: Date) {
@@ -20,12 +28,12 @@ interface Props {
   onEventClick?: (date: string) => void;
 }
 
-export function DayView({ selectedDate, days, onDateChange, onEventClick }: Props) {
+export function DayView({ selectedDate, days, onDateChange, onEventClick: _onEventClick }: Props) {
   const t = useTokens();
   const isDark = t.bg.page === '#020617';
   const today = toKey(new Date());
   const key = toKey(selectedDate);
-  const summary = days.find(d => d.date === key);
+  const summary = days.find((d) => d.date === key);
   const isToday = key === today;
 
   const prev = () => {
@@ -41,31 +49,38 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick }: Prop
   };
 
   return (
-    <div style={{
-      background: t.bg.card,
-      border: `1px solid ${t.border.default}`,
-      borderRadius: 18,
-      overflow: 'hidden',
-      boxShadow: t.shadow.card,
-    }}>
+    <div
+      style={{
+        background: t.bg.card,
+        border: `1px solid ${t.border.default}`,
+        borderRadius: 18,
+        overflow: 'hidden',
+        boxShadow: t.shadow.card,
+      }}
+    >
       {/* Day header */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '16px 20px',
-        borderBottom: `1px solid ${t.border.divider}`,
-        background: isToday
-          ? (isDark ? 'rgba(99,102,241,0.08)' : '#f5f3ff')
-          : 'transparent',
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '16px 20px',
+          borderBottom: `1px solid ${t.border.divider}`,
+          background: isToday ? (isDark ? 'rgba(99,102,241,0.08)' : '#f5f3ff') : 'transparent',
+        }}
+      >
         <button
           type="button"
           onClick={prev}
           style={{
             background: isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
-            border: 'none', borderRadius: 10, padding: '8px 10px',
-            cursor: 'pointer', color: t.text.muted, display: 'flex', alignItems: 'center',
+            border: 'none',
+            borderRadius: 10,
+            padding: '8px 10px',
+            cursor: 'pointer',
+            color: t.text.muted,
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <ChevronLeft size={18} />
@@ -75,8 +90,17 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick }: Prop
           <p style={{ fontSize: 13, color: t.text.muted, marginBottom: 2 }}>
             {WEEKDAYS[selectedDate.getDay()]}
           </p>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, justifyContent: 'center' }}>
-            <span style={{ fontSize: 40, fontWeight: 800, color: isToday ? '#6366f1' : t.text.primary, lineHeight: 1 }}>
+          <div
+            style={{ display: 'flex', alignItems: 'baseline', gap: 6, justifyContent: 'center' }}
+          >
+            <span
+              style={{
+                fontSize: 40,
+                fontWeight: 800,
+                color: isToday ? '#6366f1' : t.text.primary,
+                lineHeight: 1,
+              }}
+            >
               {selectedDate.getDate()}
             </span>
             <span style={{ fontSize: 16, fontWeight: 600, color: t.text.secondary }}>
@@ -84,10 +108,18 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick }: Prop
             </span>
           </div>
           {isToday && (
-            <span style={{
-              fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 999,
-              background: '#6366f1', color: '#fff', marginTop: 4, display: 'inline-block',
-            }}>
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                padding: '2px 8px',
+                borderRadius: 999,
+                background: '#6366f1',
+                color: '#fff',
+                marginTop: 4,
+                display: 'inline-block',
+              }}
+            >
               HOJE
             </span>
           )}
@@ -98,8 +130,13 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick }: Prop
           onClick={next}
           style={{
             background: isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
-            border: 'none', borderRadius: 10, padding: '8px 10px',
-            cursor: 'pointer', color: t.text.muted, display: 'flex', alignItems: 'center',
+            border: 'none',
+            borderRadius: 10,
+            padding: '8px 10px',
+            cursor: 'pointer',
+            color: t.text.muted,
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <ChevronRight size={18} />
@@ -108,11 +145,15 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick }: Prop
 
       {/* Summary chips */}
       {summary && (
-        <div style={{
-          display: 'flex', gap: 10, padding: '12px 20px',
-          borderBottom: `1px solid ${t.border.divider}`,
-          flexWrap: 'wrap',
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: 10,
+            padding: '12px 20px',
+            borderBottom: `1px solid ${t.border.divider}`,
+            flexWrap: 'wrap',
+          }}
+        >
           <Chip
             icon={<TrendingUp size={13} />}
             label="Receitas"
@@ -131,24 +172,44 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick }: Prop
             icon={<Wallet size={13} />}
             label="Saldo"
             value={fmt(summary.balance)}
-            color={summary.balance >= 0 ? (isDark ? '#6ee7b7' : '#059669') : (isDark ? '#fca5a5' : '#dc2626')}
+            color={
+              summary.balance >= 0
+                ? isDark
+                  ? '#6ee7b7'
+                  : '#059669'
+                : isDark
+                  ? '#fca5a5'
+                  : '#dc2626'
+            }
             bg={isDark ? 'rgba(255,255,255,0.05)' : '#f8fafc'}
           />
         </div>
       )}
 
       {/* Events list */}
-      <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 8, minHeight: 200 }}>
+      <div
+        style={{
+          padding: '16px 20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+          minHeight: 200,
+        }}
+      >
         {summary && summary.events.length > 0 ? (
-          summary.events.map(ev => (
-            <CalendarEventItem key={ev.id} event={ev} />
-          ))
+          summary.events.map((ev) => <CalendarEventItem key={ev.id} event={ev} />)
         ) : (
-          <div style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center',
-            gap: 8, padding: '40px 0',
-          }}>
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '40px 0',
+            }}
+          >
             <span style={{ fontSize: 32 }}>📭</span>
             <p style={{ fontSize: 14, color: t.text.muted }}>Nenhum lançamento neste dia</p>
           </div>
@@ -158,7 +219,13 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick }: Prop
   );
 }
 
-function Chip({ icon, label, value, color, bg }: {
+function Chip({
+  icon,
+  label,
+  value,
+  color,
+  bg,
+}: {
   icon: React.ReactNode;
   label: string;
   value: string;
@@ -166,11 +233,16 @@ function Chip({ icon, label, value, color, bg }: {
   bg: string;
 }) {
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 6,
-      padding: '6px 12px', borderRadius: 10,
-      background: bg,
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '6px 12px',
+        borderRadius: 10,
+        background: bg,
+      }}
+    >
       <span style={{ color }}>{icon}</span>
       <span style={{ fontSize: 11, color, fontWeight: 600 }}>{label}</span>
       <span style={{ fontSize: 12, fontWeight: 800, color }}>{value}</span>

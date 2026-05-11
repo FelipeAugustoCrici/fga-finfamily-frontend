@@ -14,38 +14,46 @@ export function AuthLayout({ children, maxWidth = 420 }: AuthLayoutProps) {
   const { toggle } = useTheme();
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 16,
-      position: 'relative',
-      background: isDark
-        ? 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.12) 0%, #020617 55%)'
-        : 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.07) 0%, #f1f5f9 55%)',
-    }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        position: 'relative',
+        background: isDark
+          ? 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.12) 0%, #020617 55%)'
+          : 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.07) 0%, #f1f5f9 55%)',
+      }}
+    >
       {}
       <button
         onClick={toggle}
         title={isDark ? 'Modo claro' : 'Modo escuro'}
         style={{
-          position: 'fixed', top: 16, right: 16,
-          width: 38, height: 38, borderRadius: 10,
+          position: 'fixed',
+          top: 16,
+          right: 16,
+          width: 38,
+          height: 38,
+          borderRadius: 10,
           border: `1px solid ${t.border.default}`,
           background: t.bg.card,
           color: t.text.muted,
           cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           boxShadow: t.shadow.card,
           transition: 'background 0.2s, color 0.2s',
           zIndex: 100,
         }}
-        onMouseEnter={e => {
+        onMouseEnter={(e) => {
           (e.currentTarget as HTMLElement).style.color = t.text.primary;
           (e.currentTarget as HTMLElement).style.background = t.bg.cardHover;
         }}
-        onMouseLeave={e => {
+        onMouseLeave={(e) => {
           (e.currentTarget as HTMLElement).style.color = t.text.muted;
           (e.currentTarget as HTMLElement).style.background = t.bg.card;
         }}
@@ -55,13 +63,19 @@ export function AuthLayout({ children, maxWidth = 420 }: AuthLayoutProps) {
       <div style={{ width: '100%', maxWidth }}>
         {}
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 52, height: 52, borderRadius: 16,
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            boxShadow: '0 8px 24px rgba(99,102,241,0.35)',
-            marginBottom: 14,
-          }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 52,
+              height: 52,
+              borderRadius: 16,
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              boxShadow: '0 8px 24px rgba(99,102,241,0.35)',
+              marginBottom: 14,
+            }}
+          >
             <Sparkles size={24} color="#fff" />
           </div>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: t.text.primary, margin: 0 }}>
@@ -70,13 +84,15 @@ export function AuthLayout({ children, maxWidth = 420 }: AuthLayoutProps) {
         </div>
 
         {}
-        <div style={{
-          background: t.bg.card,
-          border: `1px solid ${t.border.default}`,
-          borderRadius: 20,
-          padding: '28px 28px 24px',
-          boxShadow: t.shadow.cardLg,
-        }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 20,
+            padding: '28px 28px 24px',
+            boxShadow: t.shadow.cardLg,
+          }}
+        >
           {children}
         </div>
       </div>

@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CalendarDays, ArrowRight, AlertTriangle } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { useTokens } from '@/hooks/useTokens';
-import { cn } from '@/components/ui/Button';
+
 import { useUpcoming7Days } from '../hooks/useCalendar';
 import { CalendarEventItem } from './CalendarEventItem';
 
@@ -13,7 +12,6 @@ const fmt = (v: number) =>
 
 export function UpcomingWeekCard() {
   const navigate = useNavigate();
-  const t = useTokens();
   const { data: events = [], isLoading, isError } = useUpcoming7Days();
 
   const totalExpense = events.filter((e) => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
@@ -50,7 +48,9 @@ export function UpcomingWeekCard() {
           {overdueCount > 0 && (
             <div className="flex items-center gap-2 p-2 bg-danger-50 rounded-lg border border-danger-100">
               <AlertTriangle size={14} className="text-danger-500 shrink-0" />
-              <p className="text-xs text-danger-700 font-medium">{overdueCount} lançamento(s) vencido(s)</p>
+              <p className="text-xs text-danger-700 font-medium">
+                {overdueCount} lançamento(s) vencido(s)
+              </p>
             </div>
           )}
 

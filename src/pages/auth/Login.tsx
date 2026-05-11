@@ -56,45 +56,68 @@ export function Login() {
   });
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 16,
-      position: 'relative',
-      background: isDark
-        ? 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.12) 0%, #020617 55%)'
-        : 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.07) 0%, #f1f5f9 55%)',
-    }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        position: 'relative',
+        background: isDark
+          ? 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.12) 0%, #020617 55%)'
+          : 'radial-gradient(ellipse at 60% 0%, rgba(99,102,241,0.07) 0%, #f1f5f9 55%)',
+      }}
+    >
       {}
       <button
         onClick={toggle}
         title={isDark ? 'Modo claro' : 'Modo escuro'}
         style={{
-          position: 'fixed', top: 16, right: 16,
-          width: 38, height: 38, borderRadius: 10,
+          position: 'fixed',
+          top: 16,
+          right: 16,
+          width: 38,
+          height: 38,
+          borderRadius: 10,
           border: `1px solid ${t.border.default}`,
-          background: t.bg.card, color: t.text.muted,
-          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: t.shadow.card, transition: 'background 0.2s, color 0.2s', zIndex: 100,
+          background: t.bg.card,
+          color: t.text.muted,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: t.shadow.card,
+          transition: 'background 0.2s, color 0.2s',
+          zIndex: 100,
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = t.text.primary; (e.currentTarget as HTMLElement).style.background = t.bg.cardHover; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = t.text.muted; (e.currentTarget as HTMLElement).style.background = t.bg.card; }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.color = t.text.primary;
+          (e.currentTarget as HTMLElement).style.background = t.bg.cardHover;
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.color = t.text.muted;
+          (e.currentTarget as HTMLElement).style.background = t.bg.card;
+        }}
       >
         {isDark ? <Sun size={16} /> : <Moon size={16} />}
       </button>
       <div style={{ width: '100%', maxWidth: 420 }}>
-
         {}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 52, height: 52, borderRadius: 16,
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            boxShadow: '0 8px 24px rgba(99,102,241,0.35)',
-            marginBottom: 16,
-          }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 52,
+              height: 52,
+              borderRadius: 16,
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              boxShadow: '0 8px 24px rgba(99,102,241,0.35)',
+              marginBottom: 16,
+            }}
+          >
             <Sparkles size={24} color="#fff" />
           </div>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: t.text.primary, margin: 0 }}>
@@ -106,13 +129,15 @@ export function Login() {
         </div>
 
         {}
-        <div style={{
-          background: t.bg.card,
-          border: `1px solid ${t.border.default}`,
-          borderRadius: 20,
-          padding: '32px 28px',
-          boxShadow: t.shadow.cardLg,
-        }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 20,
+            padding: '32px 28px',
+            boxShadow: t.shadow.cardLg,
+          }}
+        >
           <h2 style={{ fontSize: 18, fontWeight: 700, color: t.text.primary, marginBottom: 4 }}>
             Bem-vindo de volta
           </h2>
@@ -120,17 +145,28 @@ export function Login() {
             Entre na sua conta para continuar
           </p>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+          >
             {}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: t.text.secondary }}>Email</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: t.text.secondary }}>
+                Email
+              </label>
               <div style={{ position: 'relative' }}>
-                <Mail size={16} style={{
-                  position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)',
-                  color: focusedField === 'email' ? t.border.focus : t.text.muted, pointerEvents: 'none',
-                  transition: 'color 0.18s',
-                }} />
+                <Mail
+                  size={16}
+                  style={{
+                    position: 'absolute',
+                    left: 13,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: focusedField === 'email' ? t.border.focus : t.text.muted,
+                    pointerEvents: 'none',
+                    transition: 'color 0.18s',
+                  }}
+                />
                 <input
                   type="email"
                   placeholder="seu@exemplo.com"
@@ -146,18 +182,32 @@ export function Login() {
 
             {}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label style={{ fontSize: 13, fontWeight: 500, color: t.text.secondary }}>Senha</label>
-                <Link to="/forgot-password" style={{ fontSize: 12, color: t.text.link, textDecoration: 'none' }}>
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <label style={{ fontSize: 13, fontWeight: 500, color: t.text.secondary }}>
+                  Senha
+                </label>
+                <Link
+                  to="/forgot-password"
+                  style={{ fontSize: 12, color: t.text.link, textDecoration: 'none' }}
+                >
                   Esqueci minha senha
                 </Link>
               </div>
               <div style={{ position: 'relative' }}>
-                <Lock size={16} style={{
-                  position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)',
-                  color: focusedField === 'password' ? t.border.focus : t.text.muted, pointerEvents: 'none',
-                  transition: 'color 0.18s',
-                }} />
+                <Lock
+                  size={16}
+                  style={{
+                    position: 'absolute',
+                    left: 13,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: focusedField === 'password' ? t.border.focus : t.text.muted,
+                    pointerEvents: 'none',
+                    transition: 'color 0.18s',
+                  }}
+                />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
@@ -172,9 +222,17 @@ export function Login() {
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   style={{
-                    position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
-                    background: 'none', border: 'none', cursor: 'pointer', padding: 2,
-                    color: t.text.muted, display: 'flex', alignItems: 'center',
+                    position: 'absolute',
+                    right: 12,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 2,
+                    color: t.text.muted,
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -184,12 +242,16 @@ export function Login() {
 
             {}
             {error && (
-              <div style={{
-                padding: '10px 14px', borderRadius: 10,
-                background: isDark ? 'rgba(252,165,165,0.08)' : '#fef2f2',
-                border: `1px solid ${isDark ? 'rgba(252,165,165,0.2)' : '#fecdd3'}`,
-                fontSize: 13, color: isDark ? '#fca5a5' : '#991b1b',
-              }}>
+              <div
+                style={{
+                  padding: '10px 14px',
+                  borderRadius: 10,
+                  background: isDark ? 'rgba(252,165,165,0.08)' : '#fef2f2',
+                  border: `1px solid ${isDark ? 'rgba(252,165,165,0.2)' : '#fecdd3'}`,
+                  fontSize: 13,
+                  color: isDark ? '#fca5a5' : '#991b1b',
+                }}
+              >
                 {error}
               </div>
             )}
@@ -199,25 +261,50 @@ export function Login() {
               type="submit"
               disabled={isLoading}
               style={{
-                width: '100%', height: 46, borderRadius: 12, border: 'none',
-                background: isLoading ? (isDark ? 'rgba(99,102,241,0.5)' : '#a5b4fc') : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                color: '#ffffff', fontSize: 14, fontWeight: 700,
+                width: '100%',
+                height: 46,
+                borderRadius: 12,
+                border: 'none',
+                background: isLoading
+                  ? isDark
+                    ? 'rgba(99,102,241,0.5)'
+                    : '#a5b4fc'
+                  : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                color: '#ffffff',
+                fontSize: 14,
+                fontWeight: 700,
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
                 boxShadow: isLoading ? 'none' : '0 4px 14px rgba(99,102,241,0.35)',
                 transition: 'opacity 0.18s, box-shadow 0.18s',
                 marginTop: 4,
               }}
-              onMouseEnter={e => { if (!isLoading) (e.currentTarget as HTMLElement).style.opacity = '0.9'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+              onMouseEnter={(e) => {
+                if (!isLoading) (e.currentTarget as HTMLElement).style.opacity = '0.9';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.opacity = '1';
+              }}
             >
-              {isLoading ? <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Entrando...</> : 'Entrar'}
+              {isLoading ? (
+                <>
+                  <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Entrando...
+                </>
+              ) : (
+                'Entrar'
+              )}
             </button>
 
             {}
             <p style={{ textAlign: 'center', fontSize: 13, color: t.text.muted, margin: 0 }}>
               Não tem uma conta?{' '}
-              <Link to="/register" style={{ color: t.text.link, fontWeight: 600, textDecoration: 'none' }}>
+              <Link
+                to="/register"
+                style={{ color: t.text.link, fontWeight: 600, textDecoration: 'none' }}
+              >
                 Cadastre-se grátis
               </Link>
             </p>

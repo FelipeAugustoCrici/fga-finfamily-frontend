@@ -17,15 +17,25 @@ type RecordsFiltersProps = {
 };
 
 const MONTHS = [
-  'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-  'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro',
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro',
 ];
 
 const STATUS_OPTIONS = [
-  { value: 'ALL',     label: 'Todos os status', dot: null },
-  { value: 'PENDING', label: 'Pendente',         dot: '#f59e0b' },
-  { value: 'PAID',    label: 'Pago',             dot: '#4ade80' },
-  { value: 'OVERDUE', label: 'Atrasado',         dot: '#f87171' },
+  { value: 'ALL', label: 'Todos os status', dot: null },
+  { value: 'PENDING', label: 'Pendente', dot: '#f59e0b' },
+  { value: 'PAID', label: 'Pago', dot: '#4ade80' },
+  { value: 'OVERDUE', label: 'Atrasado', dot: '#f87171' },
 ] as const;
 
 function useDropdownPos() {
@@ -47,8 +57,14 @@ function useDropdownPos() {
 }
 
 export function RecordsFilters({
-  month, year, search, status,
-  onMonthChange, onYearChange, onSearchChange, onStatusChange,
+  month,
+  year,
+  search,
+  status,
+  onMonthChange,
+  onYearChange,
+  onSearchChange,
+  onStatusChange,
 }: RecordsFiltersProps) {
   const now = new Date();
   const t = useTokens();
@@ -102,7 +118,8 @@ export function RecordsFilters({
           onBlur={() => setSearchFocused(false)}
           className="w-full pl-10 pr-4 text-sm outline-none"
           style={{
-            height: '42px', borderRadius: '12px',
+            height: '42px',
+            borderRadius: '12px',
             background: t.bg.input,
             border: `1.5px solid ${searchFocused ? t.border.focus : t.border.input}`,
             boxShadow: searchFocused ? t.shadow.focus : 'none',
@@ -118,20 +135,32 @@ export function RecordsFilters({
           ref={period.btnRef}
           onClick={() => {
             period.calcPos();
-            setPeriodOpen(v => !v);
+            setPeriodOpen((v) => !v);
             setStatusOpen(false);
           }}
           className="flex items-center gap-2 text-sm font-medium transition-all duration-200"
           style={{
-            height: '42px', padding: '0 14px', borderRadius: '999px',
+            height: '42px',
+            padding: '0 14px',
+            borderRadius: '999px',
             background: periodOpen ? t.bg.mutedStrong : t.bg.input,
             border: `1px solid ${periodOpen ? t.border.strong : t.border.input}`,
-            color: t.text.primary, cursor: 'pointer',
+            color: t.text.primary,
+            cursor: 'pointer',
           }}
         >
           <Calendar size={14} style={{ color: t.text.muted }} />
-          <span className="capitalize">{MONTHS[month - 1]} {year}</span>
-          <ChevronDown size={13} style={{ color: t.text.subtle, transform: periodOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+          <span className="capitalize">
+            {MONTHS[month - 1]} {year}
+          </span>
+          <ChevronDown
+            size={13}
+            style={{
+              color: t.text.subtle,
+              transform: periodOpen ? 'rotate(180deg)' : 'none',
+              transition: 'transform 0.2s',
+            }}
+          />
         </button>
 
         {/* Status button */}
@@ -139,135 +168,207 @@ export function RecordsFilters({
           ref={statusDrop.btnRef}
           onClick={() => {
             statusDrop.calcPos();
-            setStatusOpen(v => !v);
+            setStatusOpen((v) => !v);
             setPeriodOpen(false);
           }}
           className="flex items-center gap-2 text-sm font-medium transition-all duration-200"
           style={{
-            height: '42px', padding: '0 14px', borderRadius: '999px',
+            height: '42px',
+            padding: '0 14px',
+            borderRadius: '999px',
             background: statusOpen ? t.bg.mutedStrong : t.bg.input,
             border: `1px solid ${statusOpen ? t.border.strong : t.border.input}`,
-            color: t.text.primary, cursor: 'pointer',
+            color: t.text.primary,
+            cursor: 'pointer',
           }}
         >
-          {currentStatus.dot
-            ? <span className="w-2 h-2 rounded-full shrink-0" style={{ background: currentStatus.dot }} />
-            : <span className="w-2 h-2 rounded-full shrink-0" style={{ background: t.border.strong }} />
-          }
+          {currentStatus.dot ? (
+            <span
+              className="w-2 h-2 rounded-full shrink-0"
+              style={{ background: currentStatus.dot }}
+            />
+          ) : (
+            <span
+              className="w-2 h-2 rounded-full shrink-0"
+              style={{ background: t.border.strong }}
+            />
+          )}
           <span>{currentStatus.label}</span>
-          <ChevronDown size={13} style={{ color: t.text.subtle, transform: statusOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+          <ChevronDown
+            size={13}
+            style={{
+              color: t.text.subtle,
+              transform: statusOpen ? 'rotate(180deg)' : 'none',
+              transition: 'transform 0.2s',
+            }}
+          />
         </button>
       </div>
 
       {/* Period portal */}
-      {periodOpen && createPortal(
-        <>
-          <div style={{ position: 'fixed', inset: 0, zIndex: 9998 }} onClick={() => setPeriodOpen(false)} />
-          <div style={{
-            position: 'fixed',
-            top: period.pos.top,
-            right: period.pos.right,
-            zIndex: 9999,
-            padding: 12,
-            width: 224,
-            background: t.bg.card,
-            border: `1px solid ${t.border.default}`,
-            borderRadius: 14,
-            boxShadow: t.shadow.drop,
-          }}>
-            <p className="text-xs font-semibold uppercase tracking-wider mb-2 px-1" style={{ color: t.text.subtle }}>Mês</p>
-            <div className="grid grid-cols-3 gap-1 mb-3">
-              {MONTHS.map((m, i) => (
-                <button
-                  key={i}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={() => onMonthChange(i + 1)}
-                  className="text-xs px-2 py-1.5 rounded-lg text-left transition-all duration-150"
-                  style={{
-                    background: month === i + 1 ? t.income.bgIcon : 'transparent',
-                    color: month === i + 1 ? t.income.text : t.text.secondary,
-                    fontWeight: month === i + 1 ? 600 : 400,
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => { if (month !== i + 1) (e.currentTarget as HTMLElement).style.background = t.bg.muted; }}
-                  onMouseLeave={e => { if (month !== i + 1) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                >
-                  {m.slice(0, 3)}
-                </button>
-              ))}
+      {periodOpen &&
+        createPortal(
+          <>
+            <div
+              style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
+              onClick={() => setPeriodOpen(false)}
+            />
+            <div
+              style={{
+                position: 'fixed',
+                // eslint-disable-next-line react-hooks/refs
+                top: period.pos.top,
+                // eslint-disable-next-line react-hooks/refs
+                right: period.pos.right,
+                zIndex: 9999,
+                padding: 12,
+                width: 224,
+                background: t.bg.card,
+                border: `1px solid ${t.border.default}`,
+                borderRadius: 14,
+                boxShadow: t.shadow.drop,
+              }}
+            >
+              <p
+                className="text-xs font-semibold uppercase tracking-wider mb-2 px-1"
+                style={{ color: t.text.subtle }}
+              >
+                Mês
+              </p>
+              <div className="grid grid-cols-3 gap-1 mb-3">
+                {MONTHS.map((m, i) => (
+                  <button
+                    key={i}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={() => onMonthChange(i + 1)}
+                    className="text-xs px-2 py-1.5 rounded-lg text-left transition-all duration-150"
+                    style={{
+                      background: month === i + 1 ? t.income.bgIcon : 'transparent',
+                      color: month === i + 1 ? t.income.text : t.text.secondary,
+                      fontWeight: month === i + 1 ? 600 : 400,
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (month !== i + 1)
+                        (e.currentTarget as HTMLElement).style.background = t.bg.muted;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (month !== i + 1)
+                        (e.currentTarget as HTMLElement).style.background = 'transparent';
+                    }}
+                  >
+                    {m.slice(0, 3)}
+                  </button>
+                ))}
+              </div>
+              <p
+                className="text-xs font-semibold uppercase tracking-wider mb-2 px-1"
+                style={{ color: t.text.subtle }}
+              >
+                Ano
+              </p>
+              <div className="flex gap-1">
+                {years.map((y) => (
+                  <button
+                    key={y}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={() => onYearChange(y)}
+                    className="flex-1 text-xs py-1.5 rounded-lg transition-all duration-150"
+                    style={{
+                      background: year === y ? t.income.bgIcon : 'transparent',
+                      color: year === y ? t.income.text : t.text.secondary,
+                      fontWeight: year === y ? 600 : 400,
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (year !== y)
+                        (e.currentTarget as HTMLElement).style.background = t.bg.muted;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (year !== y)
+                        (e.currentTarget as HTMLElement).style.background = 'transparent';
+                    }}
+                  >
+                    {y}
+                  </button>
+                ))}
+              </div>
             </div>
-            <p className="text-xs font-semibold uppercase tracking-wider mb-2 px-1" style={{ color: t.text.subtle }}>Ano</p>
-            <div className="flex gap-1">
-              {years.map((y) => (
-                <button
-                  key={y}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={() => onYearChange(y)}
-                  className="flex-1 text-xs py-1.5 rounded-lg transition-all duration-150"
-                  style={{
-                    background: year === y ? t.income.bgIcon : 'transparent',
-                    color: year === y ? t.income.text : t.text.secondary,
-                    fontWeight: year === y ? 600 : 400,
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => { if (year !== y) (e.currentTarget as HTMLElement).style.background = t.bg.muted; }}
-                  onMouseLeave={e => { if (year !== y) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                >
-                  {y}
-                </button>
-              ))}
-            </div>
-          </div>
-        </>,
-        document.body,
-      )}
+          </>,
+          document.body,
+        )}
 
       {/* Status portal */}
-      {statusOpen && createPortal(
-        <>
-          <div style={{ position: 'fixed', inset: 0, zIndex: 9998 }} onClick={() => setStatusOpen(false)} />
-          <div style={{
-            position: 'fixed',
-            top: statusDrop.pos.top,
-            right: statusDrop.pos.right,
-            zIndex: 9999,
-            paddingTop: 6, paddingBottom: 6,
-            minWidth: 176,
-            background: t.bg.card,
-            border: `1px solid ${t.border.default}`,
-            borderRadius: 12,
-            boxShadow: t.shadow.drop,
-          }}>
-            {STATUS_OPTIONS.map((opt) => {
-              const isSelected = opt.value === status;
-              return (
-                <button
-                  key={opt.value}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={() => { onStatusChange(opt.value as RecordStatus | 'ALL'); setStatusOpen(false); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors duration-150"
-                  style={{
-                    color: isSelected ? t.text.primary : t.text.secondary,
-                    background: isSelected ? t.bg.muted : 'transparent',
-                    fontWeight: isSelected ? 600 : 400,
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLElement).style.background = t.bg.cardHover; }}
-                  onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                >
-                  {opt.dot
-                    ? <span className="w-2 h-2 rounded-full shrink-0" style={{ background: opt.dot }} />
-                    : <span className="w-2 h-2 rounded-full shrink-0" style={{ background: t.border.strong }} />
-                  }
-                  <span className="flex-1 text-left">{opt.label}</span>
-                  {isSelected && <Check size={13} style={{ color: t.text.link }} />}
-                </button>
-              );
-            })}
-          </div>
-        </>,
-        document.body,
-      )}
+      {statusOpen &&
+        createPortal(
+          <>
+            <div
+              style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
+              onClick={() => setStatusOpen(false)}
+            />
+            <div
+              style={{
+                position: 'fixed',
+                // eslint-disable-next-line react-hooks/refs
+                top: statusDrop.pos.top,
+                // eslint-disable-next-line react-hooks/refs
+                right: statusDrop.pos.right,
+                zIndex: 9999,
+                paddingTop: 6,
+                paddingBottom: 6,
+                minWidth: 176,
+                background: t.bg.card,
+                border: `1px solid ${t.border.default}`,
+                borderRadius: 12,
+                boxShadow: t.shadow.drop,
+              }}
+            >
+              {STATUS_OPTIONS.map((opt) => {
+                const isSelected = opt.value === status;
+                return (
+                  <button
+                    key={opt.value}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={() => {
+                      onStatusChange(opt.value as RecordStatus | 'ALL');
+                      setStatusOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors duration-150"
+                    style={{
+                      color: isSelected ? t.text.primary : t.text.secondary,
+                      background: isSelected ? t.bg.muted : 'transparent',
+                      fontWeight: isSelected ? 600 : 400,
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected)
+                        (e.currentTarget as HTMLElement).style.background = t.bg.cardHover;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected)
+                        (e.currentTarget as HTMLElement).style.background = 'transparent';
+                    }}
+                  >
+                    {opt.dot ? (
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0"
+                        style={{ background: opt.dot }}
+                      />
+                    ) : (
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0"
+                        style={{ background: t.border.strong }}
+                      />
+                    )}
+                    <span className="flex-1 text-left">{opt.label}</span>
+                    {isSelected && <Check size={13} style={{ color: t.text.link }} />}
+                  </button>
+                );
+              })}
+            </div>
+          </>,
+          document.body,
+        )}
     </div>
   );
 }

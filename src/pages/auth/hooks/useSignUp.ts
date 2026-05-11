@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { confirmUserSignUp, registerUser, setupUserAfterConfirmation } from '../services/auth.service';
+import {
+  confirmUserSignUp,
+  registerUser,
+  setupUserAfterConfirmation,
+} from '../services/auth.service';
 
 export function useSignUp() {
   const [loading, setLoading] = useState(false);

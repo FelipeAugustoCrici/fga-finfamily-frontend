@@ -32,11 +32,11 @@ export async function setupUserAfterConfirmation(
   await signIn({ username: email, password });
   await fetchAuthSession({ forceRefresh: true });
 
-const { data: family } = await api.post('/finance/families', {
+  const { data: family } = await api.post('/finance/families', {
     name: `Família de ${name}`,
   });
 
-await api.post('/finance/persons', {
+  await api.post('/finance/persons', {
     name,
     familyId: family.id,
     email,

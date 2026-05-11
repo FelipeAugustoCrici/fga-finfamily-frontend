@@ -3,14 +3,19 @@ import type { Category, PaginatedCategories } from '../types/category.types';
 import type { CategoryFormData } from '../schemas/category.schema';
 
 export const categoryService = {
-  async list(familyId?: string, type?: 'expense' | 'income', page = 1, limit = 10): Promise<PaginatedCategories> {
-    const params = new URLSearchParams()
-    if (familyId) params.set('familyId', familyId)
-    if (type) params.set('type', type)
-    params.set('page', String(page))
-    params.set('limit', String(limit))
-    const { data } = await api.get(`/finance/categories?${params.toString()}`)
-    return data
+  async list(
+    familyId?: string,
+    type?: 'expense' | 'income',
+    page = 1,
+    limit = 10,
+  ): Promise<PaginatedCategories> {
+    const params = new URLSearchParams();
+    if (familyId) params.set('familyId', familyId);
+    if (type) params.set('type', type);
+    params.set('page', String(page));
+    params.set('limit', String(limit));
+    const { data } = await api.get(`/finance/categories?${params.toString()}`);
+    return data;
   },
 
   async getById(id: string): Promise<Category> {

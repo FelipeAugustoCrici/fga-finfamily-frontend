@@ -7,7 +7,7 @@ interface Props {
   summaries: SummaryData[];
 }
 
-const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
 function buildCategoryHistory(summaries: SummaryData[]) {
   const map: Record<string, { month: string; value: number }[]> = {};
@@ -53,12 +53,19 @@ export function CategoryTrends({ summaries }: Props) {
   const maxTotal = categories[0]?.total ?? 1;
 
   return (
-    <div style={{
-      background: t.bg.card, border: `1px solid ${t.border.default}`,
-      borderRadius: 18, padding: '18px 20px', boxShadow: t.shadow.card,
-    }}>
+    <div
+      style={{
+        background: t.bg.card,
+        border: `1px solid ${t.border.default}`,
+        borderRadius: 18,
+        padding: '18px 20px',
+        boxShadow: t.shadow.card,
+      }}
+    >
       <div style={{ marginBottom: 14 }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: t.text.primary }}>Tendências por Categoria</p>
+        <p style={{ fontSize: 14, fontWeight: 700, color: t.text.primary }}>
+          Tendências por Categoria
+        </p>
         <p style={{ fontSize: 12, color: t.text.muted, marginTop: 2 }}>
           Evolução e variação dos gastos por categoria no período
         </p>
@@ -71,28 +78,48 @@ export function CategoryTrends({ summaries }: Props) {
           const barPct = Math.min((total / maxTotal) * 100, 100);
 
           const changeColor = isUp
-            ? (isDark ? '#fca5a5' : '#dc2626')
+            ? isDark
+              ? '#fca5a5'
+              : '#dc2626'
             : isDown
-              ? (isDark ? '#6ee7b7' : '#059669')
+              ? isDark
+                ? '#6ee7b7'
+                : '#059669'
               : t.text.muted;
 
           const Icon = isUp ? TrendingUp : isDown ? TrendingDown : Minus;
 
-          const statusLabel = isUp
-            ? '↑ Aumentando'
-            : isDown
-              ? '↓ Diminuindo'
-              : '→ Estável';
+          const statusLabel = isUp ? '↑ Aumentando' : isDown ? '↓ Diminuindo' : '→ Estável';
 
           return (
-            <div key={name} style={{
-              padding: '10px 14px', borderRadius: 12,
-              background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc',
-              border: `1px solid ${t.border.subtle}`,
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+            <div
+              key={name}
+              style={{
+                padding: '10px 14px',
+                borderRadius: 12,
+                background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc',
+                border: `1px solid ${t.border.subtle}`,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 7,
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: t.text.primary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: t.text.primary,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
                     {name}
                   </p>
                   <span style={{ fontSize: 10, color: t.text.subtle, flexShrink: 0 }}>
@@ -107,7 +134,8 @@ export function CategoryTrends({ summaries }: Props) {
                     </span>
                     {Math.abs(change) >= 0.5 && (
                       <span style={{ fontSize: 10, color: t.text.subtle }}>
-                        ({isUp ? '+' : ''}{change.toFixed(1)}%)
+                        ({isUp ? '+' : ''}
+                        {change.toFixed(1)}%)
                       </span>
                     )}
                   </div>
@@ -117,24 +145,38 @@ export function CategoryTrends({ summaries }: Props) {
                 </div>
               </div>
 
-              <div style={{ width: '100%', height: 4, borderRadius: 999, background: isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0', overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%', borderRadius: 999,
-                  width: `${barPct}%`,
-                  background: isUp
-                    ? `linear-gradient(90deg, #f87171, #ef4444)`
-                    : isDown
-                      ? `linear-gradient(90deg, #34d399, #10b981)`
-                      : `linear-gradient(90deg, #818cf8, #6366f1)`,
-                  transition: 'width 0.6s ease',
-                }} />
+              <div
+                style={{
+                  width: '100%',
+                  height: 4,
+                  borderRadius: 999,
+                  background: isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0',
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  style={{
+                    height: '100%',
+                    borderRadius: 999,
+                    width: `${barPct}%`,
+                    background: isUp
+                      ? `linear-gradient(90deg, #f87171, #ef4444)`
+                      : isDown
+                        ? `linear-gradient(90deg, #34d399, #10b981)`
+                        : `linear-gradient(90deg, #818cf8, #6366f1)`,
+                    transition: 'width 0.6s ease',
+                  }}
+                />
               </div>
 
               {data.length > 1 && (
                 <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
                   {data.map((d, i) => (
                     <span key={i} style={{ fontSize: 10, color: t.text.subtle }}>
-                      {d.month}: <span style={{ color: t.text.secondary, fontWeight: 600 }}>{formatCurrency(d.value)}</span>
+                      {d.month}:{' '}
+                      <span style={{ color: t.text.secondary, fontWeight: 600 }}>
+                        {formatCurrency(d.value)}
+                      </span>
                       {i < data.length - 1 && <span style={{ color: t.border.default }}> · </span>}
                     </span>
                   ))}

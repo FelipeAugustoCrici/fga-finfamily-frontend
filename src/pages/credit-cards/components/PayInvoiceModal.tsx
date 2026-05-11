@@ -24,9 +24,15 @@ export function PayInvoiceModal({ isOpen, onClose, invoice }: Props) {
 
   const onSubmit = (data: { paidAmount: string }) => {
     if (!invoice) return;
-    pay.mutate({ invoiceId: invoice.id, paidAmount: Number(data.paidAmount) }, {
-      onSuccess: () => { reset(); onClose(); },
-    });
+    pay.mutate(
+      { invoiceId: invoice.id, paidAmount: Number(data.paidAmount) },
+      {
+        onSuccess: () => {
+          reset();
+          onClose();
+        },
+      },
+    );
   };
 
   if (!invoice) return null;
@@ -59,8 +65,12 @@ export function PayInvoiceModal({ isOpen, onClose, invoice }: Props) {
             )}
           />
           <div className="flex gap-3 justify-end">
-            <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
-            <Button type="submit" isLoading={pay.isPending}>Confirmar Pagamento</Button>
+            <Button type="button" variant="ghost" onClick={onClose}>
+              Cancelar
+            </Button>
+            <Button type="submit" isLoading={pay.isPending}>
+              Confirmar Pagamento
+            </Button>
           </div>
         </form>
       </div>

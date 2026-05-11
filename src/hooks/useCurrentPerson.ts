@@ -27,8 +27,8 @@ export function useCurrentPerson() {
       // Match by email first, then by userId (sub), then fall back to first member
       const sub = attributes.sub || '';
       const person =
-        members.find(m => m.email?.toLowerCase() === email) ||
-        members.find(m => m.userId === sub) ||
+        members.find((m) => m.email?.toLowerCase() === email) ||
+        members.find((m) => m.userId === sub) ||
         members[0] ||
         null;
 

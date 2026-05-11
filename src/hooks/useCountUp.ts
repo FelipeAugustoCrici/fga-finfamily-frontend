@@ -17,7 +17,7 @@ export function useCountUp(target: number, duration = 700): number {
       if (startRef.current === null) startRef.current = timestamp;
       const elapsed = timestamp - startRef.current;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       const eased = 1 - Math.pow(1 - progress, 3);
       setDisplay(from + delta * eased);
       if (progress < 1) {
@@ -28,7 +28,9 @@ export function useCountUp(target: number, duration = 700): number {
     };
 
     rafRef.current = requestAnimationFrame(step);
-    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
   }, [target, duration]);
 
   return display;

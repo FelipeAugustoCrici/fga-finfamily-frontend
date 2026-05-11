@@ -16,11 +16,7 @@ export function useRecords(
     enabled: !!familyId,
   });
 
-const records = normalizeRecords(
-    expenses.data?.data || [],
-    [], 
-    [], 
-  );
+  const records = normalizeRecords(expenses.data?.data || [], [], []);
 
   const isLoading = expenses.isLoading;
   const pagination = expenses.data?.pagination;

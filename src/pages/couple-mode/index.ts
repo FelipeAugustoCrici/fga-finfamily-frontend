@@ -1,2 +1,2 @@
-export { CoupleModeList } from './CoupleModeList'
-export { CoupleModeRoutes } from './base/CoupleModeRoutes'
+export { CoupleModeList } from './CoupleModeList';
+export { CoupleModeRoutes } from './base/CoupleModeRoutes';

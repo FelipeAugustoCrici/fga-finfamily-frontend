@@ -1,5 +1,12 @@
 import React from 'react';
-import { ArrowUpCircle, ArrowDownCircle, Wallet, AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react';
+import {
+  ArrowUpCircle,
+  ArrowDownCircle,
+  Wallet,
+  AlertTriangle,
+  CheckCircle,
+  RefreshCw,
+} from 'lucide-react';
 import { cn } from '@/components/ui/Button';
 import type { MonthlyCalendarSummary } from '../types/calendar.types';
 
@@ -61,7 +68,10 @@ export function MonthlySummaryCards({ summary }: Props) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
       {cards.map((c) => (
-        <div key={c.label} className="bg-white rounded-xl border border-primary-100 p-4 flex flex-col gap-2">
+        <div
+          key={c.label}
+          className="bg-white rounded-xl border border-primary-100 p-4 flex flex-col gap-2"
+        >
           <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center', c.bg)}>
             <c.icon size={16} className={c.color} />
           </div>

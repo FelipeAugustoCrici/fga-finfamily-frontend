@@ -70,7 +70,7 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
       const rect = btnRef.current.getBoundingClientRect();
       setPos({ top: rect.bottom + 4, left: rect.left });
     }
-    setIsOpen(o => !o);
+    setIsOpen((o) => !o);
   };
 
   return (
@@ -93,52 +93,67 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
         )}
       </button>
 
-      {isOpen && !disabled && createPortal(
-        <>
-          <div style={{ position: 'fixed', inset: 0, zIndex: 9998 }} onClick={() => setIsOpen(false)} />
-          <div
-            style={{
-              position: 'fixed',
-              top: pos.top,
-              left: pos.left,
-              zIndex: 9999,
-              width: 144,
-              borderRadius: 12,
-              paddingTop: 6,
-              paddingBottom: 6,
-              overflow: 'hidden',
-              background: t.bg.card,
-              border: `1px solid ${t.border.default}`,
-              boxShadow: t.shadow.drop,
-            }}
-          >
-            {(Object.keys(statusConfig) as RecordStatus[]).map((key) => {
-              const cfg = statusConfig[key];
-              const StatusIcon = cfg.icon;
-              const isSelected = key === status;
-              return (
-                <button
-                  key={key}
-                  onClick={(e) => { e.stopPropagation(); onChange(key); setIsOpen(false); }}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium transition-colors duration-150"
-                  style={{
-                    color: cfg.style.color,
-                    background: isSelected ? cfg.style.background : 'transparent',
-                  }}
-                  onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLElement).style.background = t.bg.cardHover; }}
-                  onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                >
-                  <StatusIcon size={13} />
-                  <span>{cfg.label}</span>
-                  {isSelected && <Check size={11} className="ml-auto" />}
-                </button>
-              );
-            })}
-          </div>
-        </>,
-        document.body,
-      )}
+      {isOpen &&
+        !disabled &&
+        createPortal(
+          <>
+            <div
+              style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
+              onClick={() => setIsOpen(false)}
+            />
+            <div
+              style={{
+                position: 'fixed',
+                top: pos.top,
+                left: pos.left,
+                zIndex: 9999,
+                width: 144,
+                borderRadius: 12,
+                paddingTop: 6,
+                paddingBottom: 6,
+                overflow: 'hidden',
+                background: t.bg.card,
+                border: `1px solid ${t.border.default}`,
+                boxShadow: t.shadow.drop,
+              }}
+            >
+              {(Object.keys(statusConfig) as RecordStatus[]).map((key) => {
+                const cfg = statusConfig[key];
+                const StatusIcon = cfg.icon;
+                const isSelected = key === status;
+                return (
+                  <button
+                    key={key}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onChange(key);
+                      setIsOpen(false);
+                    }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium transition-colors duration-150"
+                    style={{
+                      color: cfg.style.color,
+                      background: isSelected ? cfg.style.background : 'transparent',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected)
+                        (e.currentTarget as HTMLElement).style.background = t.bg.cardHover;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected)
+                        (e.currentTarget as HTMLElement).style.background = 'transparent';
+                    }}
+                  >
+                    <StatusIcon size={13} />
+                    <span>{cfg.label}</span>
+                    {isSelected && <Check size={11} className="ml-auto" />}
+                  </button>
+                );
+              })}
+            </div>
+          </>,
+          document.body,
+        )}
     </div>
   );
 }

@@ -32,7 +32,10 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
       />
 
       {/* Linha 2: Valor | Categoria | Data */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }} className="grid-cols-1 sm:grid-cols-3">
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}
+        className="grid-cols-1 sm:grid-cols-3"
+      >
         <Controller
           name="value"
           control={control}
@@ -60,7 +63,16 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
               searchable={expenseCategories.length > 5}
             />
             {expenseCategories.length === 0 && (
-              <p style={{ fontSize: 11, color: '#d97706', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <p
+                style={{
+                  fontSize: 11,
+                  color: '#d97706',
+                  marginTop: 4,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}
+              >
                 <Tag size={11} />
                 Cadastre categorias primeiro
               </p>
@@ -87,8 +99,6 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
           )}
         />
       </div>
-
-
     </div>
   );
 }

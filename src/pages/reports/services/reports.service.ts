@@ -24,6 +24,6 @@ export const reportsService = {
     }
 
     const results = await Promise.all(promises);
-    return results.reverse(); 
+    return results.reverse();
   },
 };

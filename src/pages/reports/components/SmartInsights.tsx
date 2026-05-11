@@ -1,4 +1,11 @@
-import { TrendingUp, TrendingDown, AlertTriangle, Target, Sparkles, CheckCircle2 } from 'lucide-react';
+import {
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  Target,
+  Sparkles,
+  CheckCircle2,
+} from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import type { SummaryData } from '../types/reports.types';
 import { formatCurrency } from '../utils/reports-helpers';
@@ -17,16 +24,22 @@ interface Insight {
   group: 'alerta' | 'oportunidade' | 'evolucao';
 }
 
-function buildInsights(summaries: SummaryData[], current: SummaryData, previous: SummaryData | null): Insight[] {
+function buildInsights(
+  summaries: SummaryData[],
+  current: SummaryData,
+  previous: SummaryData | null,
+): Insight[] {
   const insights: Insight[] = [];
 
   if (previous) {
-    const expChange = previous.totals.expenses > 0
-      ? ((current.totals.expenses - previous.totals.expenses) / previous.totals.expenses) * 100
-      : 0;
-    const incChange = previous.totals.incomes > 0
-      ? ((current.totals.incomes - previous.totals.incomes) / previous.totals.incomes) * 100
-      : 0;
+    const expChange =
+      previous.totals.expenses > 0
+        ? ((current.totals.expenses - previous.totals.expenses) / previous.totals.expenses) * 100
+        : 0;
+    const incChange =
+      previous.totals.incomes > 0
+        ? ((current.totals.incomes - previous.totals.incomes) / previous.totals.incomes) * 100
+        : 0;
 
     if (expChange > 15) {
       insights.push({
@@ -104,7 +117,7 @@ function buildInsights(summaries: SummaryData[], current: SummaryData, previous:
     }
   }
 
-  const alerts = current.budgetAlerts?.filter(a => a.alert) ?? [];
+  const alerts = current.budgetAlerts?.filter((a) => a.alert) ?? [];
   if (alerts.length > 0) {
     const worst = alerts.sort((a, b) => b.percent - a.percent)[0];
     insights.push({
@@ -117,7 +130,7 @@ function buildInsights(summaries: SummaryData[], current: SummaryData, previous:
   }
 
   if (summaries.length >= 3) {
-    const positiveMonths = summaries.filter(s => s.totals.balance > 0).length;
+    const positiveMonths = summaries.filter((s) => s.totals.balance > 0).length;
     const pct = (positiveMonths / summaries.length) * 100;
     if (pct >= 80) {
       insights.push({
@@ -204,19 +217,28 @@ export function SmartInsights({ summaries, current, previous }: Props) {
   };
 
   const groups = ['alerta', 'oportunidade', 'evolucao'] as const;
-  const grouped = groups.map(g => ({
-    key: g,
-    label: GROUP_LABELS[g],
-    items: insights.filter(i => i.group === g),
-  })).filter(g => g.items.length > 0);
+  const grouped = groups
+    .map((g) => ({
+      key: g,
+      label: GROUP_LABELS[g],
+      items: insights.filter((i) => i.group === g),
+    }))
+    .filter((g) => g.items.length > 0);
 
   return (
-    <div style={{
-      background: t.bg.card, border: `1px solid ${t.border.default}`,
-      borderRadius: 18, padding: '18px 20px', boxShadow: t.shadow.card,
-    }}>
+    <div
+      style={{
+        background: t.bg.card,
+        border: `1px solid ${t.border.default}`,
+        borderRadius: 18,
+        padding: '18px 20px',
+        boxShadow: t.shadow.card,
+      }}
+    >
       <div style={{ marginBottom: 14 }}>
-        <p style={{ fontSize: 14, fontWeight: 700, color: t.text.primary }}>Insights Inteligentes</p>
+        <p style={{ fontSize: 14, fontWeight: 700, color: t.text.primary }}>
+          Insights Inteligentes
+        </p>
         <p style={{ fontSize: 12, color: t.text.muted, marginTop: 2 }}>
           Análises baseadas nos seus dados reais
         </p>
@@ -225,28 +247,52 @@ export function SmartInsights({ summaries, current, previous }: Props) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {grouped.map(({ key, label, items }) => (
           <div key={key}>
-            <p style={{
-              fontSize: 11, fontWeight: 700, color: t.text.muted,
-              textTransform: 'uppercase', letterSpacing: '0.05em',
-              marginBottom: 8,
-            }}>
+            <p
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: t.text.muted,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                marginBottom: 8,
+              }}
+            >
               {label}
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 8 }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                gap: 8,
+              }}
+            >
               {items.map((insight, i) => {
                 const styles = typeStyles[insight.type];
                 const Icon = insight.icon;
                 return (
-                  <div key={i} style={{
-                    padding: '12px 14px', borderRadius: 12,
-                    background: styles.bg, border: `1px solid ${styles.border}`,
-                    display: 'flex', gap: 10,
-                  }}>
+                  <div
+                    key={i}
+                    style={{
+                      padding: '12px 14px',
+                      borderRadius: 12,
+                      background: styles.bg,
+                      border: `1px solid ${styles.border}`,
+                      display: 'flex',
+                      gap: 10,
+                    }}
+                  >
                     <div style={{ flexShrink: 0, marginTop: 1 }}>
                       <Icon size={14} style={{ color: styles.color }} />
                     </div>
                     <div>
-                      <p style={{ fontSize: 12, fontWeight: 700, color: styles.titleColor, marginBottom: 3 }}>
+                      <p
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: styles.titleColor,
+                          marginBottom: 3,
+                        }}
+                      >
                         {insight.title}
                       </p>
                       <p style={{ fontSize: 11, color: t.text.secondary, lineHeight: 1.5 }}>

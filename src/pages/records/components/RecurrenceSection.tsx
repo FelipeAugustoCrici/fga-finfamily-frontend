@@ -20,7 +20,7 @@ export function RecurrenceSection() {
             width: 36,
             height: 20,
             borderRadius: 999,
-            background: isRecurring ? '#6366f1' : (isDark ? 'rgba(255,255,255,0.15)' : '#cbd5e1'),
+            background: isRecurring ? '#6366f1' : isDark ? 'rgba(255,255,255,0.15)' : '#cbd5e1',
             border: 'none',
             cursor: 'pointer',
             position: 'relative',
@@ -28,28 +28,32 @@ export function RecurrenceSection() {
             transition: 'background 0.18s ease',
           }}
         >
-          <div style={{
-            position: 'absolute',
-            top: 2,
-            left: isRecurring ? 18 : 2,
-            width: 16,
-            height: 16,
-            borderRadius: '50%',
-            background: '#ffffff',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-            transition: 'left 0.18s ease',
-          }} />
+          <div
+            style={{
+              position: 'absolute',
+              top: 2,
+              left: isRecurring ? 18 : 2,
+              width: 16,
+              height: 16,
+              borderRadius: '50%',
+              background: '#ffffff',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+              transition: 'left 0.18s ease',
+            }}
+          />
         </button>
         <span style={{ fontSize: 13, color: t.text.secondary }}>Recorrente</span>
       </label>
 
       {/* Duração — expande inline */}
-      <div style={{
-        overflow: 'hidden',
-        maxHeight: isRecurring ? 80 : 0,
-        opacity: isRecurring ? 1 : 0,
-        transition: 'max-height 0.25s ease, opacity 0.2s ease',
-      }}>
+      <div
+        style={{
+          overflow: 'hidden',
+          maxHeight: isRecurring ? 80 : 0,
+          opacity: isRecurring ? 1 : 0,
+          transition: 'max-height 0.25s ease, opacity 0.2s ease',
+        }}
+      >
         <Input
           label="Duração (meses)"
           type="number"

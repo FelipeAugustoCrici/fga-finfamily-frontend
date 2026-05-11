@@ -22,27 +22,43 @@ function getWeekDates(ref: Date): Date[] {
 }
 
 function eventColors(ev: CalendarFinancialEvent) {
-  if (ev.type === 'income')    return { color: '#059669', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.25)' };
-  if (ev.status === 'OVERDUE') return { color: '#dc2626', bg: 'rgba(239,68,68,0.15)',   border: 'rgba(239,68,68,0.3)' };
-  return                              { color: '#d97706', bg: 'rgba(245,158,11,0.12)',  border: 'rgba(245,158,11,0.25)' };
+  if (ev.type === 'income')
+    return { color: '#059669', bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.25)' };
+  if (ev.status === 'OVERDUE')
+    return { color: '#dc2626', bg: 'rgba(239,68,68,0.15)', border: 'rgba(239,68,68,0.3)' };
+  return { color: '#d97706', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.25)' };
 }
 
 function EventPill({ ev }: { ev: CalendarFinancialEvent }) {
   const { color, bg, border } = eventColors(ev);
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 3,
-      padding: '3px 6px', borderRadius: 6,
-      background: bg, border: `1px solid ${border}`,
-      minWidth: 0, overflow: 'hidden',
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 3,
+        padding: '3px 6px',
+        borderRadius: 6,
+        background: bg,
+        border: `1px solid ${border}`,
+        minWidth: 0,
+        overflow: 'hidden',
+      }}
+    >
       {ev.isRecurring && <RefreshCw size={8} style={{ color, flexShrink: 0 }} />}
       {ev.status === 'OVERDUE' && <AlertCircle size={8} style={{ color, flexShrink: 0 }} />}
-      <span style={{
-        fontSize: 10, fontWeight: 600, color,
-        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-        flex: 1, minWidth: 0,
-      }}>
+      <span
+        style={{
+          fontSize: 10,
+          fontWeight: 600,
+          color,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          flex: 1,
+          minWidth: 0,
+        }}
+      >
         {ev.description}
       </span>
       <span style={{ fontSize: 10, fontWeight: 700, color, flexShrink: 0, marginLeft: 2 }}>
@@ -62,35 +78,72 @@ export function WeekView({ referenceDate, days, onDayClick }: Props) {
   const t = useTokens();
   const isDark = t.bg.page === '#020617';
   const today = toKey(new Date());
-  const dayMap = new Map(days.map(d => [d.date, d]));
+  const dayMap = new Map(days.map((d) => [d.date, d]));
   const weekDates = getWeekDates(referenceDate);
 
   return (
-    <div style={{
-      background: t.bg.card,
-      border: `1px solid ${t.border.default}`,
-      borderRadius: 18,
-      overflow: 'hidden',
-      boxShadow: t.shadow.card,
-    }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', borderBottom: `1px solid ${t.border.divider}` }}>
+    <div
+      style={{
+        background: t.bg.card,
+        border: `1px solid ${t.border.default}`,
+        borderRadius: 18,
+        overflow: 'hidden',
+        boxShadow: t.shadow.card,
+      }}
+    >
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+          borderBottom: `1px solid ${t.border.divider}`,
+        }}
+      >
         {weekDates.map((date, i) => {
           const isToday = toKey(date) === today;
           return (
-            <div key={i} style={{
-              padding: '12px 6px', textAlign: 'center',
-              borderRight: i < 6 ? `1px solid ${t.border.divider}` : 'none',
-              background: isToday ? (isDark ? 'rgba(99,102,241,0.12)' : '#eef2ff') : 'transparent',
-            }}>
-              <p style={{ fontSize: 10, fontWeight: 600, color: t.text.muted, textTransform: 'uppercase', marginBottom: 4 }}>
+            <div
+              key={i}
+              style={{
+                padding: '12px 6px',
+                textAlign: 'center',
+                borderRight: i < 6 ? `1px solid ${t.border.divider}` : 'none',
+                background: isToday
+                  ? isDark
+                    ? 'rgba(99,102,241,0.12)'
+                    : '#eef2ff'
+                  : 'transparent',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 10,
+                  fontWeight: 600,
+                  color: t.text.muted,
+                  textTransform: 'uppercase',
+                  marginBottom: 4,
+                }}
+              >
                 {WEEKDAYS_SHORT[date.getDay()]}
               </p>
-              <div style={{
-                width: 30, height: 30, borderRadius: '50%', margin: '0 auto',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: isToday ? '#6366f1' : 'transparent',
-              }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: isToday ? '#fff' : t.text.primary }}>
+              <div
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: '50%',
+                  margin: '0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: isToday ? '#6366f1' : 'transparent',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: isToday ? '#fff' : t.text.primary,
+                  }}
+                >
                   {date.getDate()}
                 </span>
               </div>
@@ -99,7 +152,13 @@ export function WeekView({ referenceDate, days, onDayClick }: Props) {
         })}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', minHeight: 180 }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+          minHeight: 180,
+        }}
+      >
         {weekDates.map((date, i) => {
           const key = toKey(date);
           const summary = dayMap.get(key);
@@ -115,14 +174,21 @@ export function WeekView({ referenceDate, days, onDayClick }: Props) {
                 padding: '8px 5px',
                 borderRight: i < 6 ? `1px solid ${t.border.divider}` : 'none',
                 cursor: hasEvents ? 'pointer' : 'default',
-                background: isToday ? (isDark ? 'rgba(99,102,241,0.05)' : '#faf5ff') : 'transparent',
-                display: 'flex', flexDirection: 'column', gap: 3,
-                minWidth: 0, overflow: 'hidden',
+                background: isToday
+                  ? isDark
+                    ? 'rgba(99,102,241,0.05)'
+                    : '#faf5ff'
+                  : 'transparent',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 3,
+                minWidth: 0,
+                overflow: 'hidden',
               }}
             >
               {hasEvents ? (
                 <>
-                  {summary!.events.slice(0, MAX).map(ev => (
+                  {summary!.events.slice(0, MAX).map((ev) => (
                     <EventPill key={ev.id} ev={ev} />
                   ))}
                   {summary!.eventCount > MAX && (
@@ -130,18 +196,41 @@ export function WeekView({ referenceDate, days, onDayClick }: Props) {
                       +{summary!.eventCount - MAX} mais
                     </span>
                   )}
-                  <div style={{
-                    marginTop: 'auto', paddingTop: 5,
-                    borderTop: `1px solid ${t.border.divider}`,
-                    fontSize: 10, fontWeight: 700,
-                    color: summary!.balance >= 0 ? (isDark ? '#6ee7b7' : '#059669') : (isDark ? '#fca5a5' : '#dc2626'),
-                    textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                  }}>
-                    {summary!.balance >= 0 ? '+' : ''}{fmt(summary!.balance)}
+                  <div
+                    style={{
+                      marginTop: 'auto',
+                      paddingTop: 5,
+                      borderTop: `1px solid ${t.border.divider}`,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      color:
+                        summary!.balance >= 0
+                          ? isDark
+                            ? '#6ee7b7'
+                            : '#059669'
+                          : isDark
+                            ? '#fca5a5'
+                            : '#dc2626',
+                      textAlign: 'right',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {summary!.balance >= 0 ? '+' : ''}
+                    {fmt(summary!.balance)}
                   </div>
                 </>
               ) : (
-                <span style={{ fontSize: 11, color: t.text.muted, textAlign: 'center', marginTop: 20, display: 'block' }}>
+                <span
+                  style={{
+                    fontSize: 11,
+                    color: t.text.muted,
+                    textAlign: 'center',
+                    marginTop: 20,
+                    display: 'block',
+                  }}
+                >
                   -
                 </span>
               )}

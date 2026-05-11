@@ -14,9 +14,15 @@ const PASSWORD_RULES = [
 ];
 
 export function RegisterStep1({
-  register, setValue, errors, password,
-  showPassword, setShowPassword,
-  focused, setFocused, onSubmit,
+  register,
+  setValue,
+  errors,
+  password,
+  showPassword,
+  setShowPassword,
+  focused,
+  setFocused,
+  onSubmit,
 }: Step1Props) {
   const t = useTokens();
   const isDark = t.bg.page === '#020617';
@@ -58,38 +64,75 @@ export function RegisterStep1({
           icon={<Lock size={16} />}
           error={errors.password}
           rightElement={
-            <button type="button" onClick={() => setShowPassword(v => !v)} style={{
-              background: 'none', border: 'none', cursor: 'pointer', padding: 2,
-              color: t.text.muted, display: 'flex', alignItems: 'center',
-            }}>
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 2,
+                color: t.text.muted,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
               {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           }
           {...register('password')}
-          onFocus={() => { setFocused('password'); setLocalPasswordFocused(true); }}
-          onBlur={() => { setFocused(null); setLocalPasswordFocused(false); }}
+          onFocus={() => {
+            setFocused('password');
+            setLocalPasswordFocused(true);
+          }}
+          onBlur={() => {
+            setFocused(null);
+            setLocalPasswordFocused(false);
+          }}
         />
 
         {(localPasswordFocused || showRules) && (
-          <div style={{
-            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px 8px',
-            padding: '10px 12px', borderRadius: 10,
-            background: isDark ? 'rgba(255,255,255,0.04)' : '#f8fafc',
-            border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0'}`,
-          }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '5px 8px',
+              padding: '10px 12px',
+              borderRadius: 10,
+              background: isDark ? 'rgba(255,255,255,0.04)' : '#f8fafc',
+              border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0'}`,
+            }}
+          >
             {PASSWORD_RULES.map(({ label, test }) => {
               const ok = test(password);
               return (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <div style={{
-                    width: 14, height: 14, borderRadius: '50%', flexShrink: 0,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: ok ? '#22c55e' : isDark ? 'rgba(255,255,255,0.1)' : '#e2e8f0',
-                    transition: 'background 0.2s',
-                  }}>
-                    {ok && <span style={{ color: '#fff', fontSize: 9, fontWeight: 700, lineHeight: 1 }}>✓</span>}
+                  <div
+                    style={{
+                      width: 14,
+                      height: 14,
+                      borderRadius: '50%',
+                      flexShrink: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: ok ? '#22c55e' : isDark ? 'rgba(255,255,255,0.1)' : '#e2e8f0',
+                      transition: 'background 0.2s',
+                    }}
+                  >
+                    {ok && (
+                      <span style={{ color: '#fff', fontSize: 9, fontWeight: 700, lineHeight: 1 }}>
+                        ✓
+                      </span>
+                    )}
                   </div>
-                  <span style={{ fontSize: 11, color: ok ? '#22c55e' : t.text.muted, transition: 'color 0.2s' }}>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      color: ok ? '#22c55e' : t.text.muted,
+                      transition: 'color 0.2s',
+                    }}
+                  >
                     {label}
                   </span>
                 </div>
@@ -102,14 +145,29 @@ export function RegisterStep1({
       <button
         type="submit"
         style={{
-          width: '100%', height: 46, borderRadius: 12, border: 'none', marginTop: 4,
+          width: '100%',
+          height: 46,
+          borderRadius: 12,
+          border: 'none',
+          marginTop: 4,
           background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-          color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          boxShadow: '0 4px 14px rgba(99,102,241,0.35)', transition: 'opacity 0.18s',
+          color: '#fff',
+          fontSize: 14,
+          fontWeight: 700,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
+          transition: 'opacity 0.18s',
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = '0.9'; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.opacity = '0.9';
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.opacity = '1';
+        }}
       >
         Continuar <ChevronRight size={15} />
       </button>

@@ -55,7 +55,7 @@ export function formatRelativeDate(date: Date | string | number): string {
   if (diffInDays > 1 && diffInDays < 7) return `há ${diffInDays} dias`;
   if (diffInDays < -1 && diffInDays > -7) return `em ${Math.abs(diffInDays)} dias`;
 
-return formatShortDate(date);
+  return formatShortDate(date);
 }
 
 export function formatFromNow(date: Date | string | number): string {

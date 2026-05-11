@@ -20,13 +20,12 @@ api.interceptors.request.use(async (config) => {
 const prefix = '/finance';
 
 export const financeService = {
-  
   async getCategories() {
     const response = await api.get<Category[]>(`${prefix}/categories`);
     return response.data;
   },
 
-async getFamilies() {
+  async getFamilies() {
     const response = await api.get<Family[]>(`${prefix}/families`);
     return response.data;
   },
@@ -38,7 +37,7 @@ async getFamilies() {
     return response.data;
   },
 
-async addIncome(data: Income & { isRecurring?: boolean; durationMonths?: number }) {
+  async addIncome(data: Income & { isRecurring?: boolean; durationMonths?: number }) {
     const response = await api.post(`${prefix}/incomes`, data);
     return response.data;
   },
@@ -50,7 +49,7 @@ async addIncome(data: Income & { isRecurring?: boolean; durationMonths?: number 
     return response.data;
   },
 
-async addExpense(data: Expense) {
+  async addExpense(data: Expense) {
     const response = await api.post(`${prefix}/expenses`, data);
     return response.data;
   },
@@ -76,7 +75,7 @@ async addExpense(data: Expense) {
     }>(url);
     return response.data;
   },
-  
+
   async addGoal(data: Partial<Goal>) {
     const response = await api.post(`${prefix}/goals`, data);
     return response.data;
@@ -86,7 +85,7 @@ async addExpense(data: Expense) {
     return response.data;
   },
 
-async saveBudget(data: Budget) {
+  async saveBudget(data: Budget) {
     const response = await api.post(`${prefix}/budgets`, data);
     return response.data;
   },

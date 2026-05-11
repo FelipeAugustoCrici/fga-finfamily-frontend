@@ -6,14 +6,12 @@ function getIsDark() {
 
 export function useTheme() {
   const [isDark, setIsDark] = useState<boolean>(() => {
-    
     const saved = localStorage.getItem('theme');
     if (saved) return saved === 'dark';
     return getIsDark();
   });
 
   useEffect(() => {
-    
     const root = document.documentElement;
     if (isDark) {
       root.classList.add('dark');
@@ -24,7 +22,6 @@ export function useTheme() {
   }, [isDark]);
 
   useEffect(() => {
-    
     const observer = new MutationObserver(() => {
       setIsDark(getIsDark());
     });

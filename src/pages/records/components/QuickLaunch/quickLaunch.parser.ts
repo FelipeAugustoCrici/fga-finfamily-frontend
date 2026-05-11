@@ -18,28 +18,21 @@ function localDate(offsetDays = 0): string {
 }
 
 export function norm(s: string): string {
-  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
 }
 
 const DATE_WORDS: Record<string, number> = { hoje: 0, ontem: -1, amanha: 1 };
 
-const INCOME_VERBS = [
-  'recebi', 'ganhei', 'entrou', 'caiu', 'me deu', 'me pagou', 'me mandou',
-];
+const INCOME_VERBS = ['recebi', 'ganhei', 'entrou', 'caiu', 'me deu', 'me pagou', 'me mandou'];
 
-const EXPENSE_VERBS = [
-  'enviei', 'paguei', 'transferi', 'mandei', 'dei', 'gastei', 'mande',
-];
+const EXPENSE_VERBS = ['enviei', 'paguei', 'transferi', 'mandei', 'dei', 'gastei', 'mande'];
 
-const SALARY_HINTS = [
-  'salario', 'salary', 'contracheque', 'holerite',
-];
+const SALARY_HINTS = ['salario', 'salary', 'contracheque', 'holerite'];
 
 const TRANSFER_HINTS = ['pix', 'transferencia', 'ted', 'doc'];
-
-const FROM_PREPS = ['do', 'da', 'de', 'dos', 'das'];
-
-const TO_PREPS = ['para', 'pro', 'pra', 'pras', 'pros', 'ao', 'a'];
 
 const FAMILY_LABELS: Record<string, string> = {
   pai: 'meu pai',
@@ -98,8 +91,16 @@ const FAMILY_ALIASES: Record<string, string> = {
 };
 
 const INCOME_KEYWORDS = [
-  'salario', 'bonus', 'extra', 'renda', 'recebimento',
-  'freelance', 'dividendo', 'rendimento', 'reembolso', 'comissao',
+  'salario',
+  'bonus',
+  'extra',
+  'renda',
+  'recebimento',
+  'freelance',
+  'dividendo',
+  'rendimento',
+  'reembolso',
+  'comissao',
 ];
 
 const CATEGORY_MAP: Record<string, string> = {
@@ -172,9 +173,12 @@ function extractDate(tokens: string[]): { date: string; usedIndices: Set<number>
         break;
       }
     }
-    const dm = t.match(/^(\d{1,2})[\/\-](\d{1,2})$/);
+    const dm = t.match(/^(\d{1,2})[/-](\d{1,2})$/);
     if (dm) {
-      date = moment().date(parseInt(dm[1])).month(parseInt(dm[2]) - 1).format('YYYY-MM-DD');
+      date = moment()
+        .date(parseInt(dm[1]))
+        .month(parseInt(dm[2]) - 1)
+        .format('YYYY-MM-DD');
       used.add(i);
       break;
     }
@@ -188,20 +192,19 @@ function cleanForDescription(text: string): string {
     .replace(/\d[\d.,]*/g, '')
     .replace(/\b(reais|real|r\$)\b/gi, '')
     .replace(/\b(no\s+dia|dia|hoje|ontem|amanha)\b/gi, '')
-    .replace(/\d{1,2}[\/\-]\d{1,2}/g, '')
+    .replace(/\d{1,2}[/-]\d{1,2}/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 function resolveFamilyLabel(n: string): string | null {
-  
   const twoWord = n.match(/\b(meu|minha)\s+(\w+)\b/);
   if (twoWord) {
     const key = norm(`${twoWord[1]} ${twoWord[2]}`);
     const canonical = FAMILY_ALIASES[key];
     if (canonical) return FAMILY_LABELS[canonical] ?? null;
   }
-  
+
   for (const [alias, canonical] of Object.entries(FAMILY_ALIASES)) {
     if (n.includes(alias)) return FAMILY_LABELS[canonical] ?? null;
   }
@@ -214,18 +217,16 @@ interface PersonContext {
   isFamilyRelative: boolean;
 }
 
-function extractOrigin(
-  n: string,
-  members: { id: string; name: string }[],
-): PersonContext | null {
-  
+function extractOrigin(n: string, members: { id: string; name: string }[]): PersonContext | null {
   const member = members.find((m) => n.includes(norm(m.name)));
   if (member) return { label: member.name, memberId: member.id, isFamilyRelative: false };
 
-const familyLabel = resolveFamilyLabel(n);
+  const familyLabel = resolveFamilyLabel(n);
   if (familyLabel) return { label: familyLabel, memberId: null, isFamilyRelative: true };
 
-const fromMatch = n.match(/\b(?:do|da|de|dos|das)\s+([a-záéíóúãõâêîôûç]+(?:\s+[a-záéíóúãõâêîôûç]+)?)\b/);
+  const fromMatch = n.match(
+    /\b(?:do|da|de|dos|das)\s+([a-záéíóúãõâêîôûç]+(?:\s+[a-záéíóúãõâêîôûç]+)?)\b/,
+  );
   if (fromMatch) {
     const name = fromMatch[1].replace(/\b\w/g, (c) => c.toUpperCase());
     if (!['meu', 'minha', 'seu', 'sua', 'um', 'uma'].includes(fromMatch[1])) {
@@ -240,14 +241,15 @@ function extractDestination(
   n: string,
   members: { id: string; name: string }[],
 ): PersonContext | null {
-  
   const member = members.find((m) => n.includes(norm(m.name)));
   if (member) return { label: member.name, memberId: member.id, isFamilyRelative: false };
 
-const familyLabel = resolveFamilyLabel(n);
+  const familyLabel = resolveFamilyLabel(n);
   if (familyLabel) return { label: familyLabel, memberId: null, isFamilyRelative: true };
 
-const toMatch = n.match(/\b(?:para|pro|pra|pras|pros|ao|a)\s+([a-záéíóúãõâêîôûç]+(?:\s+[a-záéíóúãõâêîôûç]+)?)\b/);
+  const toMatch = n.match(
+    /\b(?:para|pro|pra|pras|pros|ao|a)\s+([a-záéíóúãõâêîôûç]+(?:\s+[a-záéíóúãõâêîôûç]+)?)\b/,
+  );
   if (toMatch) {
     const name = toMatch[1].replace(/\b\w/g, (c) => c.toUpperCase());
     if (!['meu', 'minha', 'seu', 'sua', 'um', 'uma', 'o', 'a'].includes(toMatch[1])) {
@@ -274,30 +276,34 @@ function tryNaturalLanguage(
   const n = norm(raw);
   const { amount } = extractAmount(raw);
 
-const incomeVerb = INCOME_VERBS.find(
+  const incomeVerb = INCOME_VERBS.find(
     (v) => n.startsWith(v + ' ') || n.includes(' ' + v + ' ') || n === v,
   );
   const expenseVerb = EXPENSE_VERBS.find(
     (v) => n.startsWith(v + ' ') || n.includes(' ' + v + ' ') || n === v,
   );
 
-const subjectVerbMatch =
-    !incomeVerb && !expenseVerb
-      ? n.match(/^(.+?)\s+(me\s+deu|me\s+pagou|me\s+mandou)\b/)
-      : null;
+  const subjectVerbMatch =
+    !incomeVerb && !expenseVerb ? n.match(/^(.+?)\s+(me\s+deu|me\s+pagou|me\s+mandou)\b/) : null;
 
   const isIncome = !!incomeVerb || !!subjectVerbMatch;
   const isExpense = !!expenseVerb;
 
   if (!isIncome && !isExpense) return null;
 
-if (isIncome) {
-    
+  if (isIncome) {
     if (SALARY_HINTS.some((h) => n.includes(h))) {
-      return { type: 'salary', description: 'Salário', categoryName: 'Salário', amount, personName: null, personId: null };
+      return {
+        type: 'salary',
+        description: 'Salário',
+        categoryName: 'Salário',
+        amount,
+        personName: null,
+        personId: null,
+      };
     }
 
-if (subjectVerbMatch) {
+    if (subjectVerbMatch) {
       const subjectRaw = subjectVerbMatch[1];
       const origin = extractOrigin(subjectRaw, members);
       const label = origin?.label ?? subjectRaw.replace(/\b\w/g, (c) => c.toUpperCase()).trim();
@@ -312,7 +318,7 @@ if (subjectVerbMatch) {
       };
     }
 
-const origin = extractOrigin(n, members);
+    const origin = extractOrigin(n, members);
     if (origin) {
       const prep = origin.label.toLowerCase().startsWith('minha') ? 'da' : 'do';
       return {
@@ -325,9 +331,7 @@ const origin = extractOrigin(n, members);
       };
     }
 
-const cleaned = cleanForDescription(
-      raw.replace(new RegExp(incomeVerb ?? '', 'i'), ''),
-    );
+    const cleaned = cleanForDescription(raw.replace(new RegExp(incomeVerb ?? '', 'i'), ''));
     return {
       type: 'income',
       description: cleaned.length > 2 ? `Recebi ${cleaned}` : 'Receita',
@@ -338,13 +342,15 @@ const cleaned = cleanForDescription(
     };
   }
 
-const destination = extractDestination(n, members);
+  const destination = extractDestination(n, members);
   const hasTransfer = TRANSFER_HINTS.some((h) => n.includes(h));
 
   if (destination) {
-    const prep = destination.label.toLowerCase().startsWith('minha') || destination.label.toLowerCase().startsWith('meu')
-      ? 'para'
-      : 'a';
+    const prep =
+      destination.label.toLowerCase().startsWith('minha') ||
+      destination.label.toLowerCase().startsWith('meu')
+        ? 'para'
+        : 'a';
     return {
       type: 'expense',
       description: `Paguei ${prep} ${destination.label}`,
@@ -355,9 +361,7 @@ const destination = extractDestination(n, members);
     };
   }
 
-  const cleaned = cleanForDescription(
-    raw.replace(new RegExp(expenseVerb ?? '', 'i'), ''),
-  );
+  const cleaned = cleanForDescription(raw.replace(new RegExp(expenseVerb ?? '', 'i'), ''));
   return {
     type: 'expense',
     description: cleaned.length > 2 ? `Paguei ${cleaned}` : 'Despesa',
@@ -421,13 +425,17 @@ export function parseQuickLaunch(
     };
   }
 
-const used = new Set(usedIndices);
+  const used = new Set(usedIndices);
 
   let amount: number | null = null;
   for (let i = 0; i < tokens.length; i++) {
     if (!/^[\d.,]+$/.test(tokens[i])) continue;
     const v = parseFloat(tokens[i].replace(',', '.'));
-    if (!isNaN(v) && v > 0) { amount = v; used.add(i); break; }
+    if (!isNaN(v) && v > 0) {
+      amount = v;
+      used.add(i);
+      break;
+    }
   }
 
   const descIdx = tokens.findIndex((_, i) => !used.has(i));
@@ -437,7 +445,11 @@ const used = new Set(usedIndices);
     if (used.has(i) || i === descIdx) continue;
     const t = norm(tokens[i]);
     const match = familyMembers.find((m) => norm(m.name).startsWith(t) && t.length >= 3);
-    if (match) { personHint = match.id; used.add(i); break; }
+    if (match) {
+      personHint = match.id;
+      used.add(i);
+      break;
+    }
   }
 
   let categoryHint: string | null = null;
@@ -451,9 +463,17 @@ const used = new Set(usedIndices);
       if (used.has(i) || i === descIdx) continue;
       const t = norm(tokens[i]);
       const direct = categories.find((c) => norm(c.name) === t);
-      if (direct) { categoryHint = direct.id; used.add(i); break; }
+      if (direct) {
+        categoryHint = direct.id;
+        used.add(i);
+        break;
+      }
       const mapped = CATEGORY_MAP[t];
-      if (mapped) { categoryHint = resolveCategory(mapped, categories); used.add(i); break; }
+      if (mapped) {
+        categoryHint = resolveCategory(mapped, categories);
+        used.add(i);
+        break;
+      }
     }
   }
 

@@ -17,24 +17,24 @@ export function CalendarGrid({ month, year, days, onDayClick }: Props) {
 
   const dayMap = new Map(days.map((d) => [d.date, d]));
 
-const firstDay = new Date(year, month - 1, 1).getDay();
+  const firstDay = new Date(year, month - 1, 1).getDay();
   const daysInMonth = new Date(year, month, 0).getDate();
   const daysInPrevMonth = new Date(year, month - 1, 0).getDate();
 
   const cells: { day: number; month: number; year: number; current: boolean }[] = [];
 
-for (let i = firstDay - 1; i >= 0; i--) {
+  for (let i = firstDay - 1; i >= 0; i--) {
     const d = daysInPrevMonth - i;
     const m = month === 1 ? 12 : month - 1;
     const y = month === 1 ? year - 1 : year;
     cells.push({ day: d, month: m, year: y, current: false });
   }
 
-for (let d = 1; d <= daysInMonth; d++) {
+  for (let d = 1; d <= daysInMonth; d++) {
     cells.push({ day: d, month, year, current: true });
   }
 
-const remaining = 42 - cells.length;
+  const remaining = 42 - cells.length;
   for (let d = 1; d <= remaining; d++) {
     const m = month === 12 ? 1 : month + 1;
     const y = month === 12 ? year + 1 : year;

@@ -20,7 +20,7 @@ export function useUserInfo() {
       const attributes = await fetchUserAttributes();
       const name = attributes.name || attributes.email || 'Usuário';
 
-const nameParts = name.split(' ');
+      const nameParts = name.split(' ');
       const initials =
         nameParts.length >= 2
           ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase()
@@ -32,7 +32,7 @@ const nameParts = name.split(' ');
         initials,
       };
     },
-    staleTime: 1000 * 60 * 10, 
+    staleTime: 1000 * 60 * 10,
   });
 }
 
@@ -49,10 +49,10 @@ export function useUserFamily() {
           };
         }
         return null;
-      } catch (error) {
+      } catch {
         return null;
       }
     },
-    staleTime: 1000 * 60 * 5, 
+    staleTime: 1000 * 60 * 5,
   });
 }

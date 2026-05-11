@@ -4,8 +4,18 @@ import { useTheme } from '@/hooks/useTheme';
 import { useTokens } from '@/hooks/useTokens';
 
 const MONTHS = [
-  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro',
 ];
 
 function getGreeting() {
@@ -16,9 +26,8 @@ function getGreeting() {
 }
 
 export interface PageHeaderProps {
-  
   actions?: React.ReactNode;
-  
+
   showPeriod?: boolean;
   month?: number;
   year?: number;
@@ -63,7 +72,9 @@ export function PageHeader({
           <h1 className="text-xl font-bold" style={{ color: t.text.primary }}>
             {getGreeting()}, {userInfo?.name?.split(' ')[0] || 'Usuário'} 👋
           </h1>
-          <p className="text-xs capitalize" style={{ color: t.text.muted }}>{dateStr}</p>
+          <p className="text-xs capitalize" style={{ color: t.text.muted }}>
+            {dateStr}
+          </p>
         </div>
       </div>
 
@@ -109,20 +120,23 @@ export function PageHeader({
               onClick={onPrevMonth}
               className="p-2 transition-colors"
               style={{ color: t.text.muted }}
-              onMouseEnter={e => (e.currentTarget.style.background = t.bg.muted)}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.bg.muted)}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             >
               <ChevronLeft size={16} />
             </button>
-            <span className="px-3 py-2 text-xs font-bold min-w-32 text-center capitalize" style={{ color: t.text.primary }}>
+            <span
+              className="px-3 py-2 text-xs font-bold min-w-32 text-center capitalize"
+              style={{ color: t.text.primary }}
+            >
               {MONTHS[month - 1]} {year}
             </span>
             <button
               onClick={onNextMonth}
               className="p-2 transition-colors"
               style={{ color: t.text.muted }}
-              onMouseEnter={e => (e.currentTarget.style.background = t.bg.muted)}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              onMouseEnter={(e) => (e.currentTarget.style.background = t.bg.muted)}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             >
               <ChevronRight size={16} />
             </button>

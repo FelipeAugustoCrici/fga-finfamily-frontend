@@ -25,7 +25,9 @@ export const Card: React.FC<CardProps> = ({ children, className, title, descript
       )}
       <div className="px-6 py-5 flex-1">{children}</div>
       {footer && (
-        <div className="px-6 py-4 bg-primary-50/50 border-t border-primary-50 shrink-0 mt-auto">{footer}</div>
+        <div className="px-6 py-4 bg-primary-50/50 border-t border-primary-50 shrink-0 mt-auto">
+          {footer}
+        </div>
       )}
     </div>
   );

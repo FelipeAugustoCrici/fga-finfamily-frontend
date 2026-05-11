@@ -8,7 +8,14 @@ import { useGoals } from '../hooks/useGoals';
 import { useDeleteGoal } from '../hooks/useDeleteGoal';
 import { GoalContributionModal } from './GoalContributionModal';
 import { GoalDetailModal } from './GoalDetailModal';
-import { fmt, getBadge, getMotivation, getProgressBarColor, GOAL_TYPE_META, computeInsights } from './goalUtils';
+import {
+  fmt,
+  getBadge,
+  getMotivation,
+  getProgressBarColor,
+  GOAL_TYPE_META,
+  computeInsights,
+} from './goalUtils';
 import type { Goal } from '../types/planning.types';
 
 export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
@@ -20,14 +27,19 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
   const [detailGoal, setDetailGoal] = useState<Goal | null>(null);
 
   const confirmDelete = () => {
-    if (deleteId) { deleteGoal.mutate(deleteId); setDeleteId(null); }
+    if (deleteId) {
+      deleteGoal.mutate(deleteId);
+      setDeleteId(null);
+    }
   };
 
   if (isLoading) {
     return (
       <Card title="Metas Financeiras">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '8px 0' }}>
-          {[1,2,3].map(i => <Skeleton key={i} height={120} borderRadius={14} />)}
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} height={120} borderRadius={14} />
+          ))}
         </div>
       </Card>
     );
@@ -77,21 +89,33 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                     {}
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${meta.bg}`}>
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${meta.bg}`}
+                        >
                           <Icon size={15} className={meta.color} />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-semibold text-slate-800 text-sm truncate">{goal.description}</p>
-                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${badge.color}`}>
+                          <p className="font-semibold text-slate-800 text-sm truncate">
+                            {goal.description}
+                          </p>
+                          <span
+                            className={`text-xs font-medium px-2 py-0.5 rounded-full border ${badge.color}`}
+                          >
                             {badge.label}
                           </span>
                         </div>
                       </div>
                       <div className="flex items-center gap-1 ml-2 shrink-0">
-                        <button onClick={() => setDetailGoal(goal)} className="p-1.5 text-slate-400 hover:text-slate-600 transition-colors">
+                        <button
+                          onClick={() => setDetailGoal(goal)}
+                          className="p-1.5 text-slate-400 hover:text-slate-600 transition-colors"
+                        >
                           <Eye size={14} />
                         </button>
-                        <button onClick={() => setDeleteId(goal.id)} className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors">
+                        <button
+                          onClick={() => setDeleteId(goal.id)}
+                          className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors"
+                        >
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -101,7 +125,9 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                     <div className="space-y-1.5 mb-3">
                       <div className="flex justify-between items-center">
                         <span className="text-2xl font-bold text-slate-800">{pct.toFixed(0)}%</span>
-                        <span className="text-xs text-slate-500">{fmt(goal.currentValue)} / {fmt(goal.targetValue)}</span>
+                        <span className="text-xs text-slate-500">
+                          {fmt(goal.currentValue)} / {fmt(goal.targetValue)}
+                        </span>
                       </div>
                       <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                         <div
@@ -119,7 +145,9 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                           <p className="text-xs text-slate-400 mb-0.5 flex items-center justify-center gap-0.5">
                             <Plus size={9} /> Este mês
                           </p>
-                          <p className={`text-xs font-bold ${insights.thisMonthTotal > 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
+                          <p
+                            className={`text-xs font-bold ${insights.thisMonthTotal > 0 ? 'text-emerald-600' : 'text-slate-400'}`}
+                          >
                             {insights.thisMonthTotal > 0 ? `+${fmt(insights.thisMonthTotal)}` : '—'}
                           </p>
                         </div>
@@ -127,7 +155,9 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                           <p className="text-xs text-slate-400 mb-0.5 flex items-center justify-center gap-0.5">
                             <Minus size={9} /> Falta
                           </p>
-                          <p className="text-xs font-bold text-rose-500">{fmt(insights.remaining)}</p>
+                          <p className="text-xs font-bold text-rose-500">
+                            {fmt(insights.remaining)}
+                          </p>
                         </div>
                         <div className="p-2 bg-slate-50 rounded-lg border border-slate-100 text-center">
                           <p className="text-xs text-slate-400 mb-0.5 flex items-center justify-center gap-0.5">
@@ -150,21 +180,24 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                         <TrendingUp size={11} className="text-sky-500 shrink-0" />
                         <p className="text-xs text-sky-700">
                           Média {fmt(insights.monthlyAvg)}/mês
-                          {insights.estimatedMonths !== null && insights.estimatedMonths > 0 &&
+                          {insights.estimatedMonths !== null &&
+                            insights.estimatedMonths > 0 &&
                             ` → conclui em ${insights.estimatedMonths} ${insights.estimatedMonths === 1 ? 'mês' : 'meses'}`}
                         </p>
                       </div>
                     )}
 
                     {}
-                    {!completed && insights.suggestedMonthly !== null && insights.suggestedMonthly > 0 && (
-                      <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-violet-50 border border-violet-100 rounded-lg mb-3">
-                        <Calendar size={11} className="text-violet-500 shrink-0" />
-                        <p className="text-xs text-violet-700">
-                          Guardar {fmt(insights.suggestedMonthly)}/mês para bater o prazo
-                        </p>
-                      </div>
-                    )}
+                    {!completed &&
+                      insights.suggestedMonthly !== null &&
+                      insights.suggestedMonthly > 0 && (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-violet-50 border border-violet-100 rounded-lg mb-3">
+                          <Calendar size={11} className="text-violet-500 shrink-0" />
+                          <p className="text-xs text-violet-700">
+                            Guardar {fmt(insights.suggestedMonthly)}/mês para bater o prazo
+                          </p>
+                        </div>
+                      )}
 
                     {!completed ? (
                       <button
@@ -207,8 +240,12 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
       <Modal isOpen={!!deleteId} onClose={() => setDeleteId(null)} title="Confirmar Exclusão">
         <p className="text-slate-600 mb-6">Tem certeza que deseja excluir esta meta?</p>
         <div className="flex gap-3 justify-end">
-          <Button variant="ghost" onClick={() => setDeleteId(null)}>Cancelar</Button>
-          <Button variant="primary" onClick={confirmDelete}>Confirmar</Button>
+          <Button variant="ghost" onClick={() => setDeleteId(null)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={confirmDelete}>
+            Confirmar
+          </Button>
         </div>
       </Modal>
     </>

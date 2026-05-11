@@ -30,11 +30,17 @@ export function Register() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
 
-  const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } =
-    useForm<RegisterStep1Data>({
-      resolver: zodResolver(registerStep1Schema),
-      mode: 'onTouched',
-    });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<RegisterStep1Data>({
+    resolver: zodResolver(registerStep1Schema),
+    mode: 'onTouched',
+  });
 
   const password = watch('password', '');
 
@@ -66,36 +72,67 @@ export function Register() {
   }
 
   return (
-    <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 16, position: 'relative',
-      background: isDark
-        ? 'radial-gradient(ellipse at 40% 0%, rgba(99,102,241,0.12) 0%, #020617 55%)'
-        : 'radial-gradient(ellipse at 40% 0%, rgba(99,102,241,0.07) 0%, #f1f5f9 55%)',
-    }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        position: 'relative',
+        background: isDark
+          ? 'radial-gradient(ellipse at 40% 0%, rgba(99,102,241,0.12) 0%, #020617 55%)'
+          : 'radial-gradient(ellipse at 40% 0%, rgba(99,102,241,0.07) 0%, #f1f5f9 55%)',
+      }}
+    >
       <button
         onClick={toggle}
         title={isDark ? 'Modo claro' : 'Modo escuro'}
         style={{
-          position: 'fixed', top: 16, right: 16, width: 38, height: 38, borderRadius: 10,
-          border: `1px solid ${t.border.default}`, background: t.bg.card, color: t.text.muted,
-          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: t.shadow.card, transition: 'background 0.2s, color 0.2s', zIndex: 100,
+          position: 'fixed',
+          top: 16,
+          right: 16,
+          width: 38,
+          height: 38,
+          borderRadius: 10,
+          border: `1px solid ${t.border.default}`,
+          background: t.bg.card,
+          color: t.text.muted,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: t.shadow.card,
+          transition: 'background 0.2s, color 0.2s',
+          zIndex: 100,
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = t.text.primary; (e.currentTarget as HTMLElement).style.background = t.bg.cardHover; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = t.text.muted; (e.currentTarget as HTMLElement).style.background = t.bg.card; }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.color = t.text.primary;
+          (e.currentTarget as HTMLElement).style.background = t.bg.cardHover;
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.color = t.text.muted;
+          (e.currentTarget as HTMLElement).style.background = t.bg.card;
+        }}
       >
         {isDark ? <Sun size={16} /> : <Moon size={16} />}
       </button>
 
       <div style={{ width: '100%', maxWidth: 440 }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 52, height: 52, borderRadius: 16,
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            boxShadow: '0 8px 24px rgba(99,102,241,0.35)', marginBottom: 14,
-          }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 52,
+              height: 52,
+              borderRadius: 16,
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              boxShadow: '0 8px 24px rgba(99,102,241,0.35)',
+              marginBottom: 14,
+            }}
+          >
             <Sparkles size={24} color="#fff" />
           </div>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: t.text.primary, margin: 0 }}>
@@ -106,10 +143,15 @@ export function Register() {
           </p>
         </div>
 
-        <div style={{
-          background: t.bg.card, border: `1px solid ${t.border.default}`,
-          borderRadius: 20, padding: '28px 28px 24px', boxShadow: t.shadow.cardLg,
-        }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 20,
+            padding: '28px 28px 24px',
+            boxShadow: t.shadow.cardLg,
+          }}
+        >
           {/* Steps indicator */}
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: 24 }}>
             {STEPS.map((label, i) => {
@@ -118,24 +160,54 @@ export function Register() {
               const isDone = step > idx;
               const isLast = idx === STEPS.length;
               return (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', flex: isLast ? 'none' : 1 }}>
+                <div
+                  key={idx}
+                  style={{ display: 'flex', alignItems: 'center', flex: isLast ? 'none' : 1 }}
+                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-                    <div style={{
-                      width: 26, height: 26, borderRadius: '50%', fontSize: 11, fontWeight: 700,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      background: isDone ? '#6366f1' : isActive ? 'linear-gradient(135deg,#6366f1,#8b5cf6)' : t.bg.muted,
-                      color: isDone || isActive ? '#fff' : t.text.muted,
-                      boxShadow: isActive ? '0 2px 8px rgba(99,102,241,0.35)' : 'none',
-                      transition: 'all 0.2s',
-                    }}>
+                    <div
+                      style={{
+                        width: 26,
+                        height: 26,
+                        borderRadius: '50%',
+                        fontSize: 11,
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: isDone
+                          ? '#6366f1'
+                          : isActive
+                            ? 'linear-gradient(135deg,#6366f1,#8b5cf6)'
+                            : t.bg.muted,
+                        color: isDone || isActive ? '#fff' : t.text.muted,
+                        boxShadow: isActive ? '0 2px 8px rgba(99,102,241,0.35)' : 'none',
+                        transition: 'all 0.2s',
+                      }}
+                    >
                       {isDone ? '✓' : idx}
                     </div>
-                    <span style={{ fontSize: 12, fontWeight: isActive ? 600 : 400, color: isActive ? t.text.primary : t.text.muted, whiteSpace: 'nowrap' }}>
+                    <span
+                      style={{
+                        fontSize: 12,
+                        fontWeight: isActive ? 600 : 400,
+                        color: isActive ? t.text.primary : t.text.muted,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       {label}
                     </span>
                   </div>
                   {!isLast && (
-                    <div style={{ flex: 1, height: 1, margin: '0 8px', background: isDone ? '#6366f1' : t.border.divider, transition: 'background 0.3s' }} />
+                    <div
+                      style={{
+                        flex: 1,
+                        height: 1,
+                        margin: '0 8px',
+                        background: isDone ? '#6366f1' : t.border.divider,
+                        transition: 'background 0.3s',
+                      }}
+                    />
                   )}
                 </div>
               );
@@ -152,15 +224,21 @@ export function Register() {
               setShowPassword={setShowPassword}
               focused={focused}
               setFocused={setFocused}
-              onSubmit={handleSubmit(() => { setSubmitError(null); setStep(2); })}
+              onSubmit={handleSubmit(() => {
+                setSubmitError(null);
+                setStep(2);
+              })}
             />
           )}
 
           {step === 2 && (
             <RegisterStep2
-              phone={phone} setPhone={setPhone}
-              cpf={cpf} setCpf={setCpf}
-              birthDate={birthDate} setBirthDate={setBirthDate}
+              phone={phone}
+              setPhone={setPhone}
+              cpf={cpf}
+              setCpf={setCpf}
+              birthDate={birthDate}
+              setBirthDate={setBirthDate}
               loading={loading}
               error={submitError}
               onBack={() => setStep(1)}

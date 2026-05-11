@@ -5,7 +5,7 @@ import { Login, NewPassword, ForgotPassword, Register, ConfirmSignUp } from '@/p
 import { FamilyRoutes } from '@/pages/families/base/FamilyRoutes';
 import { RecordRoutes } from '@/pages/records/base/RecordRoutes';
 import { CategoryRoutes } from '@/pages/categories/base/CategoryRoutes';
-import { PlanningRoutes } from '@/pages/planning'
+import { PlanningRoutes } from '@/pages/planning';
 import { CoupleModeRoutes } from '@/pages/couple-mode';
 import { ReportsRoutes } from '@/pages/reports/base/ReportsRoutes';
 import { CreditCardRoutes } from '@/pages/credit-cards/base/CreditCardRoutes';

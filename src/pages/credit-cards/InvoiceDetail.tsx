@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { useTokens } from '@/hooks/useTokens';
 import { useInvoiceById } from './hooks/useCreditCards';
 import { InvoiceStatusBadge } from './components/InvoiceStatusBadge';
 import { PayInvoiceModal } from './components/PayInvoiceModal';
@@ -15,32 +14,41 @@ export function InvoiceDetail() {
   const { invoiceId } = useParams<{ invoiceId: string }>();
   const navigate = useNavigate();
   const [payOpen, setPayOpen] = useState(false);
-  const t = useTokens();
 
   const { data: invoice, isLoading } = useInvoiceById(invoiceId!);
 
   const fmt = (v: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
 
-  if (isLoading) return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '8px 0' }}>
-      <Skeleton height={40} width={200} borderRadius={10} />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-        {[1,2,3,4].map(i => <Skeleton key={i} height={88} borderRadius={18} />)}
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
-        <Skeleton height={320} borderRadius={18} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <Skeleton height={150} borderRadius={18} />
-          <Skeleton height={150} borderRadius={18} />
+  if (isLoading)
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '8px 0' }}>
+        <Skeleton height={40} width={200} borderRadius={10} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} height={88} borderRadius={18} />
+          ))}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
+          <Skeleton height={320} borderRadius={18} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <Skeleton height={150} borderRadius={18} />
+            <Skeleton height={150} borderRadius={18} />
+          </div>
         </div>
       </div>
-    </div>
-  );
-  if (!invoice) return <div className="text-center py-16 text-primary-500">Fatura não encontrada</div>;
+    );
+  if (!invoice)
+    return <div className="text-center py-16 text-primary-500">Fatura não encontrada</div>;
 
-  const byCategory = _.groupBy(invoice.installments, (i) => i.purchase?.category?.name || 'Sem categoria');
-  const byPerson = _.groupBy(invoice.installments, (i) => i.purchase?.owner?.name || 'Sem responsável');
+  const byCategory = _.groupBy(
+    invoice.installments,
+    (i) => i.purchase?.category?.name || 'Sem categoria',
+  );
+  const byPerson = _.groupBy(
+    invoice.installments,
+    (i) => i.purchase?.owner?.name || 'Sem responsável',
+  );
 
   return (
     <div className="space-y-6">
@@ -67,7 +75,9 @@ export function InvoiceDetail() {
           { label: 'Status', value: <InvoiceStatusBadge status={invoice.status} /> },
         ].map((item) => (
           <Card key={item.label}>
-            <p className="text-xs text-primary-500 uppercase font-medium tracking-wider mb-1">{item.label}</p>
+            <p className="text-xs text-primary-500 uppercase font-medium tracking-wider mb-1">
+              {item.label}
+            </p>
             <div className="text-lg font-bold text-primary-800">{item.value}</div>
           </Card>
         ))}
@@ -78,11 +88,16 @@ export function InvoiceDetail() {
         <div className="lg:col-span-2">
           <Card title="Compras e Parcelas">
             {!invoice.installments?.length ? (
-              <p className="text-center py-8 text-primary-400 text-sm">Nenhuma compra nesta fatura</p>
+              <p className="text-center py-8 text-primary-400 text-sm">
+                Nenhuma compra nesta fatura
+              </p>
             ) : (
               <div className="space-y-2">
                 {invoice.installments.map((inst) => (
-                  <div key={inst.id} className="flex items-center justify-between p-3 rounded-lg border border-primary-100">
+                  <div
+                    key={inst.id}
+                    className="flex items-center justify-between p-3 rounded-lg border border-primary-100"
+                  >
                     <div>
                       <p className="text-sm font-medium text-primary-800">
                         {inst.purchase?.description}
@@ -93,9 +108,19 @@ export function InvoiceDetail() {
                         )}
                       </p>
                       <div className="flex gap-2 mt-0.5">
-                        {inst.purchase?.category && <span className="text-xs text-primary-400">{inst.purchase.category.name}</span>}
-                        {inst.purchase?.owner && <span className="text-xs text-primary-400">• {inst.purchase.owner.name}</span>}
-                        <span className="text-xs text-primary-400">• {formatShortDate(inst.purchase?.purchaseDate || '')}</span>
+                        {inst.purchase?.category && (
+                          <span className="text-xs text-primary-400">
+                            {inst.purchase.category.name}
+                          </span>
+                        )}
+                        {inst.purchase?.owner && (
+                          <span className="text-xs text-primary-400">
+                            • {inst.purchase.owner.name}
+                          </span>
+                        )}
+                        <span className="text-xs text-primary-400">
+                          • {formatShortDate(inst.purchase?.purchaseDate || '')}
+                        </span>
                       </div>
                     </div>
                     <span className="text-sm font-bold text-primary-800">{fmt(inst.amount)}</span>
@@ -113,7 +138,9 @@ export function InvoiceDetail() {
               {Object.entries(byCategory).map(([cat, items]) => (
                 <div key={cat} className="flex justify-between text-sm">
                   <span className="text-primary-600">{cat}</span>
-                  <span className="font-medium text-primary-800">{fmt(items.reduce((s, i) => s + i.amount, 0))}</span>
+                  <span className="font-medium text-primary-800">
+                    {fmt(items.reduce((s, i) => s + i.amount, 0))}
+                  </span>
                 </div>
               ))}
             </div>
@@ -124,7 +151,9 @@ export function InvoiceDetail() {
               {Object.entries(byPerson).map(([person, items]) => (
                 <div key={person} className="flex justify-between text-sm">
                   <span className="text-primary-600">{person}</span>
-                  <span className="font-medium text-primary-800">{fmt(items.reduce((s, i) => s + i.amount, 0))}</span>
+                  <span className="font-medium text-primary-800">
+                    {fmt(items.reduce((s, i) => s + i.amount, 0))}
+                  </span>
                 </div>
               ))}
             </div>

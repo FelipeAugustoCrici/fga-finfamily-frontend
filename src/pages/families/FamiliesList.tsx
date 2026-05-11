@@ -8,8 +8,18 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SkeletonList } from '@/components/ui/Skeleton';
 import { useTokens } from '@/hooks/useTokens';
 import {
-  Plus, Users, Trash2, Edit, UserPlus, Loader2, AlertTriangle,
-  ShieldCheck, MoreVertical, UserX, CheckCircle2, Send,
+  Plus,
+  Users,
+  Trash2,
+  Edit,
+  UserPlus,
+  Loader2,
+  AlertTriangle,
+  ShieldCheck,
+  MoreVertical,
+  UserX,
+  CheckCircle2,
+  Send,
 } from 'lucide-react';
 import { useFamilies } from './hooks/useFamilies';
 import { useCreateFamily } from './hooks/useCreateFamily';
@@ -44,7 +54,11 @@ export function FamiliesList() {
     mutationFn: (memberId: string) => familyService.deleteMember(memberId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['families'] });
-      showToast({ title: 'Sucesso', description: 'Membro removido com sucesso!', variant: 'success' });
+      showToast({
+        title: 'Sucesso',
+        description: 'Membro removido com sucesso!',
+        variant: 'success',
+      });
     },
     onError: () => {
       showToast({ title: 'Erro', description: 'Erro ao remover membro', variant: 'error' });
@@ -54,11 +68,19 @@ export function FamiliesList() {
   const resendInvite = useMutation({
     mutationFn: (memberId: string) => familyService.resendInvite(memberId),
     onSuccess: () => {
-      showToast({ title: 'Convite reenviado', description: 'O email de convite foi reenviado com sucesso!', variant: 'success' });
+      showToast({
+        title: 'Convite reenviado',
+        description: 'O email de convite foi reenviado com sucesso!',
+        variant: 'success',
+      });
       setOpenMenuId(null);
     },
     onError: () => {
-      showToast({ title: 'Erro', description: 'Não foi possível reenviar o convite', variant: 'error' });
+      showToast({
+        title: 'Erro',
+        description: 'Não foi possível reenviar o convite',
+        variant: 'error',
+      });
     },
   });
 
@@ -90,7 +112,14 @@ export function FamiliesList() {
   if (isLoading) {
     return (
       <div style={{ maxWidth: 896, margin: '0 auto' }}>
-        <div style={{ background: t.bg.card, border: `1px solid ${t.border.default}`, borderRadius: 18, overflow: 'hidden' }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 18,
+            overflow: 'hidden',
+          }}
+        >
           <SkeletonList rows={4} t={t} />
         </div>
       </div>
@@ -99,15 +128,33 @@ export function FamiliesList() {
 
   if (!hasFamily) {
     return (
-      <div style={{ maxWidth: 560, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div
+        style={{
+          maxWidth: 560,
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 24,
+        }}
+      >
         <div style={{ textAlign: 'center', padding: '32px 0 8px' }}>
-          <div style={{
-            width: 72, height: 72, borderRadius: 20, margin: '0 auto 16px',
-            background: t.bg.muted, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
+          <div
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: 20,
+              margin: '0 auto 16px',
+              background: t.bg.muted,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <Users size={32} style={{ color: t.text.muted }} />
           </div>
-          <h2 style={{ fontSize: 22, fontWeight: 700, color: t.text.primary, margin: 0 }}>Configure sua Família</h2>
+          <h2 style={{ fontSize: 22, fontWeight: 700, color: t.text.primary, margin: 0 }}>
+            Configure sua Família
+          </h2>
           <p style={{ color: t.text.muted, marginTop: 8, fontSize: 14 }}>
             Crie sua família para começar a gerenciar os lançamentos
           </p>
@@ -122,8 +169,16 @@ export function FamiliesList() {
               onChange={(e) => setNewFamilyName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleCreateFamily()}
             />
-            <Button onClick={handleCreateFamily} disabled={!newFamilyName.trim() || createFamily.isPending} className="w-full">
-              {createFamily.isPending ? <Loader2 className="mr-2 animate-spin" size={18} /> : <Plus className="mr-2" size={18} />}
+            <Button
+              onClick={handleCreateFamily}
+              disabled={!newFamilyName.trim() || createFamily.isPending}
+              className="w-full"
+            >
+              {createFamily.isPending ? (
+                <Loader2 className="mr-2 animate-spin" size={18} />
+              ) : (
+                <Plus className="mr-2" size={18} />
+              )}
               Criar Família
             </Button>
           </div>
@@ -151,38 +206,64 @@ export function FamiliesList() {
           </>
         }
       />
-      <div style={{ maxWidth: 896, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
-
+      <div
+        style={{
+          maxWidth: 896,
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 24,
+        }}
+      >
         {}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 16,
-        }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 16,
+          }}
+        >
           {[
             { label: 'Total de membros', value: members.length, icon: Users, color: t.text.link },
-            { label: 'Ativos no sistema', value: activeCount, icon: CheckCircle2, color: t.income.text },
+            {
+              label: 'Ativos no sistema',
+              value: activeCount,
+              icon: CheckCircle2,
+              color: t.income.text,
+            },
             { label: 'Sem acesso', value: inactiveCount, icon: UserX, color: t.text.muted },
           ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} style={{
-              background: t.bg.card,
-              border: `1px solid ${t.border.default}`,
-              borderRadius: 16,
-              padding: '18px 20px',
-              boxShadow: t.shadow.card,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-            }}>
-              <div style={{
-                width: 40, height: 40, borderRadius: 12,
-                background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              }}>
+            <div
+              key={label}
+              style={{
+                background: t.bg.card,
+                border: `1px solid ${t.border.default}`,
+                borderRadius: 16,
+                padding: '18px 20px',
+                boxShadow: t.shadow.card,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 14,
+              }}
+            >
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 12,
+                  background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
                 <Icon size={18} style={{ color }} />
               </div>
               <div>
-                <p style={{ fontSize: 22, fontWeight: 800, color: t.text.primary, lineHeight: 1 }}>{value}</p>
+                <p style={{ fontSize: 22, fontWeight: 800, color: t.text.primary, lineHeight: 1 }}>
+                  {value}
+                </p>
                 <p style={{ fontSize: 12, color: t.text.muted, marginTop: 3 }}>{label}</p>
               </div>
             </div>
@@ -190,27 +271,32 @@ export function FamiliesList() {
         </div>
 
         {}
-        <div style={{
-          background: t.bg.card,
-          border: `1px solid ${t.border.default}`,
-          borderRadius: 18,
-          boxShadow: t.shadow.card,
-          overflow: 'hidden',
-        }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 18,
+            boxShadow: t.shadow.card,
+            overflow: 'hidden',
+          }}
+        >
           {}
-          <div style={{
-            padding: '18px 24px',
-            borderBottom: `1px solid ${t.border.divider}`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
+          <div
+            style={{
+              padding: '18px 24px',
+              borderBottom: `1px solid ${t.border.divider}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
             <div>
-              <p style={{ fontSize: 15, fontWeight: 700, color: t.text.primary }}>Membros da Família</p>
+              <p style={{ fontSize: 15, fontWeight: 700, color: t.text.primary }}>
+                Membros da Família
+              </p>
               <p style={{ fontSize: 12, color: t.text.muted, marginTop: 2 }}>
-                {members.length} {members.length === 1 ? 'membro' : 'membros'} •{' '}
-                {activeCount} {activeCount === 1 ? 'ativo' : 'ativos'} •{' '}
-                {inactiveCount} sem acesso
+                {members.length} {members.length === 1 ? 'membro' : 'membros'} • {activeCount}{' '}
+                {activeCount === 1 ? 'ativo' : 'ativos'} • {inactiveCount} sem acesso
               </p>
             </div>
           </div>
@@ -219,7 +305,12 @@ export function FamiliesList() {
           {members.length > 0 ? (
             <div>
               {members.map((member: any, idx: number) => {
-                const initials = member.name.split(' ').map((n: string) => n[0]).slice(0, 2).join('').toUpperCase();
+                const initials = member.name
+                  .split(' ')
+                  .map((n: string) => n[0])
+                  .slice(0, 2)
+                  .join('')
+                  .toUpperCase();
                 const isMenuOpen = openMenuId === member.id;
 
                 return (
@@ -230,48 +321,71 @@ export function FamiliesList() {
                       alignItems: 'center',
                       gap: 14,
                       padding: '16px 24px',
-                      borderBottom: idx < members.length - 1 ? `1px solid ${t.border.divider}` : 'none',
+                      borderBottom:
+                        idx < members.length - 1 ? `1px solid ${t.border.divider}` : 'none',
                       transition: 'background 0.15s',
                       position: 'relative',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.background = t.bg.muted)}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = t.bg.muted)}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
                     {}
-                    <div style={{
-                      width: 44, height: 44, borderRadius: 14, flexShrink: 0,
-                      background: isDark ? 'rgba(99,102,241,0.18)' : 'rgba(99,102,241,0.10)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 15, fontWeight: 700,
-                      color: t.text.link,
-                    }}>
+                    <div
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: 14,
+                        flexShrink: 0,
+                        background: isDark ? 'rgba(99,102,241,0.18)' : 'rgba(99,102,241,0.10)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 15,
+                        fontWeight: 700,
+                        color: t.text.link,
+                      }}
+                    >
                       {initials}
                     </div>
 
                     {}
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 14, fontWeight: 600, color: t.text.primary }}>{member.name}</p>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: t.text.primary }}>
+                        {member.name}
+                      </p>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                         {member.hasAccess ? (
-                          <span style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 4,
-                            fontSize: 11, fontWeight: 600,
-                            color: t.income.text,
-                            background: isDark ? 'rgba(34,197,94,0.12)' : 'rgba(34,197,94,0.08)',
-                            border: `1px solid ${isDark ? 'rgba(34,197,94,0.25)' : 'rgba(34,197,94,0.2)'}`,
-                            borderRadius: 20, padding: '2px 8px',
-                          }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 4,
+                              fontSize: 11,
+                              fontWeight: 600,
+                              color: t.income.text,
+                              background: isDark ? 'rgba(34,197,94,0.12)' : 'rgba(34,197,94,0.08)',
+                              border: `1px solid ${isDark ? 'rgba(34,197,94,0.25)' : 'rgba(34,197,94,0.2)'}`,
+                              borderRadius: 20,
+                              padding: '2px 8px',
+                            }}
+                          >
                             <ShieldCheck size={10} /> Ativo no sistema
                           </span>
                         ) : (
-                          <span style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 4,
-                            fontSize: 11, fontWeight: 500,
-                            color: t.text.muted,
-                            background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
-                            border: `1px solid ${t.border.subtle}`,
-                            borderRadius: 20, padding: '2px 8px',
-                          }}>
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 4,
+                              fontSize: 11,
+                              fontWeight: 500,
+                              color: t.text.muted,
+                              background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                              border: `1px solid ${t.border.subtle}`,
+                              borderRadius: 20,
+                              padding: '2px 8px',
+                            }}
+                          >
                             <UserX size={10} /> Não convidado
                           </span>
                         )}
@@ -286,14 +400,22 @@ export function FamiliesList() {
                       <button
                         onClick={() => setOpenMenuId(isMenuOpen ? null : member.id)}
                         style={{
-                          width: 32, height: 32, borderRadius: 8, border: 'none',
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          border: 'none',
                           background: isMenuOpen ? t.bg.mutedStrong : 'transparent',
-                          color: t.text.muted, cursor: 'pointer',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          color: t.text.muted,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                           transition: 'background 0.15s',
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.background = t.bg.mutedStrong)}
-                        onMouseLeave={e => { if (!isMenuOpen) e.currentTarget.style.background = 'transparent'; }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = t.bg.mutedStrong)}
+                        onMouseLeave={(e) => {
+                          if (!isMenuOpen) e.currentTarget.style.background = 'transparent';
+                        }}
                       >
                         <MoreVertical size={16} />
                       </button>
@@ -305,38 +427,58 @@ export function FamiliesList() {
                             style={{ position: 'fixed', inset: 0, zIndex: 10 }}
                             onClick={() => setOpenMenuId(null)}
                           />
-                          <div style={{
-                            position: 'absolute', right: 0, top: 36, zIndex: 20,
-                            background: t.bg.card,
-                            border: `1px solid ${t.border.default}`,
-                            borderRadius: 12,
-                            boxShadow: isDark
-                              ? '0 8px 24px rgba(0,0,0,0.5)'
-                              : '0 8px 24px rgba(0,0,0,0.12)',
-                            minWidth: 160,
-                            overflow: 'hidden',
-                          }}>
+                          <div
+                            style={{
+                              position: 'absolute',
+                              right: 0,
+                              top: 36,
+                              zIndex: 20,
+                              background: t.bg.card,
+                              border: `1px solid ${t.border.default}`,
+                              borderRadius: 12,
+                              boxShadow: isDark
+                                ? '0 8px 24px rgba(0,0,0,0.5)'
+                                : '0 8px 24px rgba(0,0,0,0.12)',
+                              minWidth: 160,
+                              overflow: 'hidden',
+                            }}
+                          >
                             {member.hasAccess && (
                               <button
                                 onClick={() => resendInvite.mutate(member.id)}
                                 disabled={resendInvite.isPending}
                                 style={{
-                                  width: '100%', padding: '10px 14px',
-                                  display: 'flex', alignItems: 'center', gap: 8,
-                                  background: 'transparent', border: 'none',
-                                  fontSize: 13, color: t.text.link,
+                                  width: '100%',
+                                  padding: '10px 14px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 8,
+                                  background: 'transparent',
+                                  border: 'none',
+                                  fontSize: 13,
+                                  color: t.text.link,
                                   cursor: resendInvite.isPending ? 'not-allowed' : 'pointer',
                                   textAlign: 'left',
                                   transition: 'background 0.15s',
                                   opacity: resendInvite.isPending ? 0.6 : 1,
                                 }}
-                                onMouseEnter={e => (e.currentTarget.style.background = isDark ? 'rgba(99,102,241,0.1)' : 'rgba(99,102,241,0.06)')}
-                                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                              >
-                                {resendInvite.isPending
-                                  ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
-                                  : <Send size={14} />
+                                onMouseEnter={(e) =>
+                                  (e.currentTarget.style.background = isDark
+                                    ? 'rgba(99,102,241,0.1)'
+                                    : 'rgba(99,102,241,0.06)')
                                 }
+                                onMouseLeave={(e) =>
+                                  (e.currentTarget.style.background = 'transparent')
+                                }
+                              >
+                                {resendInvite.isPending ? (
+                                  <Loader2
+                                    size={14}
+                                    style={{ animation: 'spin 1s linear infinite' }}
+                                  />
+                                ) : (
+                                  <Send size={14} />
+                                )}
                                 Reenviar convite
                               </button>
                             )}
@@ -347,15 +489,25 @@ export function FamiliesList() {
                                 setDeleteMemberModalOpen(true);
                               }}
                               style={{
-                                width: '100%', padding: '10px 14px',
-                                display: 'flex', alignItems: 'center', gap: 8,
-                                background: 'transparent', border: 'none',
-                                fontSize: 13, color: t.expense.text,
-                                cursor: 'pointer', textAlign: 'left',
+                                width: '100%',
+                                padding: '10px 14px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                                background: 'transparent',
+                                border: 'none',
+                                fontSize: 13,
+                                color: t.expense.text,
+                                cursor: 'pointer',
+                                textAlign: 'left',
                                 transition: 'background 0.15s',
                               }}
-                              onMouseEnter={e => (e.currentTarget.style.background = t.expense.bgIcon)}
-                              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                              onMouseEnter={(e) =>
+                                (e.currentTarget.style.background = t.expense.bgIcon)
+                              }
+                              onMouseLeave={(e) =>
+                                (e.currentTarget.style.background = 'transparent')
+                              }
                             >
                               <Trash2 size={14} /> Remover membro
                             </button>
@@ -369,13 +521,23 @@ export function FamiliesList() {
             </div>
           ) : (
             <div style={{ padding: '48px 24px', textAlign: 'center' }}>
-              <div style={{
-                width: 56, height: 56, borderRadius: 16, margin: '0 auto 12px',
-                background: t.bg.muted, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 16,
+                  margin: '0 auto 12px',
+                  background: t.bg.muted,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <UserPlus size={24} style={{ color: t.text.muted }} />
               </div>
-              <p style={{ fontSize: 15, fontWeight: 600, color: t.text.secondary }}>Nenhum membro ainda</p>
+              <p style={{ fontSize: 15, fontWeight: 600, color: t.text.secondary }}>
+                Nenhum membro ainda
+              </p>
               <p style={{ fontSize: 13, color: t.text.muted, marginTop: 4 }}>
                 Adicione membros para começar a dividir as despesas
               </p>
@@ -383,39 +545,62 @@ export function FamiliesList() {
           )}
 
           {}
-          <div style={{
-            padding: '16px 24px',
-            borderTop: `1px solid ${t.border.divider}`,
-            background: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.015)',
-          }}>
+          <div
+            style={{
+              padding: '16px 24px',
+              borderTop: `1px solid ${t.border.divider}`,
+              background: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.015)',
+            }}
+          >
             <button
               onClick={() => setAddMemberOpen(true)}
               style={{
-                width: '100%', padding: '12px 16px',
-                display: 'flex', alignItems: 'center', gap: 12,
+                width: '100%',
+                padding: '12px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
                 background: isDark ? 'rgba(99,102,241,0.12)' : 'rgba(99,102,241,0.06)',
                 border: `1.5px dashed ${isDark ? 'rgba(99,102,241,0.35)' : 'rgba(99,102,241,0.25)'}`,
-                borderRadius: 12, cursor: 'pointer',
+                borderRadius: 12,
+                cursor: 'pointer',
                 transition: 'all 0.15s',
               }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.background = isDark ? 'rgba(99,102,241,0.18)' : 'rgba(99,102,241,0.10)';
-                (e.currentTarget as HTMLElement).style.borderColor = isDark ? 'rgba(99,102,241,0.5)' : 'rgba(99,102,241,0.4)';
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = isDark
+                  ? 'rgba(99,102,241,0.18)'
+                  : 'rgba(99,102,241,0.10)';
+                (e.currentTarget as HTMLElement).style.borderColor = isDark
+                  ? 'rgba(99,102,241,0.5)'
+                  : 'rgba(99,102,241,0.4)';
               }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.background = isDark ? 'rgba(99,102,241,0.12)' : 'rgba(99,102,241,0.06)';
-                (e.currentTarget as HTMLElement).style.borderColor = isDark ? 'rgba(99,102,241,0.35)' : 'rgba(99,102,241,0.25)';
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = isDark
+                  ? 'rgba(99,102,241,0.12)'
+                  : 'rgba(99,102,241,0.06)';
+                (e.currentTarget as HTMLElement).style.borderColor = isDark
+                  ? 'rgba(99,102,241,0.35)'
+                  : 'rgba(99,102,241,0.25)';
               }}
             >
-              <div style={{
-                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                background: isDark ? 'rgba(99,102,241,0.2)' : 'rgba(99,102,241,0.12)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
+              <div
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  flexShrink: 0,
+                  background: isDark ? 'rgba(99,102,241,0.2)' : 'rgba(99,102,241,0.12)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <UserPlus size={16} style={{ color: t.text.link }} />
               </div>
               <div style={{ textAlign: 'left' }}>
-                <p style={{ fontSize: 13, fontWeight: 600, color: t.text.link }}>Adicionar novo membro</p>
+                <p style={{ fontSize: 13, fontWeight: 600, color: t.text.link }}>
+                  Adicionar novo membro
+                </p>
                 <p style={{ fontSize: 11, color: t.text.muted, marginTop: 1 }}>
                   Convide alguém para participar das despesas
                 </p>
@@ -426,11 +611,19 @@ export function FamiliesList() {
       </div>
 
       {family && (
-        <AddMemberModal familyId={family.id} isOpen={addMemberOpen} onClose={() => setAddMemberOpen(false)} />
+        <AddMemberModal
+          familyId={family.id}
+          isOpen={addMemberOpen}
+          onClose={() => setAddMemberOpen(false)}
+        />
       )}
 
       {}
-      <Modal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirmar Exclusão">
+      <Modal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        title="Confirmar Exclusão"
+      >
         <div className="space-y-4">
           <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
             <AlertTriangle size={20} className="text-red-600 mt-0.5 flex-shrink-0" />
@@ -446,12 +639,25 @@ export function FamiliesList() {
             Tem certeza que deseja excluir a família <strong>{family?.name}</strong>?
           </p>
           <div className="flex gap-3 justify-end">
-            <Button variant="ghost" onClick={() => setDeleteModalOpen(false)}>Cancelar</Button>
-            <Button variant="primary" onClick={handleDeleteFamily} disabled={deleteFamily.isPending} className="bg-red-600 hover:bg-red-700">
+            <Button variant="ghost" onClick={() => setDeleteModalOpen(false)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleDeleteFamily}
+              disabled={deleteFamily.isPending}
+              className="bg-red-600 hover:bg-red-700"
+            >
               {deleteFamily.isPending ? (
-                <><Loader2 className="mr-2 animate-spin" size={18} />Excluindo...</>
+                <>
+                  <Loader2 className="mr-2 animate-spin" size={18} />
+                  Excluindo...
+                </>
               ) : (
-                <><Trash2 className="mr-2" size={18} />Confirmar Exclusão</>
+                <>
+                  <Trash2 className="mr-2" size={18} />
+                  Confirmar Exclusão
+                </>
               )}
             </Button>
           </div>
@@ -461,19 +667,38 @@ export function FamiliesList() {
       {}
       <Modal
         isOpen={deleteMemberModalOpen}
-        onClose={() => { setDeleteMemberModalOpen(false); setSelectedMemberId(null); }}
+        onClose={() => {
+          setDeleteMemberModalOpen(false);
+          setSelectedMemberId(null);
+        }}
         title="Remover Membro"
       >
         <div className="space-y-4">
           <p className="text-gray-600">Tem certeza que deseja remover este membro da família?</p>
           <div className="flex gap-3 justify-end">
-            <Button variant="ghost" onClick={() => { setDeleteMemberModalOpen(false); setSelectedMemberId(null); }}>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setDeleteMemberModalOpen(false);
+                setSelectedMemberId(null);
+              }}
+            >
               Cancelar
             </Button>
-            <Button variant="primary" onClick={handleDeleteMember} disabled={deleteMember.isPending} className="bg-red-600 hover:bg-red-700">
+            <Button
+              variant="primary"
+              onClick={handleDeleteMember}
+              disabled={deleteMember.isPending}
+              className="bg-red-600 hover:bg-red-700"
+            >
               {deleteMember.isPending ? (
-                <><Loader2 className="mr-2 animate-spin" size={18} />Removendo...</>
-              ) : 'Confirmar'}
+                <>
+                  <Loader2 className="mr-2 animate-spin" size={18} />
+                  Removendo...
+                </>
+              ) : (
+                'Confirmar'
+              )}
             </Button>
           </div>
         </div>
@@ -481,4 +706,3 @@ export function FamiliesList() {
     </>
   );
 }
-

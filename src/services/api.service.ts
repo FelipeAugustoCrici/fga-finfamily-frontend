@@ -15,8 +15,8 @@ api.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-    } catch {
-      
+    } catch (_e) {
+      // token not available, proceed without auth header
     }
 
     return config;

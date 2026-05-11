@@ -10,7 +10,7 @@ export function PlanningList() {
   const [budgetModalOpen, setBudgetModalOpen] = useState(false);
   const [cardModalOpen, setCardModalOpen] = useState(false);
 
-const { data: families = [] } = useQuery({
+  const { data: families = [] } = useQuery({
     queryKey: ['families'],
     queryFn: async () => {
       const { data } = await api.get('/finance/families');

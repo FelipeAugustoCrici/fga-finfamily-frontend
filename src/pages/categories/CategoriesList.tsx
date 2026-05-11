@@ -7,7 +7,6 @@ import { ActionButton } from '@/components/ui/ActionButton';
 
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
-import { Button } from '@/components/ui/Button';
 import { ConfirmModal } from '@/components/ui/Modal';
 import { Pagination } from '@/components/ui/Pagination';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -46,21 +45,30 @@ export function CategoriesList() {
   const [createSuccess, setCreateSuccess] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const { data: expenseData, isLoading: loadingExpenses } = useCategoriesPaginated('expense', expensePage);
-  const { data: incomeData, isLoading: loadingIncomes } = useCategoriesPaginated('income', incomePage);
+  const { data: expenseData, isLoading: loadingExpenses } = useCategoriesPaginated(
+    'expense',
+    expensePage,
+  );
+  const { data: incomeData, isLoading: loadingIncomes } = useCategoriesPaginated(
+    'income',
+    incomePage,
+  );
 
   const totalExpenses = expenseData?.total ?? 0;
   const totalIncomes = incomeData?.total ?? 0;
 
   function onSubmit(data: CategoryFormData) {
-    createCategory.mutate({ ...data, familyId: family?.id }, {
-      onSuccess: () => {
-        reset();
-        setCreateSuccess(true);
-        setActiveTab(data.type as 'expense' | 'income');
-        setTimeout(() => setCreateSuccess(false), 2500);
+    createCategory.mutate(
+      { ...data, familyId: family?.id },
+      {
+        onSuccess: () => {
+          reset();
+          setCreateSuccess(true);
+          setActiveTab(data.type as 'expense' | 'income');
+          setTimeout(() => setCreateSuccess(false), 2500);
+        },
       },
-    });
+    );
   }
 
   const handleConfirmDelete = () => {
@@ -118,25 +126,63 @@ export function CategoriesList() {
       {}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
         {[
-          { label: 'Total de Categorias', value: totalExpenses + totalIncomes, icon: Layers, color: '#6366f1', bg: isDark ? 'rgba(99,102,241,0.10)' : '#eef2ff', border: isDark ? 'rgba(99,102,241,0.20)' : '#c7d2fe' },
-          { label: 'Despesas', value: totalExpenses, icon: TrendingDown, color: '#ef4444', bg: isDark ? 'rgba(239,68,68,0.10)' : '#fef2f2', border: isDark ? 'rgba(239,68,68,0.20)' : '#fecaca' },
-          { label: 'Receitas', value: totalIncomes, icon: TrendingUp, color: '#10b981', bg: isDark ? 'rgba(16,185,129,0.10)' : '#ecfdf5', border: isDark ? 'rgba(16,185,129,0.20)' : '#a7f3d0' },
+          {
+            label: 'Total de Categorias',
+            value: totalExpenses + totalIncomes,
+            icon: Layers,
+            color: '#6366f1',
+            bg: isDark ? 'rgba(99,102,241,0.10)' : '#eef2ff',
+            border: isDark ? 'rgba(99,102,241,0.20)' : '#c7d2fe',
+          },
+          {
+            label: 'Despesas',
+            value: totalExpenses,
+            icon: TrendingDown,
+            color: '#ef4444',
+            bg: isDark ? 'rgba(239,68,68,0.10)' : '#fef2f2',
+            border: isDark ? 'rgba(239,68,68,0.20)' : '#fecaca',
+          },
+          {
+            label: 'Receitas',
+            value: totalIncomes,
+            icon: TrendingUp,
+            color: '#10b981',
+            bg: isDark ? 'rgba(16,185,129,0.10)' : '#ecfdf5',
+            border: isDark ? 'rgba(16,185,129,0.20)' : '#a7f3d0',
+          },
         ].map(({ label, value, icon: Icon, color, bg, border }) => (
-          <div key={label} style={{
-            background: t.bg.card,
-            border: `1px solid ${t.border.default}`,
-            borderRadius: 14,
-            padding: '14px 16px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            boxShadow: t.shadow.card,
-          }}>
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: bg, border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div
+            key={label}
+            style={{
+              background: t.bg.card,
+              border: `1px solid ${t.border.default}`,
+              borderRadius: 14,
+              padding: '14px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              boxShadow: t.shadow.card,
+            }}
+          >
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 10,
+                background: bg,
+                border: `1px solid ${border}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
               <Icon size={18} color={color} />
             </div>
             <div>
-              <p style={{ fontSize: 22, fontWeight: 800, color: t.text.primary, lineHeight: 1 }}>{value}</p>
+              <p style={{ fontSize: 22, fontWeight: 800, color: t.text.primary, lineHeight: 1 }}>
+                {value}
+              </p>
               <p style={{ fontSize: 11, color: t.text.muted, marginTop: 2 }}>{label}</p>
             </div>
           </div>
@@ -144,43 +190,60 @@ export function CategoriesList() {
       </div>
 
       {}
-      <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16, alignItems: 'start' }}>
-
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16, alignItems: 'start' }}
+      >
         {}
-        <div style={{
-          background: t.bg.card,
-          border: `1px solid ${t.border.default}`,
-          borderRadius: 18,
-          padding: '20px 18px',
-          boxShadow: t.shadow.card,
-          position: 'sticky',
-          top: 96,
-        }}>
-          <p style={{ fontSize: 11, fontWeight: 700, color: t.text.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 18,
+            padding: '20px 18px',
+            boxShadow: t.shadow.card,
+            position: 'sticky',
+            top: 96,
+          }}
+        >
+          <p
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: t.text.muted,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginBottom: 16,
+            }}
+          >
             Criar nova categoria
           </p>
 
           {}
           {createSuccess && (
-            <div style={{
-              background: isDark ? 'rgba(16,185,129,0.12)' : '#dcfce7',
-              border: `1px solid ${isDark ? 'rgba(16,185,129,0.25)' : '#a7f3d0'}`,
-              borderRadius: 10,
-              padding: '10px 12px',
-              marginBottom: 14,
-              fontSize: 12,
-              fontWeight: 600,
-              color: isDark ? '#6ee7b7' : '#166534',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-            }}>
+            <div
+              style={{
+                background: isDark ? 'rgba(16,185,129,0.12)' : '#dcfce7',
+                border: `1px solid ${isDark ? 'rgba(16,185,129,0.25)' : '#a7f3d0'}`,
+                borderRadius: 10,
+                padding: '10px 12px',
+                marginBottom: 14,
+                fontSize: 12,
+                fontWeight: 600,
+                color: isDark ? '#6ee7b7' : '#166534',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
               ✓ Categoria criada com sucesso
             </div>
           )}
 
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
+            >
               <Input
                 id="category-form-name"
                 label="Nome da Categoria"
@@ -200,29 +263,40 @@ export function CategoriesList() {
 
               {}
               <div>
-                <p style={{ fontSize: 10, fontWeight: 600, color: t.text.muted, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>
+                <p
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 600,
+                    color: t.text.muted,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.07em',
+                    marginBottom: 8,
+                  }}
+                >
                   Sugestões
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {(selectedType === 'expense' ? EXPENSE_SUGGESTIONS : INCOME_SUGGESTIONS).map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => setValue('name', s)}
-                      style={{
-                        fontSize: 11,
-                        padding: '4px 10px',
-                        borderRadius: 999,
-                        border: `1px solid ${t.border.input}`,
-                        background: t.bg.muted,
-                        color: t.text.secondary,
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                      }}
-                    >
-                      {s}
-                    </button>
-                  ))}
+                  {(selectedType === 'expense' ? EXPENSE_SUGGESTIONS : INCOME_SUGGESTIONS).map(
+                    (s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setValue('name', s)}
+                        style={{
+                          fontSize: 11,
+                          padding: '4px 10px',
+                          borderRadius: 999,
+                          border: `1px solid ${t.border.input}`,
+                          background: t.bg.muted,
+                          color: t.text.secondary,
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        {s}
+                      </button>
+                    ),
+                  )}
                 </div>
               </div>
 
@@ -247,9 +321,11 @@ export function CategoriesList() {
                   marginTop: 4,
                 }}
               >
-                {createCategory.isPending
-                  ? <Loader2 size={15} className="animate-spin" />
-                  : <Plus size={15} />}
+                {createCategory.isPending ? (
+                  <Loader2 size={15} className="animate-spin" />
+                ) : (
+                  <Plus size={15} />
+                )}
                 Criar Categoria
               </button>
             </form>
@@ -257,46 +333,54 @@ export function CategoriesList() {
         </div>
 
         {}
-        <div style={{
-          background: t.bg.card,
-          border: `1px solid ${t.border.default}`,
-          borderRadius: 18,
-          boxShadow: t.shadow.card,
-          overflow: 'hidden',
-        }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 18,
+            boxShadow: t.shadow.card,
+            overflow: 'hidden',
+          }}
+        >
           {}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 4,
-            padding: '14px 18px',
-            borderBottom: `1px solid ${t.border.divider}`,
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+              padding: '14px 18px',
+              borderBottom: `1px solid ${t.border.divider}`,
+            }}
+          >
             <button style={tabActiveStyle('expense')} onClick={() => setActiveTab('expense')}>
               <span style={{ marginRight: 6 }}>💸</span>
               Despesas
-              <span style={{
-                marginLeft: 8,
-                fontSize: 11,
-                padding: '1px 7px',
-                borderRadius: 999,
-                background: isDark ? 'rgba(239,68,68,0.15)' : '#fee2e2',
-                color: isDark ? '#fca5a5' : '#dc2626',
-              }}>
+              <span
+                style={{
+                  marginLeft: 8,
+                  fontSize: 11,
+                  padding: '1px 7px',
+                  borderRadius: 999,
+                  background: isDark ? 'rgba(239,68,68,0.15)' : '#fee2e2',
+                  color: isDark ? '#fca5a5' : '#dc2626',
+                }}
+              >
                 {totalExpenses}
               </span>
             </button>
             <button style={tabActiveStyle('income')} onClick={() => setActiveTab('income')}>
               <span style={{ marginRight: 6 }}>💰</span>
               Receitas
-              <span style={{
-                marginLeft: 8,
-                fontSize: 11,
-                padding: '1px 7px',
-                borderRadius: 999,
-                background: isDark ? 'rgba(16,185,129,0.15)' : '#dcfce7',
-                color: isDark ? '#6ee7b7' : '#166534',
-              }}>
+              <span
+                style={{
+                  marginLeft: 8,
+                  fontSize: 11,
+                  padding: '1px 7px',
+                  borderRadius: 999,
+                  background: isDark ? 'rgba(16,185,129,0.15)' : '#dcfce7',
+                  color: isDark ? '#6ee7b7' : '#166534',
+                }}
+              >
                 {totalIncomes}
               </span>
             </button>
@@ -327,22 +411,41 @@ export function CategoriesList() {
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: 10,
-                          background: isExpense
-                            ? (isDark ? 'rgba(239,68,68,0.12)' : '#fef2f2')
-                            : (isDark ? 'rgba(16,185,129,0.12)' : '#ecfdf5'),
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}>
-                          <Tag size={16} color={isExpense ? (isDark ? '#fca5a5' : '#dc2626') : (isDark ? '#6ee7b7' : '#166534')} />
+                        <div
+                          style={{
+                            width: 36,
+                            height: 36,
+                            borderRadius: 10,
+                            background: isExpense
+                              ? isDark
+                                ? 'rgba(239,68,68,0.12)'
+                                : '#fef2f2'
+                              : isDark
+                                ? 'rgba(16,185,129,0.12)'
+                                : '#ecfdf5',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <Tag
+                            size={16}
+                            color={
+                              isExpense
+                                ? isDark
+                                  ? '#fca5a5'
+                                  : '#dc2626'
+                                : isDark
+                                  ? '#6ee7b7'
+                                  : '#166534'
+                            }
+                          />
                         </div>
                         <div>
-                          <p style={{ fontSize: 13, fontWeight: 700, color: t.text.primary }}>{cat.name}</p>
+                          <p style={{ fontSize: 13, fontWeight: 700, color: t.text.primary }}>
+                            {cat.name}
+                          </p>
                           <p style={{ fontSize: 11, color: t.text.muted }}>
                             {isExpense ? 'Categoria de despesa' : 'Categoria de receita'}
                           </p>
@@ -386,31 +489,57 @@ export function CategoriesList() {
               </div>
             </>
           ) : (
-            
             <div style={{ padding: '48px 24px', textAlign: 'center' }}>
-              <div style={{
-                width: 56,
-                height: 56,
-                borderRadius: 16,
-                background: isExpense
-                  ? (isDark ? 'rgba(239,68,68,0.10)' : '#fef2f2')
-                  : (isDark ? 'rgba(16,185,129,0.10)' : '#ecfdf5'),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-              }}>
-                <Tag size={24} color={isExpense ? (isDark ? '#fca5a5' : '#dc2626') : (isDark ? '#6ee7b7' : '#166534')} />
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 16,
+                  background: isExpense
+                    ? isDark
+                      ? 'rgba(239,68,68,0.10)'
+                      : '#fef2f2'
+                    : isDark
+                      ? 'rgba(16,185,129,0.10)'
+                      : '#ecfdf5',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 16px',
+                }}
+              >
+                <Tag
+                  size={24}
+                  color={
+                    isExpense ? (isDark ? '#fca5a5' : '#dc2626') : isDark ? '#6ee7b7' : '#166534'
+                  }
+                />
               </div>
               <p style={{ fontSize: 15, fontWeight: 700, color: t.text.primary, marginBottom: 6 }}>
                 Nenhuma categoria de {isExpense ? 'despesa' : 'receita'} criada
               </p>
-              <p style={{ fontSize: 13, color: t.text.muted, marginBottom: 20, maxWidth: 320, margin: '0 auto 20px' }}>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: t.text.muted,
+                  marginBottom: 20,
+                  maxWidth: 320,
+                  margin: '0 auto 20px',
+                }}
+              >
                 {isExpense
                   ? 'Crie categorias como Alimentação, Transporte ou Saúde para organizar suas despesas.'
                   : 'Crie categorias como Salário, Freelance ou Investimentos para organizar suas receitas.'}
               </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: 20 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 8,
+                  justifyContent: 'center',
+                  marginBottom: 20,
+                }}
+              >
                 {(isExpense ? EXPENSE_SUGGESTIONS : INCOME_SUGGESTIONS).map((s) => (
                   <button
                     key={s}

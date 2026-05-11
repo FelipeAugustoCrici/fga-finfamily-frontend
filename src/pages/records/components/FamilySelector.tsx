@@ -24,29 +24,42 @@ export function FamilySelector({ families }: { families: any[] }) {
       <input type="hidden" {...register('familyId')} />
 
       {family && (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10,
-          background: isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff',
-          border: `1px solid ${isDark ? 'rgba(99,102,241,0.20)' : '#c7d2fe'}`,
-          borderRadius: 10,
-          padding: '10px 14px',
-        }}>
-          <div style={{
-            width: 30,
-            height: 30,
-            borderRadius: 8,
-            background: isDark ? 'rgba(99,102,241,0.20)' : '#e0e7ff',
+        <div
+          style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}>
+            gap: 10,
+            background: isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff',
+            border: `1px solid ${isDark ? 'rgba(99,102,241,0.20)' : '#c7d2fe'}`,
+            borderRadius: 10,
+            padding: '10px 14px',
+          }}
+        >
+          <div
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: 8,
+              background: isDark ? 'rgba(99,102,241,0.20)' : '#e0e7ff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
             <Users size={14} color={isDark ? '#a5b4fc' : '#4338ca'} />
           </div>
           <div>
-            <p style={{ fontSize: 10, fontWeight: 600, color: isDark ? '#a5b4fc' : '#4338ca', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 1 }}>
+            <p
+              style={{
+                fontSize: 10,
+                fontWeight: 600,
+                color: isDark ? '#a5b4fc' : '#4338ca',
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                marginBottom: 1,
+              }}
+            >
               Família
             </p>
             <p style={{ fontSize: 13, fontWeight: 700, color: isDark ? '#c7d2fe' : '#3730a3' }}>
@@ -62,8 +75,13 @@ export function FamilySelector({ families }: { families: any[] }) {
         render={({ field }) => (
           <Select
             label="Responsável"
-            placeholder={people.length > 0 ? 'Selecione um responsável' : 'Nenhum membro cadastrado'}
-            options={people.map((p: { id: string; name: string }) => ({ value: p.id, label: p.name }))}
+            placeholder={
+              people.length > 0 ? 'Selecione um responsável' : 'Nenhum membro cadastrado'
+            }
+            options={people.map((p: { id: string; name: string }) => ({
+              value: p.id,
+              label: p.name,
+            }))}
             value={field.value}
             onChange={field.onChange}
             disabled={people.length === 0}

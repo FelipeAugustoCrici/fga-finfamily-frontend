@@ -16,9 +16,10 @@ const brandLogos: Record<string, string> = {
 };
 
 export function CardVisual({ card, compact = false }: CardVisualProps) {
-  const usedPercent = card.limitAmount > 0
-    ? Math.min(((card.limitAmount - card.availableLimit) / card.limitAmount) * 100, 100)
-    : 0;
+  const usedPercent =
+    card.limitAmount > 0
+      ? Math.min(((card.limitAmount - card.availableLimit) / card.limitAmount) * 100, 100)
+      : 0;
 
   const fmt = (v: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
@@ -26,7 +27,9 @@ export function CardVisual({ card, compact = false }: CardVisualProps) {
   return (
     <div
       className={`rounded-xl text-white shadow-lg relative overflow-hidden ${compact ? 'p-4' : 'p-5'}`}
-      style={{ background: `linear-gradient(135deg, ${card.color || '#334155'}, ${card.color || '#334155'}cc)` }}
+      style={{
+        background: `linear-gradient(135deg, ${card.color || '#334155'}, ${card.color || '#334155'}cc)`,
+      }}
     >
       {}
       <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/10" />

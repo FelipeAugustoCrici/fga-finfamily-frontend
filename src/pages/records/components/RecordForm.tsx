@@ -7,7 +7,6 @@ import { SmartInput } from './SmartInput';
 import { RecordFormHeader } from './RecordFormHeader';
 import { RecordTypeSelector } from './RecordTypeSelector';
 import { RecordDetailsForm } from './RecordDetailsForm';
-import { RecurrenceSection } from './RecurrenceSection';
 import { ToggleCards } from './ToggleCards';
 import { SummarySection } from './SummarySection';
 import { Select } from '@/components/ui/Select';
@@ -64,7 +63,9 @@ export function RecordForm({
     defaultValues: {
       description: initialData?.description || '',
       value: initialData?.value?.toString() || '',
-      date: initialData?.date ? initialData.date.split('T')[0] : new Date().toISOString().split('T')[0],
+      date: initialData?.date
+        ? initialData.date.split('T')[0]
+        : new Date().toISOString().split('T')[0],
       categoryName: '',
       categoryId: initialData?.categoryId || '',
       type: mapType(initialData),
@@ -119,29 +120,43 @@ export function RecordForm({
         </div>
 
         {/* 2-column layout */}
-        <div className="record-form-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr) 320px',
-          gap: 24,
-          alignItems: 'start',
-        }}>
+        <div
+          className="record-form-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) 320px',
+            gap: 24,
+            alignItems: 'start',
+          }}
+        >
           {/* Left column — main form */}
-          <div style={{
-            background: t.bg.card,
-            border: `1px solid ${t.border.default}`,
-            borderRadius: 16,
-            padding: 20,
-            boxShadow: t.shadow.card,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 20,
-          }}>
+          <div
+            style={{
+              background: t.bg.card,
+              border: `1px solid ${t.border.default}`,
+              borderRadius: 16,
+              padding: 20,
+              boxShadow: t.shadow.card,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 20,
+            }}
+          >
             {/* Smart input */}
             <SmartInput categories={categories} familyId={familyId} />
 
             {/* Tipo */}
             <div>
-              <p style={{ fontSize: 11, fontWeight: 700, color: t.text.muted, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+              <p
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: t.text.muted,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: 10,
+                }}
+              >
                 Tipo
               </p>
               <RecordTypeSelector />
@@ -157,7 +172,10 @@ export function RecordForm({
             <div style={{ height: 1, background: t.border.divider }} />
 
             {/* Responsável */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }} className="grid-cols-1 sm:grid-cols-2">
+            <div
+              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}
+              className="grid-cols-1 sm:grid-cols-2"
+            >
               <Controller
                 name="personId"
                 control={methods.control}
@@ -174,9 +192,18 @@ export function RecordForm({
                 )}
               />
               {family && (
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', paddingBottom: 2 }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    paddingBottom: 2,
+                  }}
+                >
                   <p style={{ fontSize: 11, color: t.text.muted, marginBottom: 4 }}>Família</p>
-                  <p style={{ fontSize: 13, fontWeight: 600, color: t.text.primary }}>{family.name}</p>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: t.text.primary }}>
+                    {family.name}
+                  </p>
                 </div>
               )}
             </div>

@@ -6,8 +6,18 @@ import { useTokens } from '@/hooks/useTokens';
 import type { Step2Props } from './types';
 
 export function RegisterStep2({
-  phone, setPhone, cpf, setCpf, birthDate, setBirthDate,
-  loading, error, onBack, onSubmit, focused, setFocused,
+  phone,
+  setPhone,
+  cpf,
+  setCpf,
+  birthDate,
+  setBirthDate,
+  loading,
+  error,
+  onBack,
+  onSubmit,
+  focused: _focused,
+  setFocused,
 }: Step2Props) {
   const t = useTokens();
   const isDark = t.bg.page === '#020617';
@@ -39,7 +49,9 @@ export function RegisterStep2({
         onFocus={() => setFocused('cpf')}
         onBlur={() => setFocused(null)}
         onChange={(e) => {
-          const v = e.target.value.replace(/\D/g, '').slice(0, 11)
+          const v = e.target.value
+            .replace(/\D/g, '')
+            .slice(0, 11)
             .replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
           setCpf(v);
         }}
@@ -55,12 +67,16 @@ export function RegisterStep2({
       />
 
       {error && (
-        <div style={{
-          padding: '10px 14px', borderRadius: 10,
-          background: isDark ? 'rgba(252,165,165,0.08)' : '#fef2f2',
-          border: `1px solid ${isDark ? 'rgba(252,165,165,0.2)' : '#fecdd3'}`,
-          fontSize: 13, color: isDark ? '#fca5a5' : '#991b1b',
-        }}>
+        <div
+          style={{
+            padding: '10px 14px',
+            borderRadius: 10,
+            background: isDark ? 'rgba(252,165,165,0.08)' : '#fef2f2',
+            border: `1px solid ${isDark ? 'rgba(252,165,165,0.2)' : '#fecdd3'}`,
+            fontSize: 13,
+            color: isDark ? '#fca5a5' : '#991b1b',
+          }}
+        >
           {error}
         </div>
       )}
@@ -70,13 +86,22 @@ export function RegisterStep2({
           type="button"
           onClick={onBack}
           style={{
-            height: 46, padding: '0 18px', borderRadius: 12,
-            border: `1.5px solid ${t.border.input}`, background: 'transparent',
-            color: t.text.secondary, fontSize: 14, fontWeight: 600, cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: 6, transition: 'background 0.15s',
+            height: 46,
+            padding: '0 18px',
+            borderRadius: 12,
+            border: `1.5px solid ${t.border.input}`,
+            background: 'transparent',
+            color: t.text.secondary,
+            fontSize: 14,
+            fontWeight: 600,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            transition: 'background 0.15s',
           }}
-          onMouseEnter={e => (e.currentTarget.style.background = t.bg.muted)}
-          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+          onMouseEnter={(e) => (e.currentTarget.style.background = t.bg.muted)}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
         >
           <ChevronLeft size={15} /> Voltar
         </button>
@@ -84,20 +109,43 @@ export function RegisterStep2({
           type="submit"
           disabled={loading}
           style={{
-            flex: 1, height: 46, borderRadius: 12, border: 'none',
-            background: loading ? (isDark ? 'rgba(99,102,241,0.4)' : '#a5b4fc') : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            color: '#fff', fontSize: 14, fontWeight: 700,
+            flex: 1,
+            height: 46,
+            borderRadius: 12,
+            border: 'none',
+            background: loading
+              ? isDark
+                ? 'rgba(99,102,241,0.4)'
+                : '#a5b4fc'
+              : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            color: '#fff',
+            fontSize: 14,
+            fontWeight: 700,
             cursor: loading ? 'not-allowed' : 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
             boxShadow: loading ? 'none' : '0 4px 14px rgba(99,102,241,0.35)',
             transition: 'opacity 0.18s',
           }}
-          onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.opacity = '0.9'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+          onMouseEnter={(e) => {
+            if (!loading) (e.currentTarget as HTMLElement).style.opacity = '0.9';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.opacity = '1';
+          }}
         >
-          {loading
-            ? <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Criando conta...</>
-            : <>Criar conta <ChevronRight size={15} /></>}
+          {loading ? (
+            <>
+              <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Criando
+              conta...
+            </>
+          ) : (
+            <>
+              Criar conta <ChevronRight size={15} />
+            </>
+          )}
         </button>
       </div>
 

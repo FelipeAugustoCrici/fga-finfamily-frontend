@@ -40,7 +40,9 @@ export function BudgetsCard({ onCreateNew }: { onCreateNew: () => void }) {
     return (
       <Card title="Orçamentos por Categoria">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '8px 0' }}>
-          {[1,2,3].map(i => <Skeleton key={i} height={72} borderRadius={12} />)}
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} height={72} borderRadius={12} />
+          ))}
         </div>
       </Card>
     );

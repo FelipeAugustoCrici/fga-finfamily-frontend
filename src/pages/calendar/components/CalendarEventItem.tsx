@@ -18,16 +18,22 @@ export function CalendarEventItem({ event, compact = false }: Props) {
   const isPending = event.status === 'PENDING';
 
   const colorClass = isIncome
-    ? isPaid ? 'text-success-600' : 'text-success-500'
-    : isOverdue ? 'text-danger-600'
-    : isPending ? 'text-warning-600'
-    : 'text-danger-500';
+    ? isPaid
+      ? 'text-success-600'
+      : 'text-success-500'
+    : isOverdue
+      ? 'text-danger-600'
+      : isPending
+        ? 'text-warning-600'
+        : 'text-danger-500';
 
   const bgClass = isIncome
     ? 'bg-success-50 border-success-100'
-    : isOverdue ? 'bg-danger-50 border-danger-100'
-    : isPending ? 'bg-warning-50 border-warning-100'
-    : 'bg-danger-50 border-danger-100';
+    : isOverdue
+      ? 'bg-danger-50 border-danger-100'
+      : isPending
+        ? 'bg-warning-50 border-warning-100'
+        : 'bg-danger-50 border-danger-100';
 
   if (compact) {
     return (
@@ -59,12 +65,16 @@ export function CalendarEventItem({ event, compact = false }: Props) {
           {isIncome ? '+' : '-'} {fmt(event.amount)}
         </p>
         {event.status && (
-          <span className={cn(
-            'text-xs px-1.5 py-0.5 rounded-full font-medium',
-            isPaid ? 'bg-success-100 text-success-700'
-              : isOverdue ? 'bg-danger-100 text-danger-700'
-              : 'bg-warning-100 text-warning-700',
-          )}>
+          <span
+            className={cn(
+              'text-xs px-1.5 py-0.5 rounded-full font-medium',
+              isPaid
+                ? 'bg-success-100 text-success-700'
+                : isOverdue
+                  ? 'bg-danger-100 text-danger-700'
+                  : 'bg-warning-100 text-warning-700',
+            )}
+          >
             {isPaid ? 'Pago' : isOverdue ? 'Vencido' : 'Pendente'}
           </span>
         )}

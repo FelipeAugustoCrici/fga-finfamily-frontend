@@ -27,7 +27,6 @@ export const recordService = {
   },
 
   async getById(id: string, recordType?: 'expense' | 'income' | 'extra'): Promise<Record> {
-    
     if (recordType === 'income') {
       const { data } = await api.get(`/finance/incomes/${id}`);
       return data;
@@ -37,27 +36,25 @@ export const recordService = {
       return data;
     }
 
-const { data } = await api.get(`/finance/expenses/${id}`);
+    const { data } = await api.get(`/finance/expenses/${id}`);
     return data;
   },
 
   async create(data: CreateRecordDTO & { type: string }): Promise<Record> {
-    
     const formType = (data as any).formType || 'expense';
     const route = getRouteByFormType(formType);
 
-const { formType: _, ...payload } = data as any;
+    const { formType: _formType, ...payload } = data as any;
 
     const response = await api.post(`/finance/${route}`, payload);
     return response.data;
   },
 
   async update(id: string, data: UpdateRecordDTO & { type: string }): Promise<Record> {
-    
     const formType = (data as any).formType || 'expense';
     const route = getRouteByFormType(formType);
 
-const { formType: _, ...payload } = data as any;
+    const { formType: _formType, ...payload } = data as any;
 
     const response = await api.put(`/finance/${route}/${id}`, payload);
     return response.data;

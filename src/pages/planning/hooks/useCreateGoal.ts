@@ -14,7 +14,8 @@ export function useCreateGoal() {
         targetValue: Number(data.targetValue),
       };
       return planningService.createGoal(payload);
-    },    onSuccess: () => {
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] });
       showToast({
         title: 'Sucesso',

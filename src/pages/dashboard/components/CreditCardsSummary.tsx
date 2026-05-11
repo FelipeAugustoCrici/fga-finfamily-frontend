@@ -63,27 +63,39 @@ export function CreditCardsSummary({ month, year }: Props) {
   const futureInstallments = allInvoices
     .filter((i) => {
       const isFuture =
-        i.referenceYear > year ||
-        (i.referenceYear === year && i.referenceMonth > month);
+        i.referenceYear > year || (i.referenceYear === year && i.referenceMonth > month);
       return isFuture && i.status !== 'paid';
     })
     .reduce((s, i) => s + i.totalAmount, 0);
 
   const limitBarColor =
     usedPercent > 80
-      ? (isDark ? '#fca5a5' : '#ef4444')
+      ? isDark
+        ? '#fca5a5'
+        : '#ef4444'
       : usedPercent > 60
-        ? (isDark ? '#fcd34d' : '#f59e0b')
-        : (isDark ? '#6ee7b7' : '#16a34a');
+        ? isDark
+          ? '#fcd34d'
+          : '#f59e0b'
+        : isDark
+          ? '#6ee7b7'
+          : '#16a34a';
 
   const trackBg = isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0';
   const dividerClr = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
 
-  const utilizationColor = usedPercent > 80
-    ? (isDark ? '#fca5a5' : '#991b1b')
-    : usedPercent > 60
-      ? (isDark ? '#fcd34d' : '#92400e')
-      : (isDark ? '#6ee7b7' : '#166534');
+  const utilizationColor =
+    usedPercent > 80
+      ? isDark
+        ? '#fca5a5'
+        : '#991b1b'
+      : usedPercent > 60
+        ? isDark
+          ? '#fcd34d'
+          : '#92400e'
+        : isDark
+          ? '#6ee7b7'
+          : '#166534';
 
   return (
     <Card
@@ -107,8 +119,14 @@ export function CreditCardsSummary({ month, year }: Props) {
               <span className="text-primary-500 font-medium">Limite Usado</span>
               <span className="text-primary-800 font-bold">{fmt(totalUsed)}</span>
             </div>
-            <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: trackBg }}>
-              <div className="h-full rounded-full transition-all" style={{ width: `${usedPercent}%`, background: limitBarColor }} />
+            <div
+              className="w-full h-2 rounded-full overflow-hidden"
+              style={{ background: trackBg }}
+            >
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${usedPercent}%`, background: limitBarColor }}
+              />
             </div>
             <p className="text-xs text-primary-400">de {fmt(totalLimit)} disponível</p>
           </div>
@@ -119,8 +137,14 @@ export function CreditCardsSummary({ month, year }: Props) {
               <span className="text-primary-500 font-medium">Faturas em Aberto</span>
               <span className="text-danger-600 font-bold">{fmt(totalOpen)}</span>
             </div>
-            <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: trackBg }}>
-              <div className="h-full rounded-full" style={{ width: '100%', background: isDark ? '#fca5a5' : '#ef4444' }} />
+            <div
+              className="w-full h-2 rounded-full overflow-hidden"
+              style={{ background: trackBg }}
+            >
+              <div
+                className="h-full rounded-full"
+                style={{ width: '100%', background: isDark ? '#fca5a5' : '#ef4444' }}
+              />
             </div>
             <p className="text-xs text-primary-400">
               {openInvoices.length} fatura{openInvoices.length !== 1 ? 's' : ''} pendente
@@ -134,8 +158,14 @@ export function CreditCardsSummary({ month, year }: Props) {
               <span className="text-primary-500 font-medium">Parcelamentos Futuros</span>
               <span className="text-primary-800 font-bold">{fmt(futureInstallments)}</span>
             </div>
-            <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: trackBg }}>
-              <div className="h-full rounded-full" style={{ width: '100%', background: isDark ? '#93c5fd' : '#6366f1' }} />
+            <div
+              className="w-full h-2 rounded-full overflow-hidden"
+              style={{ background: trackBg }}
+            >
+              <div
+                className="h-full rounded-full"
+                style={{ width: '100%', background: isDark ? '#93c5fd' : '#6366f1' }}
+              />
             </div>
             <p className="text-xs text-primary-400">comprometido nos próximos meses</p>
           </div>
@@ -161,28 +191,52 @@ export function CreditCardsSummary({ month, year }: Props) {
         {(daysUntilDue !== null || usedPercent > 70 || futureInstallments > 0) && (
           <div className="space-y-2 pt-2" style={{ borderTop: `1px solid ${dividerClr}` }}>
             {daysUntilDue !== null && daysUntilDue <= 7 && (
-              <div className="flex items-center gap-2 p-3 rounded-lg text-sm"
-                style={{ background: isDark ? 'rgba(252,211,77,0.08)' : '#fefce8', border: `1px solid ${isDark ? 'rgba(252,211,77,0.2)' : '#fde68a'}`, color: isDark ? '#fcd34d' : '#92400e' }}>
+              <div
+                className="flex items-center gap-2 p-3 rounded-lg text-sm"
+                style={{
+                  background: isDark ? 'rgba(252,211,77,0.08)' : '#fefce8',
+                  border: `1px solid ${isDark ? 'rgba(252,211,77,0.2)' : '#fde68a'}`,
+                  color: isDark ? '#fcd34d' : '#92400e',
+                }}
+              >
                 <AlertCircle size={15} className="flex-shrink-0" />
                 <span>
                   Sua próxima fatura vence{' '}
-                  {daysUntilDue === 0 ? 'hoje' : `em ${daysUntilDue} dia${daysUntilDue !== 1 ? 's' : ''}`}{' '}
+                  {daysUntilDue === 0
+                    ? 'hoje'
+                    : `em ${daysUntilDue} dia${daysUntilDue !== 1 ? 's' : ''}`}{' '}
                   — {fmt(nextDue!.totalAmount)} ({formatShortDate(nextDue!.dueDate)})
                 </span>
               </div>
             )}
             {usedPercent > 70 && (
-              <div className="flex items-center gap-2 p-3 rounded-lg text-sm"
-                style={{ background: isDark ? 'rgba(252,165,165,0.08)' : '#fef2f2', border: `1px solid ${isDark ? 'rgba(252,165,165,0.2)' : '#fecaca'}`, color: isDark ? '#fca5a5' : '#991b1b' }}>
+              <div
+                className="flex items-center gap-2 p-3 rounded-lg text-sm"
+                style={{
+                  background: isDark ? 'rgba(252,165,165,0.08)' : '#fef2f2',
+                  border: `1px solid ${isDark ? 'rgba(252,165,165,0.2)' : '#fecaca'}`,
+                  color: isDark ? '#fca5a5' : '#991b1b',
+                }}
+              >
                 <CreditCard size={15} className="flex-shrink-0" />
-                <span>Você já utilizou {usedPercent.toFixed(0)}% do limite total dos seus cartões</span>
+                <span>
+                  Você já utilizou {usedPercent.toFixed(0)}% do limite total dos seus cartões
+                </span>
               </div>
             )}
             {futureInstallments > 0 && (
-              <div className="flex items-center gap-2 p-3 rounded-lg text-sm"
-                style={{ background: isDark ? 'rgba(147,197,253,0.08)' : '#eff6ff', border: `1px solid ${isDark ? 'rgba(147,197,253,0.2)' : '#bfdbfe'}`, color: isDark ? '#93c5fd' : '#1e40af' }}>
+              <div
+                className="flex items-center gap-2 p-3 rounded-lg text-sm"
+                style={{
+                  background: isDark ? 'rgba(147,197,253,0.08)' : '#eff6ff',
+                  border: `1px solid ${isDark ? 'rgba(147,197,253,0.2)' : '#bfdbfe'}`,
+                  color: isDark ? '#93c5fd' : '#1e40af',
+                }}
+              >
                 <TrendingDown size={15} className="flex-shrink-0" />
-                <span>Compras parceladas comprometem {fmt(futureInstallments)} dos próximos meses</span>
+                <span>
+                  Compras parceladas comprometem {fmt(futureInstallments)} dos próximos meses
+                </span>
               </div>
             )}
           </div>

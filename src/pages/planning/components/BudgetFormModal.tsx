@@ -15,7 +15,7 @@ const budgetSchema = z.object({
   categoryId: z.string().min(1, 'Categoria é obrigatória'),
   categoryName: z.string(),
   limitValue: z.string().refine((v) => !isNaN(Number(v)) && Number(v) > 0, 'Valor inválido'),
-  
+
   monthYear: z.string().min(1, 'Mês/Ano é obrigatório'),
   familyId: z.string().min(1, 'Família é obrigatória'),
 });
@@ -67,7 +67,10 @@ export function BudgetFormModal({ isOpen, onClose, familyId }: BudgetFormModalPr
         familyId: data.familyId,
       },
       {
-        onSuccess: () => { reset(); onClose(); },
+        onSuccess: () => {
+          reset();
+          onClose();
+        },
       },
     );
   };

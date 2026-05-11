@@ -1,9 +1,9 @@
-import { CoupleModeList } from '../CoupleModeList'
-import type { AppRoute } from '@/routes/routes'
+import { CoupleModeList } from '../CoupleModeList';
+import type { AppRoute } from '@/routes/routes';
 
 export const CoupleModeRoutes = {
   coupleMode: {
     path: '/couple-mode',
     element: <CoupleModeList />,
   },
-} satisfies Record<string, AppRoute>
+} satisfies Record<string, AppRoute>;

@@ -39,6 +39,19 @@ export default tseslint.config(
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       'react-hooks/set-state-in-effect': 'off',
+      // Allow variables prefixed with _ to be unused (intentional)
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          varsIgnorePattern: '^_',
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+      // react-hooks/refs produces false positives when accessing .pos (state) on
+      // objects returned from custom hooks that internally use refs
+      'react-hooks/refs': 'off',
     },
     settings: {
       react: {

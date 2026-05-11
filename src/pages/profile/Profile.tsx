@@ -30,7 +30,7 @@ export function Profile() {
   const { showToast } = useToast();
   const t = useTokens();
 
-const { data: userAttributes, isLoading } = useQuery({
+  const { data: userAttributes, isLoading } = useQuery({
     queryKey: ['user-profile'],
     queryFn: async () => {
       const attributes = await fetchUserAttributes();
@@ -38,17 +38,16 @@ const { data: userAttributes, isLoading } = useQuery({
     },
   });
 
-const updateProfileMutation = useMutation({
+  const updateProfileMutation = useMutation({
     mutationFn: async (data: ProfileFormData) => {
       const attributes: Record<string, string> = {
         name: data.name,
       };
 
       if (data.phone) {
-        
-        let phone = data.phone.replace(/\D/g, ''); 
+        let phone = data.phone.replace(/\D/g, '');
 
-if (!phone.startsWith('55')) {
+        if (!phone.startsWith('55')) {
           phone = '55' + phone;
         }
 
@@ -83,16 +82,14 @@ if (!phone.startsWith('55')) {
     },
   });
 
-const formatPhoneForDisplay = (phone?: string) => {
+  const formatPhoneForDisplay = (phone?: string) => {
     if (!phone) return '';
 
-const cleaned = phone.replace('+55', '').replace(/\D/g, '');
+    const cleaned = phone.replace('+55', '').replace(/\D/g, '');
 
     if (cleaned.length <= 10) {
-      
       return cleaned.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
     } else {
-      
       return cleaned.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
     }
   };
@@ -128,7 +125,9 @@ const cleaned = phone.replace('+55', '').replace(/\D/g, '');
         <Skeleton height={56} borderRadius={14} />
         <Skeleton height={120} borderRadius={18} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {[1, 2, 3].map(i => <Skeleton key={i} height={180} borderRadius={18} />)}
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} height={180} borderRadius={18} />
+          ))}
         </div>
       </div>
     );
@@ -137,7 +136,9 @@ const cleaned = phone.replace('+55', '').replace(/\D/g, '');
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <PageHeader
-        actions={!isEditing ? <Button onClick={() => setIsEditing(true)}>Editar Perfil</Button> : undefined}
+        actions={
+          !isEditing ? <Button onClick={() => setIsEditing(true)}>Editar Perfil</Button> : undefined
+        }
       />
 
       {}
@@ -196,7 +197,7 @@ const cleaned = phone.replace('+55', '').replace(/\D/g, '');
               <Input
                 {...register('email')}
                 type="email"
-                disabled={true} 
+                disabled={true}
                 placeholder="seu@email.com"
                 error={errors.email?.message}
               />
@@ -222,15 +223,12 @@ const cleaned = phone.replace('+55', '').replace(/\D/g, '');
                   error={errors.phone?.message}
                   maxLength={15}
                   onChange={(e) => {
-                    
                     let value = e.target.value.replace(/\D/g, '');
 
                     if (value.length <= 11) {
                       if (value.length <= 10) {
-                        
                         value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
                       } else {
-                        
                         value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
                       }
                     }
@@ -349,48 +347,61 @@ const cleaned = phone.replace('+55', '').replace(/\D/g, '');
 }
 
 function TelegramSection({ t }: { t: ReturnType<typeof useTokens> }) {
-  const [code, setCode] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
-  const { showToast } = useToast()
-  const queryClient = useQueryClient()
+  const [code, setCode] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: status, isLoading: statusLoading } = useQuery({
     queryKey: ['telegram-link-status'],
     queryFn: () => telegramService.getLinkStatus(),
-  })
+  });
 
   const generateMutation = useMutation({
     mutationFn: () => telegramService.generateCode(),
     onSuccess: (data) => setCode(data.code),
-    onError: () => showToast({ title: 'Erro', description: 'Não foi possível gerar o código.', variant: 'error' }),
-  })
+    onError: () =>
+      showToast({
+        title: 'Erro',
+        description: 'Não foi possível gerar o código.',
+        variant: 'error',
+      }),
+  });
 
   const unlinkMutation = useMutation({
     mutationFn: () => telegramService.unlink(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['telegram-link-status'] })
-      setCode(null)
-      showToast({ title: 'Sucesso', description: 'Telegram desvinculado.', variant: 'success' })
+      queryClient.invalidateQueries({ queryKey: ['telegram-link-status'] });
+      setCode(null);
+      showToast({ title: 'Sucesso', description: 'Telegram desvinculado.', variant: 'success' });
     },
-    onError: () => showToast({ title: 'Erro', description: 'Não foi possível desvincular.', variant: 'error' }),
-  })
+    onError: () =>
+      showToast({ title: 'Erro', description: 'Não foi possível desvincular.', variant: 'error' }),
+  });
 
   const handleCopy = () => {
-    if (!code) return
-    navigator.clipboard.writeText(`/start ${code}`)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    if (!code) return;
+    navigator.clipboard.writeText(`/start ${code}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <Card title="Telegram">
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{
-            width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-            background: 'rgba(37,99,235,0.1)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              flexShrink: 0,
+              background: 'rgba(37,99,235,0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <Send size={20} style={{ color: '#2563eb' }} />
           </div>
           <div style={{ flex: 1 }}>
@@ -398,16 +409,23 @@ function TelegramSection({ t }: { t: ReturnType<typeof useTokens> }) {
               Bot do Telegram
             </p>
             <p style={{ fontSize: 12, color: t.text.muted, margin: 0 }}>
-              {statusLoading ? 'Verificando...' : status?.linked
-                ? `Vinculado${status.username ? ` como @${status.username}` : ''}`
-                : 'Não vinculado'}
+              {statusLoading
+                ? 'Verificando...'
+                : status?.linked
+                  ? `Vinculado${status.username ? ` como @${status.username}` : ''}`
+                  : 'Não vinculado'}
             </p>
           </div>
-          <span style={{
-            fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 999,
-            background: status?.linked ? 'rgba(16,185,129,0.12)' : 'rgba(99,102,241,0.1)',
-            color: status?.linked ? '#059669' : t.text.muted,
-          }}>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              padding: '3px 10px',
+              borderRadius: 999,
+              background: status?.linked ? 'rgba(16,185,129,0.12)' : 'rgba(99,102,241,0.1)',
+              color: status?.linked ? '#059669' : t.text.muted,
+            }}
+          >
             {status?.linked ? 'Ativo' : 'Inativo'}
           </span>
         </div>
@@ -424,7 +442,11 @@ function TelegramSection({ t }: { t: ReturnType<typeof useTokens> }) {
                 disabled={generateMutation.isPending}
                 size="sm"
               >
-                {generateMutation.isPending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+                {generateMutation.isPending ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Send size={14} />
+                )}
                 Gerar código de ativação
               </Button>
             ) : (
@@ -432,19 +454,36 @@ function TelegramSection({ t }: { t: ReturnType<typeof useTokens> }) {
                 <p style={{ fontSize: 13, color: t.text.secondary, margin: 0 }}>
                   Envie o comando abaixo para o bot <b>@FinFamilyBot</b> no Telegram:
                 </p>
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: 8,
-                  background: t.bg.muted, borderRadius: 10, padding: '10px 14px',
-                  border: `1px solid ${t.border.default}`,
-                }}>
-                  <code style={{ flex: 1, fontSize: 15, fontWeight: 700, color: t.text.primary, letterSpacing: '0.05em' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    background: t.bg.muted,
+                    borderRadius: 10,
+                    padding: '10px 14px',
+                    border: `1px solid ${t.border.default}`,
+                  }}
+                >
+                  <code
+                    style={{
+                      flex: 1,
+                      fontSize: 15,
+                      fontWeight: 700,
+                      color: t.text.primary,
+                      letterSpacing: '0.05em',
+                    }}
+                  >
                     /start {code}
                   </code>
                   <button
                     onClick={handleCopy}
                     style={{
-                      background: 'none', border: 'none', cursor: 'pointer',
-                      color: copied ? '#10b981' : t.text.muted, padding: 4,
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: copied ? '#10b981' : t.text.muted,
+                      padding: 4,
                     }}
                     title="Copiar"
                   >
@@ -454,7 +493,12 @@ function TelegramSection({ t }: { t: ReturnType<typeof useTokens> }) {
                 <p style={{ fontSize: 11, color: t.text.muted, margin: 0 }}>
                   Código válido por 15 minutos.
                 </p>
-                <Button variant="outline" size="sm" onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => generateMutation.mutate()}
+                  disabled={generateMutation.isPending}
+                >
                   Gerar novo código
                 </Button>
               </div>
@@ -470,11 +514,15 @@ function TelegramSection({ t }: { t: ReturnType<typeof useTokens> }) {
             disabled={unlinkMutation.isPending}
             style={{ alignSelf: 'flex-start', color: '#dc2626', borderColor: '#fca5a5' }}
           >
-            {unlinkMutation.isPending ? <Loader2 size={14} className="animate-spin" /> : <Unlink size={14} />}
+            {unlinkMutation.isPending ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Unlink size={14} />
+            )}
             Desvincular Telegram
           </Button>
         )}
       </div>
     </Card>
-  )
+  );
 }

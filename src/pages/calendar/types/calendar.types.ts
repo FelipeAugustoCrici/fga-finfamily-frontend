@@ -15,7 +15,7 @@ export interface CalendarFinancialEvent {
 }
 
 export interface CalendarDaySummary {
-  date: string; 
+  date: string;
   totalIncome: number;
   totalExpense: number;
   balance: number;

@@ -39,12 +39,22 @@ export function PurchaseFormModal({ isOpen, onClose, familyId, defaultCardId }: 
 
   const { data: families = [] } = useQuery({
     queryKey: ['families'],
-    queryFn: async () => { const { data } = await api.get('/finance/families'); return data; },
+    queryFn: async () => {
+      const { data } = await api.get('/finance/families');
+      return data;
+    },
   });
 
   const members = families.flatMap((f: any) => f.members || []);
 
-  const { register, handleSubmit, formState: { errors }, reset, watch, setValue, control } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    watch,
+    control,
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       creditCardId: defaultCardId || '',
@@ -57,24 +67,29 @@ export function PurchaseFormModal({ isOpen, onClose, familyId, defaultCardId }: 
 
   const installments = Number(watch('installments') || 1);
   const totalAmount = Number(watch('totalAmount') || 0);
-  const installmentValue = installments > 1 && totalAmount > 0
-    ? (totalAmount / installments).toFixed(2)
-    : null;
+  const installmentValue =
+    installments > 1 && totalAmount > 0 ? (totalAmount / installments).toFixed(2) : null;
 
   const onSubmit = (data: FormData) => {
-    create.mutate({
-      creditCardId: data.creditCardId,
-      description: data.description,
-      totalAmount: Number(data.totalAmount),
-      purchaseDate: data.purchaseDate,
-      installments: Number(data.installments),
-      categoryId: data.categoryId || undefined,
-      ownerId: data.ownerId || undefined,
-      observation: data.observation,
-      familyId,
-    }, {
-      onSuccess: () => { reset(); onClose(); },
-    });
+    create.mutate(
+      {
+        creditCardId: data.creditCardId,
+        description: data.description,
+        totalAmount: Number(data.totalAmount),
+        purchaseDate: data.purchaseDate,
+        installments: Number(data.installments),
+        categoryId: data.categoryId || undefined,
+        ownerId: data.ownerId || undefined,
+        observation: data.observation,
+        familyId,
+      },
+      {
+        onSuccess: () => {
+          reset();
+          onClose();
+        },
+      },
+    );
   };
 
   return (
@@ -95,7 +110,12 @@ export function PurchaseFormModal({ isOpen, onClose, familyId, defaultCardId }: 
           )}
         />
 
-        <Input label="Descrição" placeholder="Ex: Supermercado, Netflix..." {...register('description')} error={errors.description?.message} />
+        <Input
+          label="Descrição"
+          placeholder="Ex: Supermercado, Netflix..."
+          {...register('description')}
+          error={errors.description?.message}
+        />
 
         <div className="grid grid-cols-2 gap-4">
           <Controller
@@ -175,16 +195,26 @@ export function PurchaseFormModal({ isOpen, onClose, familyId, defaultCardId }: 
 
         {installmentValue && (
           <div className="bg-primary-50 rounded-lg p-3 text-sm text-primary-700">
-            <span className="font-medium">{installments}x de R$ {installmentValue}</span>
+            <span className="font-medium">
+              {installments}x de R$ {installmentValue}
+            </span>
             <span className="text-primary-500 ml-2">— parcelas geradas automaticamente</span>
           </div>
         )}
 
-        <Input label="Observação (opcional)" placeholder="Detalhes adicionais..." {...register('observation')} />
+        <Input
+          label="Observação (opcional)"
+          placeholder="Detalhes adicionais..."
+          {...register('observation')}
+        />
 
         <div className="flex gap-3 justify-end pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" isLoading={create.isPending}>Lançar Compra</Button>
+          <Button type="button" variant="ghost" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button type="submit" isLoading={create.isPending}>
+            Lançar Compra
+          </Button>
         </div>
       </form>
     </Modal>

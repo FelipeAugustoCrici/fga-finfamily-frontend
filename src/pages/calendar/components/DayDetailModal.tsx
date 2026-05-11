@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import { X, ArrowUpCircle, ArrowDownCircle, CheckCircle } from 'lucide-react';
 import { cn } from '@/components/ui/Button';
 import { CalendarEventItem } from './CalendarEventItem';
 import { useUpdateRecordStatus } from '@/pages/records/hooks/useUpdateRecordStatus';
@@ -41,7 +40,10 @@ export function DayDetailModal({ daySummary, onClose }: Props) {
             <h3 className="text-base font-bold text-primary-800 capitalize">{dateLabel}</h3>
             <p className="text-xs text-primary-500">{daySummary.eventCount} lançamento(s)</p>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-primary-50 transition-colors">
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg hover:bg-primary-50 transition-colors"
+          >
             <X size={18} className="text-primary-500" />
           </button>
         </div>
@@ -58,7 +60,12 @@ export function DayDetailModal({ daySummary, onClose }: Props) {
           </div>
           <div className="text-center">
             <p className="text-xs text-primary-500">Saldo</p>
-            <p className={cn('text-sm font-bold', daySummary.balance >= 0 ? 'text-success-600' : 'text-danger-600')}>
+            <p
+              className={cn(
+                'text-sm font-bold',
+                daySummary.balance >= 0 ? 'text-success-600' : 'text-danger-600',
+              )}
+            >
               {fmt(daySummary.balance)}
             </p>
           </div>
@@ -67,7 +74,9 @@ export function DayDetailModal({ daySummary, onClose }: Props) {
         {}
         <div className="flex-1 overflow-y-auto p-5 space-y-2">
           {daySummary.events.length === 0 ? (
-            <p className="text-center text-primary-400 py-8 text-sm">Nenhum lançamento neste dia.</p>
+            <p className="text-center text-primary-400 py-8 text-sm">
+              Nenhum lançamento neste dia.
+            </p>
           ) : (
             daySummary.events.map((event) => (
               <div key={event.id} className="relative group">

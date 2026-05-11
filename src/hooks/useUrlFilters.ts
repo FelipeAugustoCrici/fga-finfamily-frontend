@@ -20,7 +20,7 @@ export function useUrlFilters(options: UseUrlFiltersOptions = {}) {
     page: options.defaultPage ?? 1,
   };
 
-const month = parseInt(searchParams.get('month') || String(defaults.month));
+  const month = parseInt(searchParams.get('month') || String(defaults.month));
   const year = parseInt(searchParams.get('year') || String(defaults.year));
   const search = searchParams.get('search') || defaults.search;
   const status = searchParams.get('status') || defaults.status;
@@ -32,7 +32,7 @@ const month = parseInt(searchParams.get('month') || String(defaults.month));
     Object.entries(updates).forEach(([key, value]) => {
       const stringValue = String(value);
 
-if (
+      if (
         stringValue === '' ||
         stringValue === 'ALL' ||
         (key === 'page' && stringValue === '1') ||

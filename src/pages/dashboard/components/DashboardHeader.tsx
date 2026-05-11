@@ -18,8 +18,18 @@ function getGreeting() {
 }
 
 const MONTHS = [
-  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro',
 ];
 
 export function DashboardHeader({ month, year, setMonth, setYear }: Props) {
@@ -28,17 +38,25 @@ export function DashboardHeader({ month, year, setMonth, setYear }: Props) {
   const { isDark, toggle } = useTheme();
 
   const handlePrev = () => {
-    if (month === 1) { setMonth(12); setYear(y => y - 1); }
-    else setMonth(m => m - 1);
+    if (month === 1) {
+      setMonth(12);
+      setYear((y) => y - 1);
+    } else setMonth((m) => m - 1);
   };
 
   const handleNext = () => {
-    if (month === 12) { setMonth(1); setYear(y => y + 1); }
-    else setMonth(m => m + 1);
+    if (month === 12) {
+      setMonth(1);
+      setYear((y) => y + 1);
+    } else setMonth((m) => m + 1);
   };
 
   const today = new Date();
-  const dateStr = today.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  const dateStr = today.toLocaleDateString('pt-BR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -80,9 +98,9 @@ export function DashboardHeader({ month, year, setMonth, setYear }: Props) {
           className="p-2.5 rounded-xl border transition-colors"
           style={{
             backgroundColor: isDark ? 'rgba(110,231,183,0.12)' : '#ecfdf5',
-            borderColor:      isDark ? 'rgba(110,231,183,0.2)'  : '#d1fae5',
-            color:            isDark ? '#6ee7b7'                 : '#059669',
-            boxShadow:        isDark ? '0 0 12px rgba(74,222,128,0.1)' : 'none',
+            borderColor: isDark ? 'rgba(110,231,183,0.2)' : '#d1fae5',
+            color: isDark ? '#6ee7b7' : '#059669',
+            boxShadow: isDark ? '0 0 12px rgba(74,222,128,0.1)' : 'none',
           }}
           aria-label="Alternar tema"
         >

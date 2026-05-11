@@ -17,7 +17,20 @@ export interface Suggestion {
   lastDate: string;
 }
 
-const MONTHS_PT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MONTHS_PT = [
+  'Jan',
+  'Fev',
+  'Mar',
+  'Abr',
+  'Mai',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Set',
+  'Out',
+  'Nov',
+  'Dez',
+];
 
 export function formatRelativeDate(dateStr: string): string {
   if (!dateStr) return '';
@@ -64,12 +77,14 @@ export function useSmartSuggestions(
       const parsed = parseSmartInput(query);
       if (parsed?.suggestedCategoryName) {
         const catMatch = categories.find(
-          c => c.name.toLowerCase() === parsed.suggestedCategoryName.toLowerCase()
+          (c) => c.name.toLowerCase() === parsed.suggestedCategoryName.toLowerCase(),
         );
         results.push({
           description: parsed.description,
           value: parsed.value ? parseFloat(parsed.value) : 0,
-          valueLabel: parsed.value ? `R$ ${Number(parsed.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : '',
+          valueLabel: parsed.value
+            ? `R$ ${Number(parsed.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+            : '',
           category: parsed.suggestedCategoryName,
           categoryId: catMatch?.id || '',
           type: parsed.type,

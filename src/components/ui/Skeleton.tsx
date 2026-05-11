@@ -43,16 +43,18 @@ export function SkeletonTableRow({ cols = 8, t }: { cols?: number; t: any }) {
 
 export function SkeletonCard({ lines = 3, t }: { lines?: number; t: any }) {
   return (
-    <div style={{
-      background: t.bg.card,
-      border: `1px solid ${t.border.default}`,
-      borderRadius: 18,
-      padding: '20px 22px',
-      boxShadow: t.shadow.card,
-      display: 'flex',
-      flexDirection: 'column' as const,
-      gap: 12,
-    }}>
+    <div
+      style={{
+        background: t.bg.card,
+        border: `1px solid ${t.border.default}`,
+        borderRadius: 18,
+        padding: '20px 22px',
+        boxShadow: t.shadow.card,
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: 12,
+      }}
+    >
       <Skeleton height={14} width="40%" borderRadius={6} />
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton key={i} height={12} width={i % 2 === 0 ? '100%' : '70%'} borderRadius={6} />
@@ -75,13 +77,16 @@ export function SkeletonList({ rows = 5, t }: { rows?: number; t: any }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' as const }}>
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          padding: '13px 18px',
-          borderBottom: i < rows - 1 ? `1px solid ${t.border.divider}` : 'none',
-        }}>
+        <div
+          key={i}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            padding: '13px 18px',
+            borderBottom: i < rows - 1 ? `1px solid ${t.border.divider}` : 'none',
+          }}
+        >
           <Skeleton width={36} height={36} borderRadius={10} />
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
             <Skeleton height={13} width="50%" borderRadius={6} />
@@ -126,7 +131,9 @@ export function SkeletonDashboard({ t }: { t: any }) {
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: 20 }}>
         <SkeletonCard lines={4} t={t} />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-          {[1,2,3,4].map(i => <SkeletonCard key={i} lines={2} t={t} />)}
+          {[1, 2, 3, 4].map((i) => (
+            <SkeletonCard key={i} lines={2} t={t} />
+          ))}
         </div>
       </div>
       {}
@@ -143,7 +150,16 @@ export function SkeletonTable({ rows = 8, t }: { rows?: number; t: any }) {
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
       <thead>
         <tr style={{ borderBottom: `1px solid ${t.border.divider}` }}>
-          {['Descrição','Categoria','Data','Tipo','Status','Valor','Responsável','Ações'].map(h => (
+          {[
+            'Descrição',
+            'Categoria',
+            'Data',
+            'Tipo',
+            'Status',
+            'Valor',
+            'Responsável',
+            'Ações',
+          ].map((h) => (
             <th key={h} style={{ padding: '12px 24px' }}>
               <Skeleton height={10} width={60} borderRadius={4} />
             </th>

@@ -18,7 +18,7 @@ function splitCompound(text: string): string[] {
   // Split on connectors: "e", "mais", "também", "+"
   const parts = text
     .split(/\s+(?:e|mais|também|tbm|\+)\s+/i)
-    .map(p => p.trim())
+    .map((p) => p.trim())
     .filter(Boolean);
   return parts.length > 1 ? parts : [text];
 }
@@ -42,7 +42,9 @@ function detectType(raw: string): 'expense' | 'salary' | 'income' {
 }
 
 let _idCounter = 0;
-function uid() { return `cr_${Date.now()}_${++_idCounter}`; }
+function uid() {
+  return `cr_${Date.now()}_${++_idCounter}`;
+}
 
 export function parseChat(
   text: string,
@@ -61,14 +63,12 @@ export function parseChat(
 
     const description = parsed?.description || normalized || seg;
     const rawValue = parsed?.value ? parseFloat(parsed.value) : 0;
-    const type = intentType !== 'expense' ? intentType : (parsed?.type || 'expense');
+    const type = intentType !== 'expense' ? intentType : parsed?.type || 'expense';
     const category = parsed?.suggestedCategoryName || '';
     const confidence = parsed?.confidence || 'low';
 
     // Resolve categoryId from categories list
-    const catMatch = categories.find(
-      c => c.name.toLowerCase() === category.toLowerCase()
-    );
+    const catMatch = categories.find((c) => c.name.toLowerCase() === category.toLowerCase());
 
     // Check history for avg value alert
     const histKey = description.toLowerCase().trim();
@@ -110,7 +110,7 @@ export function applyEditCommand(
   const removeMatch = lower.match(/^(remove|remov[ae]|apaga|deleta|tira)\s+(.+)$/i);
   if (removeMatch) {
     const target = removeMatch[2].trim();
-    const idx = records.findIndex(r => r.description.toLowerCase().includes(target));
+    const idx = records.findIndex((r) => r.description.toLowerCase().includes(target));
     if (idx >= 0) {
       const removed = records[idx];
       return {
@@ -122,13 +122,15 @@ export function applyEditCommand(
   }
 
   // Correct value: "corrige gasolina para 70" / "muda ifood pra 45"
-  const correctMatch = lower.match(/^(corrige?|muda|altera|atualiza)\s+(.+?)\s+(?:para|pra|p\/)\s+([\d.,]+)$/i);
+  const correctMatch = lower.match(
+    /^(corrige?|muda|altera|atualiza)\s+(.+?)\s+(?:para|pra|p\/)\s+([\d.,]+)$/i,
+  );
   if (correctMatch) {
     const target = correctMatch[2].trim();
     const newVal = parseFloat(correctMatch[3].replace(',', '.'));
-    const idx = records.findIndex(r => r.description.toLowerCase().includes(target));
+    const idx = records.findIndex((r) => r.description.toLowerCase().includes(target));
     if (idx >= 0 && !isNaN(newVal)) {
-      const updated = records.map((r, i) => i === idx ? { ...r, value: newVal } : r);
+      const updated = records.map((r, i) => (i === idx ? { ...r, value: newVal } : r));
       return {
         records: updated,
         feedback: `"${records[idx].description}" atualizado para R$ ${newVal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,

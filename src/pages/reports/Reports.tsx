@@ -37,11 +37,16 @@ export function Reports() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <PageHeader />
-        <div style={{
-          background: t.bg.card, border: `1px solid ${t.border.default}`,
-          borderRadius: 20, padding: '64px 24px', textAlign: 'center',
-          boxShadow: t.shadow.card,
-        }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 20,
+            padding: '64px 24px',
+            textAlign: 'center',
+            boxShadow: t.shadow.card,
+          }}
+        >
           <p style={{ fontSize: 15, fontWeight: 700, color: t.text.primary, marginBottom: 6 }}>
             {error ? 'Erro ao carregar relatórios' : 'Nenhum dado disponível'}
           </p>
@@ -53,7 +58,7 @@ export function Reports() {
     );
   }
 
-  const validSummaries = summaries.filter((s) => !!s) as NonNullable<typeof summaries[0]>[];
+  const validSummaries = summaries.filter((s) => !!s) as NonNullable<(typeof summaries)[0]>[];
   const currentSummary = validSummaries[validSummaries.length - 1];
   const prevSummary = validSummaries.length >= 2 ? validSummaries[validSummaries.length - 2] : null;
   const monthlyData = transformToMonthlyData(validSummaries);
@@ -63,13 +68,23 @@ export function Reports() {
       <PageHeader />
 
       {/* Seletor de período */}
-      <div style={{
-        background: t.bg.card, border: `1px solid ${t.border.default}`,
-        borderRadius: 14, padding: '12px 16px', boxShadow: t.shadow.card,
-        display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
-      }}>
+      <div
+        style={{
+          background: t.bg.card,
+          border: `1px solid ${t.border.default}`,
+          borderRadius: 14,
+          padding: '12px 16px',
+          boxShadow: t.shadow.card,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          flexWrap: 'wrap',
+        }}
+      >
         <Calendar size={16} style={{ color: t.text.muted, flexShrink: 0 }} />
-        <span style={{ fontSize: 13, fontWeight: 600, color: t.text.secondary }}>Período de análise:</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: t.text.secondary }}>
+          Período de análise:
+        </span>
         <div style={{ display: 'flex', gap: 6 }}>
           {([3, 6, 12] as const).map((period) => {
             const active = selectedPeriod === period;
@@ -79,9 +94,13 @@ export function Reports() {
                 type="button"
                 onClick={() => setSelectedPeriod(period)}
                 style={{
-                  padding: '6px 14px', borderRadius: 10, border: 'none',
-                  fontSize: 12, fontWeight: 700, cursor: 'pointer',
-                  background: active ? '#6366f1' : (isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9'),
+                  padding: '6px 14px',
+                  borderRadius: 10,
+                  border: 'none',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  background: active ? '#6366f1' : isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
                   color: active ? '#fff' : t.text.muted,
                   transition: 'all 0.15s',
                 }}
@@ -94,9 +113,7 @@ export function Reports() {
       </div>
 
       {/* Comparação com período anterior */}
-      {prevSummary && (
-        <PeriodComparison current={currentSummary} previous={prevSummary} />
-      )}
+      {prevSummary && <PeriodComparison current={currentSummary} previous={prevSummary} />}
 
       {/* Evolução mensal com tendências */}
       <MonthlyEvolution data={monthlyData} />

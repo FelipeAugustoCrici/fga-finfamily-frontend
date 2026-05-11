@@ -25,12 +25,15 @@ const schema = z
     hasAccess: z.boolean(),
     temporaryPassword: z.string().optional(),
   })
+  .refine((d) => !d.hasAccess || (d.email && d.email.length > 0), {
+    message: 'E-mail é obrigatório para acesso à plataforma',
+    path: ['email'],
+  })
   .refine(
-    (d) => !d.hasAccess || (d.email && d.email.length > 0),
-    { message: 'E-mail é obrigatório para acesso à plataforma', path: ['email'] },
-  )
-  .refine(
-    (d) => !d.hasAccess || !d.temporaryPassword || passwordRules.every((r) => r.test(d.temporaryPassword!)),
+    (d) =>
+      !d.hasAccess ||
+      !d.temporaryPassword ||
+      passwordRules.every((r) => r.test(d.temporaryPassword!)),
     { message: 'A senha não atende todos os requisitos', path: ['temporaryPassword'] },
   );
 
@@ -46,7 +49,13 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
 
-  const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', email: '', phone: '', hasAccess: false, temporaryPassword: '' },
   });
@@ -120,11 +129,15 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
               : 'border-slate-200 bg-white hover:border-slate-300'
           }`}
         >
-          <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${hasAccess ? 'bg-primary-800' : 'bg-slate-100'}`}>
+          <div
+            className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${hasAccess ? 'bg-primary-800' : 'bg-slate-100'}`}
+          >
             <ShieldCheck size={18} className={hasAccess ? 'text-white' : 'text-slate-400'} />
           </div>
           <div className="flex-1">
-            <p className={`text-sm font-semibold ${hasAccess ? 'text-primary-800' : 'text-slate-700'}`}>
+            <p
+              className={`text-sm font-semibold ${hasAccess ? 'text-primary-800' : 'text-slate-700'}`}
+            >
               Acesso à plataforma
             </p>
             <p className="text-xs text-slate-400">
@@ -133,7 +146,9 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
                 : 'Membro apenas para controle interno'}
             </p>
           </div>
-          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${hasAccess ? 'border-primary-600 bg-primary-600' : 'border-slate-300'}`}>
+          <div
+            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${hasAccess ? 'border-primary-600 bg-primary-600' : 'border-slate-300'}`}
+          >
             {hasAccess && <div className="w-2 h-2 rounded-full bg-white" />}
           </div>
         </div>
@@ -174,14 +189,24 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
                     />
                   ))}
                 </div>
-                <p className={`text-xs font-medium ${
-                  passedRules <= 2 ? 'text-danger-500' :
-                  passedRules <= 3 ? 'text-yellow-500' :
-                  passedRules <= 4 ? 'text-blue-500' : 'text-green-600'
-                }`}>
-                  {passedRules <= 2 ? 'Senha fraca' :
-                   passedRules <= 3 ? 'Senha razoável' :
-                   passedRules <= 4 ? 'Senha boa' : 'Senha forte'}
+                <p
+                  className={`text-xs font-medium ${
+                    passedRules <= 2
+                      ? 'text-danger-500'
+                      : passedRules <= 3
+                        ? 'text-yellow-500'
+                        : passedRules <= 4
+                          ? 'text-blue-500'
+                          : 'text-green-600'
+                  }`}
+                >
+                  {passedRules <= 2
+                    ? 'Senha fraca'
+                    : passedRules <= 3
+                      ? 'Senha razoável'
+                      : passedRules <= 4
+                        ? 'Senha boa'
+                        : 'Senha forte'}
                 </p>
               </div>
             )}
@@ -193,13 +218,18 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
                   const ok = rule.test(temporaryPassword);
                   return (
                     <li key={rule.label} className="flex items-center gap-2">
-                      <span className={`flex items-center justify-center w-4 h-4 rounded-full shrink-0 transition-all ${ok ? 'bg-green-500' : 'bg-slate-200'}`}>
-                        {ok
-                          ? <Check size={10} className="text-white" strokeWidth={3} />
-                          : <X size={10} className="text-slate-400" strokeWidth={3} />
-                        }
+                      <span
+                        className={`flex items-center justify-center w-4 h-4 rounded-full shrink-0 transition-all ${ok ? 'bg-green-500' : 'bg-slate-200'}`}
+                      >
+                        {ok ? (
+                          <Check size={10} className="text-white" strokeWidth={3} />
+                        ) : (
+                          <X size={10} className="text-slate-400" strokeWidth={3} />
+                        )}
                       </span>
-                      <span className={`text-xs transition-colors ${ok ? 'text-green-700' : 'text-slate-400'}`}>
+                      <span
+                        className={`text-xs transition-colors ${ok ? 'text-green-700' : 'text-slate-400'}`}
+                      >
                         {rule.label}
                       </span>
                     </li>
@@ -215,7 +245,9 @@ export function AddMemberModal({ familyId, isOpen, onClose }: Props) {
         )}
 
         <div className="flex gap-3 justify-end pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
+          <Button type="button" variant="ghost" onClick={onClose}>
+            Cancelar
+          </Button>
           <Button type="submit" variant="primary" disabled={mutation.isPending}>
             {mutation.isPending ? 'Salvando...' : 'Adicionar Membro'}
           </Button>

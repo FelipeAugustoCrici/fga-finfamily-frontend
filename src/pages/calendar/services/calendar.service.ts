@@ -7,8 +7,7 @@ import type {
 } from '../types/calendar.types';
 
 function toDateKey(record: any): string {
-
-const m = String(record.month).padStart(2, '0');
+  const m = String(record.month).padStart(2, '0');
   const y = String(record.year);
   const day = String(record.date).substring(8, 10);
   return `${y}-${m}-${day}`;
@@ -67,8 +66,12 @@ export const calendarService = {
     }
 
     const days: CalendarDaySummary[] = Array.from(dayMap.entries()).map(([date, events]) => {
-      const totalIncome = events.filter((e) => e.type === 'income').reduce((s, e) => s + e.amount, 0);
-      const totalExpense = events.filter((e) => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
+      const totalIncome = events
+        .filter((e) => e.type === 'income')
+        .reduce((s, e) => s + e.amount, 0);
+      const totalExpense = events
+        .filter((e) => e.type === 'expense')
+        .reduce((s, e) => s + e.amount, 0);
       return {
         date,
         totalIncome,
@@ -81,8 +84,12 @@ export const calendarService = {
       };
     });
 
-    const totalIncome = allEvents.filter((e) => e.type === 'income').reduce((s, e) => s + e.amount, 0);
-    const totalExpense = allEvents.filter((e) => e.type === 'expense').reduce((s, e) => s + e.amount, 0);
+    const totalIncome = allEvents
+      .filter((e) => e.type === 'income')
+      .reduce((s, e) => s + e.amount, 0);
+    const totalExpense = allEvents
+      .filter((e) => e.type === 'expense')
+      .reduce((s, e) => s + e.amount, 0);
 
     const summary: MonthlyCalendarSummary = {
       month,
@@ -90,7 +97,9 @@ export const calendarService = {
       totalIncome,
       totalExpense,
       totalPaid: allEvents.filter((e) => e.status === 'PAID').reduce((s, e) => s + e.amount, 0),
-      totalPending: allEvents.filter((e) => e.status === 'PENDING').reduce((s, e) => s + e.amount, 0),
+      totalPending: allEvents
+        .filter((e) => e.status === 'PENDING')
+        .reduce((s, e) => s + e.amount, 0),
       projectedBalance: totalIncome - totalExpense,
       overdueCount: allEvents.filter((e) => e.status === 'OVERDUE').length,
       recurringCount: allEvents.filter((e) => e.isRecurring).length,

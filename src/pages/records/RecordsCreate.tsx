@@ -20,14 +20,16 @@ export function RecordsCreate() {
   const people = families[0]?.members || [];
 
   // Pre-fill from QuickLaunch "Editar" flow
-  const prefill = searchParams.has('description') ? {
-    description: searchParams.get('description') || '',
-    value: parseFloat(searchParams.get('value') || '0') || undefined,
-    date: searchParams.get('date') || new Date().toISOString().split('T')[0],
-    recordType: (searchParams.get('type') || 'expense') as any,
-    categoryId: searchParams.get('categoryId') || '',
-    personId: searchParams.get('personId') || '',
-  } : undefined;
+  const prefill = searchParams.has('description')
+    ? {
+        description: searchParams.get('description') || '',
+        value: parseFloat(searchParams.get('value') || '0') || undefined,
+        date: searchParams.get('date') || new Date().toISOString().split('T')[0],
+        recordType: (searchParams.get('type') || 'expense') as any,
+        categoryId: searchParams.get('categoryId') || '',
+        personId: searchParams.get('personId') || '',
+      }
+    : undefined;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>

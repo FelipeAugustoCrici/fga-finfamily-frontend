@@ -9,15 +9,15 @@ export function useRecord(id?: string) {
       try {
         const { data } = await api.get(`/finance/expenses/${id}`);
         return { ...data, recordType: 'expense' };
-      } catch (_expenseError) {
+      } catch {
         try {
           const { data } = await api.get(`/finance/incomes/${id}`);
           return { ...data, recordType: 'salary' };
-        } catch (_incomeError) {
+        } catch {
           try {
             const { data } = await api.get(`/finance/extras/${id}`);
             return { ...data, recordType: 'income' };
-          } catch (_extraError) {
+          } catch {
             throw new Error('Registro não encontrado');
           }
         }

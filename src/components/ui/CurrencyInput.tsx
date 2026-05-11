@@ -42,7 +42,7 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
     const [displayValue, setDisplayValue] = useState(() => numericToDisplay(value));
     const isFocused = useRef(false);
 
-useEffect(() => {
+    useEffect(() => {
       if (!isFocused.current) {
         setDisplayValue(numericToDisplay(value));
       }
@@ -67,8 +67,14 @@ useEffect(() => {
         inputMode="numeric"
         value={displayValue}
         onChange={handleChange}
-        onFocus={(e) => { isFocused.current = true; props.onFocus?.(e) }}
-        onBlur={(e) => { isFocused.current = false; props.onBlur?.(e) }}
+        onFocus={(e) => {
+          isFocused.current = true;
+          props.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          isFocused.current = false;
+          props.onBlur?.(e);
+        }}
       />
     );
   },

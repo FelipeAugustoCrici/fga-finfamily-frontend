@@ -17,8 +17,8 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
   const { isDark } = useTheme();
   const isPositive = balance >= 0;
 
-  const animatedBalance  = useCountUp(balance, 700);
-  const animatedIncomes  = useCountUp(incomes, 600);
+  const animatedBalance = useCountUp(balance, 700);
+  const animatedIncomes = useCountUp(incomes, 600);
   const animatedExpenses = useCountUp(expenses, 650);
 
   const darkCard = {
@@ -34,46 +34,63 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
 
   const cardStyle = isDark ? darkCard : lightCard;
 
-  const labelColor   = isDark ? 'rgba(255,255,255,0.5)' : '#64748b';
-  const iconWrapBg   = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.1)';
-  const iconWrapBdr  = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.15)';
-  const walletColor  = isDark ? 'rgba(255,255,255,0.8)' : '#6366f1';
-  const eyeBtnBg     = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(99,102,241,0.06)';
-  const eyeBtnHover  = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(99,102,241,0.12)';
-  const eyeBtnBdr    = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.15)';
-  const eyeColor     = isDark ? 'rgba(255,255,255,0.6)' : '#6366f1';
+  const labelColor = isDark ? 'rgba(255,255,255,0.5)' : '#64748b';
+  const iconWrapBg = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.1)';
+  const iconWrapBdr = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.15)';
+  const walletColor = isDark ? 'rgba(255,255,255,0.8)' : '#6366f1';
+  const eyeBtnBg = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(99,102,241,0.06)';
+  const eyeBtnHover = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(99,102,241,0.12)';
+  const eyeBtnBdr = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(99,102,241,0.15)';
+  const eyeColor = isDark ? 'rgba(255,255,255,0.6)' : '#6366f1';
 
   const balanceColor = isDark
-    ? (isPositive ? '#ffffff' : '#f87171')
-    : (isPositive ? '#0f172a' : '#dc2626');
+    ? isPositive
+      ? '#ffffff'
+      : '#f87171'
+    : isPositive
+      ? '#0f172a'
+      : '#dc2626';
 
   const badgeStyle = isPositive
     ? isDark
-      ? { background: 'rgba(74,222,128,0.15)', color: '#4ade80', border: '1px solid rgba(74,222,128,0.2)' }
-      : { background: 'rgba(16,185,129,0.1)', color: '#047857', border: '1px solid rgba(16,185,129,0.2)' }
+      ? {
+          background: 'rgba(74,222,128,0.15)',
+          color: '#4ade80',
+          border: '1px solid rgba(74,222,128,0.2)',
+        }
+      : {
+          background: 'rgba(16,185,129,0.1)',
+          color: '#047857',
+          border: '1px solid rgba(16,185,129,0.2)',
+        }
     : isDark
-      ? { background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.2)' }
-      : { background: 'rgba(220,38,38,0.08)', color: '#dc2626', border: '1px solid rgba(220,38,38,0.15)' };
+      ? {
+          background: 'rgba(248,113,113,0.15)',
+          color: '#f87171',
+          border: '1px solid rgba(248,113,113,0.2)',
+        }
+      : {
+          background: 'rgba(220,38,38,0.08)',
+          color: '#dc2626',
+          border: '1px solid rgba(220,38,38,0.15)',
+        };
 
-  const indicatorBg  = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.8)';
+  const indicatorBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.8)';
   const indicatorBdr = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(99,102,241,0.1)';
   const indicatorHov = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(99,102,241,0.06)';
 
-  const incomeIconBg  = isDark ? 'rgba(74,222,128,0.2)'  : 'rgba(16,185,129,0.12)';
-  const incomeIconClr = isDark ? '#4ade80'                : '#059669';
-  const incomeLbl     = isDark ? 'rgba(255,255,255,0.4)' : '#64748b';
-  const incomeVal     = isDark ? '#86efac'                : '#047857';
+  const incomeIconBg = isDark ? 'rgba(74,222,128,0.2)' : 'rgba(16,185,129,0.12)';
+  const incomeIconClr = isDark ? '#4ade80' : '#059669';
+  const incomeLbl = isDark ? 'rgba(255,255,255,0.4)' : '#64748b';
+  const incomeVal = isDark ? '#86efac' : '#047857';
 
-  const expenseIconBg  = isDark ? 'rgba(248,113,113,0.2)'  : 'rgba(220,38,38,0.1)';
-  const expenseIconClr = isDark ? '#f87171'                 : '#dc2626';
-  const expenseLbl     = isDark ? 'rgba(255,255,255,0.4)'  : '#64748b';
-  const expenseVal     = isDark ? '#fca5a5'                 : '#be123c';
+  const expenseIconBg = isDark ? 'rgba(248,113,113,0.2)' : 'rgba(220,38,38,0.1)';
+  const expenseIconClr = isDark ? '#f87171' : '#dc2626';
+  const expenseLbl = isDark ? 'rgba(255,255,255,0.4)' : '#64748b';
+  const expenseVal = isDark ? '#fca5a5' : '#be123c';
 
   return (
-    <div
-      className="relative overflow-hidden rounded-3xl p-8 h-full"
-      style={cardStyle}
-    >
+    <div className="relative overflow-hidden rounded-3xl p-8 h-full" style={cardStyle}>
       {}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -102,20 +119,26 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
             >
               <Wallet size={20} style={{ color: walletColor }} />
             </div>
-            <span className="font-medium text-xs uppercase tracking-widest" style={{ color: labelColor }}>Saldo atual</span>
+            <span
+              className="font-medium text-xs uppercase tracking-widest"
+              style={{ color: labelColor }}
+            >
+              Saldo atual
+            </span>
           </div>
           <button
-            onClick={() => setVisible(v => !v)}
+            onClick={() => setVisible((v) => !v)}
             className="p-2 rounded-lg transition-all duration-200"
             style={{ background: eyeBtnBg, border: `1px solid ${eyeBtnBdr}` }}
-            onMouseEnter={e => (e.currentTarget.style.background = eyeBtnHover)}
-            onMouseLeave={e => (e.currentTarget.style.background = eyeBtnBg)}
+            onMouseEnter={(e) => (e.currentTarget.style.background = eyeBtnHover)}
+            onMouseLeave={(e) => (e.currentTarget.style.background = eyeBtnBg)}
             aria-label="Alternar visibilidade"
           >
-            {visible
-              ? <Eye size={15} style={{ color: eyeColor }} />
-              : <EyeOff size={15} style={{ color: eyeColor }} />
-            }
+            {visible ? (
+              <Eye size={15} style={{ color: eyeColor }} />
+            ) : (
+              <EyeOff size={15} style={{ color: eyeColor }} />
+            )}
           </button>
         </div>
 
@@ -141,14 +164,22 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
           <div
             className="rounded-2xl p-4 border transition-all duration-200"
             style={{ background: indicatorBg, borderColor: indicatorBdr }}
-            onMouseEnter={e => (e.currentTarget.style.background = indicatorHov)}
-            onMouseLeave={e => (e.currentTarget.style.background = indicatorBg)}
+            onMouseEnter={(e) => (e.currentTarget.style.background = indicatorHov)}
+            onMouseLeave={(e) => (e.currentTarget.style.background = indicatorBg)}
           >
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-5 h-5 rounded-md flex items-center justify-center" style={{ background: incomeIconBg }}>
+              <div
+                className="w-5 h-5 rounded-md flex items-center justify-center"
+                style={{ background: incomeIconBg }}
+              >
                 <TrendingUp size={11} style={{ color: incomeIconClr }} />
               </div>
-              <span className="text-xs font-medium uppercase tracking-wide" style={{ color: incomeLbl }}>Entradas</span>
+              <span
+                className="text-xs font-medium uppercase tracking-wide"
+                style={{ color: incomeLbl }}
+              >
+                Entradas
+              </span>
             </div>
             <p className="text-lg font-bold" style={{ color: incomeVal }}>
               {visible ? fmt(animatedIncomes) : 'R$ ••••'}
@@ -157,14 +188,22 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
           <div
             className="rounded-2xl p-4 border transition-all duration-200"
             style={{ background: indicatorBg, borderColor: indicatorBdr }}
-            onMouseEnter={e => (e.currentTarget.style.background = indicatorHov)}
-            onMouseLeave={e => (e.currentTarget.style.background = indicatorBg)}
+            onMouseEnter={(e) => (e.currentTarget.style.background = indicatorHov)}
+            onMouseLeave={(e) => (e.currentTarget.style.background = indicatorBg)}
           >
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-5 h-5 rounded-md flex items-center justify-center" style={{ background: expenseIconBg }}>
+              <div
+                className="w-5 h-5 rounded-md flex items-center justify-center"
+                style={{ background: expenseIconBg }}
+              >
                 <TrendingDown size={11} style={{ color: expenseIconClr }} />
               </div>
-              <span className="text-xs font-medium uppercase tracking-wide" style={{ color: expenseLbl }}>Saídas</span>
+              <span
+                className="text-xs font-medium uppercase tracking-wide"
+                style={{ color: expenseLbl }}
+              >
+                Saídas
+              </span>
             </div>
             <p className="text-lg font-bold" style={{ color: expenseVal }}>
               {visible ? fmt(animatedExpenses) : 'R$ ••••'}

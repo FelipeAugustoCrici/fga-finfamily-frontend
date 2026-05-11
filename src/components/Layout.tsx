@@ -36,16 +36,33 @@ interface SubItem {
 
 // ─── Sidebar leaf item ────────────────────────────────────────────────────────
 
-const SidebarItem = ({ to, icon: Icon, label, active, onNavigate }: { to: string; icon: React.ElementType; label: string; active?: boolean; onNavigate?: () => void }) => (
+const SidebarItem = ({
+  to,
+  icon: Icon,
+  label,
+  active,
+  onNavigate,
+}: {
+  to: string;
+  icon: React.ElementType;
+  label: string;
+  active?: boolean;
+  onNavigate?: () => void;
+}) => (
   <Link
     to={to}
     onClick={onNavigate}
     className={cn(
       'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group',
-      active ? 'bg-primary-700 text-white shadow-md' : 'text-primary-400 hover:bg-primary-800 hover:text-white',
+      active
+        ? 'bg-primary-700 text-white shadow-md'
+        : 'text-primary-400 hover:bg-primary-800 hover:text-white',
     )}
   >
-    <Icon size={20} className={cn(active ? 'text-white' : 'text-primary-500 group-hover:text-white')} />
+    <Icon
+      size={20}
+      className={cn(active ? 'text-white' : 'text-primary-500 group-hover:text-white')}
+    />
     <span className="font-medium">{label}</span>
     {active && <ChevronRight size={16} className="ml-auto" />}
   </Link>
@@ -53,7 +70,13 @@ const SidebarItem = ({ to, icon: Icon, label, active, onNavigate }: { to: string
 
 // ─── Accordion group ──────────────────────────────────────────────────────────
 
-function SidebarAccordion({ icon: Icon, label, items, isActive, onNavigate }: {
+function SidebarAccordion({
+  icon: Icon,
+  label,
+  items,
+  isActive,
+  onNavigate,
+}: {
   icon: React.ElementType;
   label: string;
   items: SubItem[];
@@ -63,26 +86,37 @@ function SidebarAccordion({ icon: Icon, label, items, isActive, onNavigate }: {
   const [open, setOpen] = React.useState(isActive);
   const location = useLocation();
 
-  React.useEffect(() => { if (isActive) setOpen(true); }, [isActive]);
+  React.useEffect(() => {
+    if (isActive) setOpen(true);
+  }, [isActive]);
 
   return (
     <div>
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className={cn(
           'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 w-full group',
-          isActive ? 'bg-primary-800 text-white' : 'text-primary-400 hover:bg-primary-800 hover:text-white',
+          isActive
+            ? 'bg-primary-800 text-white'
+            : 'text-primary-400 hover:bg-primary-800 hover:text-white',
         )}
       >
-        <Icon size={20} className={cn(isActive ? 'text-white' : 'text-primary-500 group-hover:text-white')} />
+        <Icon
+          size={20}
+          className={cn(isActive ? 'text-white' : 'text-primary-500 group-hover:text-white')}
+        />
         <span className="font-medium flex-1 text-left">{label}</span>
-        <ChevronDown size={16} className={cn('transition-transform duration-200', open ? 'rotate-180' : '')} />
+        <ChevronDown
+          size={16}
+          className={cn('transition-transform duration-200', open ? 'rotate-180' : '')}
+        />
       </button>
 
       {open && (
         <div className="ml-4 mt-1 space-y-1 border-l border-primary-700 pl-3">
-          {items.map(item => {
-            const active = location.pathname === item.to || location.pathname.startsWith(item.to + '/');
+          {items.map((item) => {
+            const active =
+              location.pathname === item.to || location.pathname.startsWith(item.to + '/');
             return (
               <Link
                 key={item.to}
@@ -90,10 +124,15 @@ function SidebarAccordion({ icon: Icon, label, items, isActive, onNavigate }: {
                 onClick={onNavigate}
                 className={cn(
                   'flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm group',
-                  active ? 'bg-primary-700 text-white shadow-md' : 'text-primary-400 hover:bg-primary-800 hover:text-white',
+                  active
+                    ? 'bg-primary-700 text-white shadow-md'
+                    : 'text-primary-400 hover:bg-primary-800 hover:text-white',
                 )}
               >
-                <item.icon size={16} className={cn(active ? 'text-white' : 'text-primary-500 group-hover:text-white')} />
+                <item.icon
+                  size={16}
+                  className={cn(active ? 'text-white' : 'text-primary-500 group-hover:text-white')}
+                />
                 <span className="font-medium">{item.label}</span>
                 {active && <ChevronRight size={14} className="ml-auto" />}
               </Link>
@@ -117,27 +156,42 @@ function AIChatFAB({ onClick, isOpen }: { onClick: () => void; isOpen: boolean }
       onMouseLeave={() => setHovered(false)}
       title="Chat IA — Registrar com linguagem natural"
       style={{
-        position: 'fixed', bottom: 28, right: 28, zIndex: 201,
-        display: 'flex', alignItems: 'center',
+        position: 'fixed',
+        bottom: 28,
+        right: 28,
+        zIndex: 201,
+        display: 'flex',
+        alignItems: 'center',
         gap: hovered ? 10 : 0,
         padding: hovered ? '14px 20px' : '14px',
-        borderRadius: 999, border: 'none', cursor: 'pointer',
-        background: isOpen ? 'linear-gradient(135deg,#4f46e5,#7c3aed)' : 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-        boxShadow: hovered ? '0 8px 32px rgba(99,102,241,0.5),0 2px 8px rgba(0,0,0,0.2)' : '0 4px 20px rgba(99,102,241,0.4),0 2px 8px rgba(0,0,0,0.15)',
+        borderRadius: 999,
+        border: 'none',
+        cursor: 'pointer',
+        background: isOpen
+          ? 'linear-gradient(135deg,#4f46e5,#7c3aed)'
+          : 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+        boxShadow: hovered
+          ? '0 8px 32px rgba(99,102,241,0.5),0 2px 8px rgba(0,0,0,0.2)'
+          : '0 4px 20px rgba(99,102,241,0.4),0 2px 8px rgba(0,0,0,0.15)',
         transform: hovered ? 'scale(1.06)' : 'scale(1)',
         transition: 'all 0.2s cubic-bezier(0.34,1.56,0.64,1)',
-        overflow: 'hidden', whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
         maxWidth: hovered ? 200 : 52,
       }}
     >
       <Sparkles size={20} color="#fff" style={{ flexShrink: 0 }} />
-      <span style={{
-        fontSize: 13, fontWeight: 700, color: '#fff',
-        opacity: hovered ? 1 : 0,
-        maxWidth: hovered ? 120 : 0,
-        transition: 'opacity 0.15s, max-width 0.2s',
-        overflow: 'hidden',
-      }}>
+      <span
+        style={{
+          fontSize: 13,
+          fontWeight: 700,
+          color: '#fff',
+          opacity: hovered ? 1 : 0,
+          maxWidth: hovered ? 120 : 0,
+          transition: 'opacity 0.15s, max-width 0.2s',
+          overflow: 'hidden',
+        }}
+      >
         {isOpen ? 'Fechar' : 'Chat IA'}
       </span>
     </button>
@@ -147,25 +201,25 @@ function AIChatFAB({ onClick, isOpen }: { onClick: () => void; isOpen: boolean }
 // ─── Nav config ───────────────────────────────────────────────────────────────
 
 const recordsSubItems: SubItem[] = [
-  { to: '/record',   icon: ListOrdered,  label: 'Lista' },
+  { to: '/record', icon: ListOrdered, label: 'Lista' },
   { to: '/calendar', icon: CalendarDays, label: 'Calendário' },
   { to: '/credit-cards', icon: CreditCard, label: 'Cartões' },
 ];
 
 const planningSubItems: SubItem[] = [
-  { to: '/planning/goals',   icon: Target,   label: 'Metas' },
+  { to: '/planning/goals', icon: Target, label: 'Metas' },
   { to: '/planning/budgets', icon: PiggyBank, label: 'Orçamentos' },
-  { to: '/reports',          icon: BarChart3, label: 'Relatórios' },
+  { to: '/reports', icon: BarChart3, label: 'Relatórios' },
 ];
 
 const familySubItems: SubItem[] = [
-  { to: '/family',      icon: Users, label: 'Membros' },
+  { to: '/family', icon: Users, label: 'Membros' },
   { to: '/couple-mode', icon: Heart, label: 'Modo Casal' },
 ];
 
 const settingsSubItems: SubItem[] = [
   { to: '/category', icon: Tags, label: 'Categorias' },
-  { to: '/profile',  icon: User, label: 'Meu Perfil' },
+  { to: '/profile', icon: User, label: 'Meu Perfil' },
 ];
 
 // ─── Sidebar nav content (shared between desktop + mobile) ───────────────────
@@ -174,19 +228,50 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const location = useLocation();
   const p = location.pathname;
 
-  const isRecords  = p.startsWith('/record') || p.startsWith('/calendar') || p.startsWith('/credit-cards');
+  const isRecords =
+    p.startsWith('/record') || p.startsWith('/calendar') || p.startsWith('/credit-cards');
   const isPlanning = p.startsWith('/planning') || p.startsWith('/reports');
-  const isFamily   = p.startsWith('/family') || p.startsWith('/couple-mode');
+  const isFamily = p.startsWith('/family') || p.startsWith('/couple-mode');
   const isSettings = p.startsWith('/category') || p.startsWith('/profile');
 
   return (
     <nav className="flex-1 space-y-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-700 scrollbar-track-transparent">
-      <SidebarItem to="/" icon={LayoutDashboard} label="Dashboard" active={p === '/' || p === '/dashboard'} onNavigate={onNavigate} />
+      <SidebarItem
+        to="/"
+        icon={LayoutDashboard}
+        label="Dashboard"
+        active={p === '/' || p === '/dashboard'}
+        onNavigate={onNavigate}
+      />
 
-      <SidebarAccordion icon={ListOrdered}  label="Lançamentos"  items={recordsSubItems}  isActive={isRecords}  onNavigate={onNavigate} />
-      <SidebarAccordion icon={ClipboardList} label="Planejamento" items={planningSubItems} isActive={isPlanning} onNavigate={onNavigate} />
-      <SidebarAccordion icon={Users}         label="Família"      items={familySubItems}   isActive={isFamily}   onNavigate={onNavigate} />
-      <SidebarAccordion icon={Settings}      label="Configurações" items={settingsSubItems} isActive={isSettings} onNavigate={onNavigate} />
+      <SidebarAccordion
+        icon={ListOrdered}
+        label="Lançamentos"
+        items={recordsSubItems}
+        isActive={isRecords}
+        onNavigate={onNavigate}
+      />
+      <SidebarAccordion
+        icon={ClipboardList}
+        label="Planejamento"
+        items={planningSubItems}
+        isActive={isPlanning}
+        onNavigate={onNavigate}
+      />
+      <SidebarAccordion
+        icon={Users}
+        label="Família"
+        items={familySubItems}
+        isActive={isFamily}
+        onNavigate={onNavigate}
+      />
+      <SidebarAccordion
+        icon={Settings}
+        label="Configurações"
+        items={settingsSubItems}
+        isActive={isSettings}
+        onNavigate={onNavigate}
+      />
     </nav>
   );
 }
@@ -202,7 +287,12 @@ export const Layout = () => {
       {/* Desktop sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-primary-900 p-6 text-white fixed h-full shadow-2xl z-20">
         <div className="flex flex-col items-center mb-6 px-2">
-          <img src={LogoSvg} alt="FinFamily" style={{ width: 100, height: 100 }} className="invert" />
+          <img
+            src={LogoSvg}
+            alt="FinFamily"
+            style={{ width: 100, height: 100 }}
+            className="invert"
+          />
           <span className="text-xl font-bold tracking-tight">FinFamily AI</span>
         </div>
 
@@ -241,7 +331,7 @@ export const Layout = () => {
         >
           <div
             className="w-72 bg-primary-900 h-full p-6 animate-in slide-in-from-left duration-300 flex flex-col"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-8 px-2 text-white">
               <div className="flex items-center gap-3">
@@ -267,7 +357,7 @@ export const Layout = () => {
       )}
 
       {/* FAB + floating chat */}
-      <AIChatFAB onClick={() => setIsChatOpen(o => !o)} isOpen={isChatOpen} />
+      <AIChatFAB onClick={() => setIsChatOpen((o) => !o)} isOpen={isChatOpen} />
       <AIChatPanel open={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   );

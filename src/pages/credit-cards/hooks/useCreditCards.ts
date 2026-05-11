@@ -27,7 +27,8 @@ export function useCreateCreditCard() {
       qc.invalidateQueries({ queryKey: ['credit-cards'] });
       showToast({ title: 'Sucesso', description: 'Cartão criado!', variant: 'success' });
     },
-    onError: () => showToast({ title: 'Erro', description: 'Erro ao criar cartão', variant: 'error' }),
+    onError: () =>
+      showToast({ title: 'Erro', description: 'Erro ao criar cartão', variant: 'error' }),
   });
 }
 
@@ -41,7 +42,8 @@ export function useUpdateCreditCard() {
       qc.invalidateQueries({ queryKey: ['credit-cards'] });
       showToast({ title: 'Sucesso', description: 'Cartão atualizado!', variant: 'success' });
     },
-    onError: () => showToast({ title: 'Erro', description: 'Erro ao atualizar cartão', variant: 'error' }),
+    onError: () =>
+      showToast({ title: 'Erro', description: 'Erro ao atualizar cartão', variant: 'error' }),
   });
 }
 
@@ -54,7 +56,8 @@ export function useDeleteCreditCard() {
       qc.invalidateQueries({ queryKey: ['credit-cards'] });
       showToast({ title: 'Sucesso', description: 'Cartão removido!', variant: 'success' });
     },
-    onError: () => showToast({ title: 'Erro', description: 'Erro ao remover cartão', variant: 'error' }),
+    onError: () =>
+      showToast({ title: 'Erro', description: 'Erro ao remover cartão', variant: 'error' }),
   });
 }
 
@@ -68,7 +71,8 @@ export function useCreatePurchase() {
       qc.invalidateQueries({ queryKey: ['credit-card-invoices'] });
       showToast({ title: 'Sucesso', description: 'Compra lançada!', variant: 'success' });
     },
-    onError: () => showToast({ title: 'Erro', description: 'Erro ao lançar compra', variant: 'error' }),
+    onError: () =>
+      showToast({ title: 'Erro', description: 'Erro ao lançar compra', variant: 'error' }),
   });
 }
 
@@ -100,7 +104,8 @@ export function usePayInvoice() {
       qc.invalidateQueries({ queryKey: ['credit-card-invoice'] });
       showToast({ title: 'Sucesso', description: 'Fatura paga!', variant: 'success' });
     },
-    onError: () => showToast({ title: 'Erro', description: 'Erro ao pagar fatura', variant: 'error' }),
+    onError: () =>
+      showToast({ title: 'Erro', description: 'Erro ao pagar fatura', variant: 'error' }),
   });
 }
 

@@ -5,11 +5,18 @@ import _ from 'lodash';
 import { Card } from '@/components/ui/Card';
 import { Pagination } from '@/components/ui/Pagination';
 import { ConfirmModal } from '@/components/ui/Modal';
-import { Button } from '@/components/ui/Button';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { api } from '@/services/api.service';
 import { SkeletonTable } from '@/components/ui/Skeleton';
-import { ArrowUpCircle, ArrowDownCircle, Edit2, Trash2, Loader2, Eye, Download, Plus, MessageSquarePlus } from 'lucide-react';
+import {
+  ArrowUpCircle,
+  ArrowDownCircle,
+  Edit2,
+  Trash2,
+  Loader2,
+  Eye,
+  Download,
+} from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import { ActionButton } from '@/components/ui/ActionButton';
 
@@ -39,7 +46,7 @@ export function RecordsList() {
   const itemsPerPage = 10;
   const t = useTokens();
 
-const { data: families = [] } = useQuery({
+  const { data: families = [] } = useQuery({
     queryKey: ['families'],
     queryFn: () => familyService.list(),
   });
@@ -58,28 +65,26 @@ const { data: families = [] } = useQuery({
   const people = families.flatMap((f) => f.members || []);
 
   const filteredRecords = records.filter((item) =>
-    item.description?.toLowerCase().includes(filters.search.toLowerCase())
+    item.description?.toLowerCase().includes(filters.search.toLowerCase()),
   );
 
-const shouldUseFrontendPagination = filters.search.length > 0;
+  const shouldUseFrontendPagination = filters.search.length > 0;
 
   let paginatedRecords = filteredRecords;
   let totalItems = pagination?.total || 0;
   let totalPages = pagination?.totalPages || 1;
 
   if (shouldUseFrontendPagination) {
-    
     totalItems = filteredRecords.length;
     totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (filters.page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     paginatedRecords = filteredRecords.slice(startIndex, endIndex);
   } else {
-    
     paginatedRecords = filteredRecords;
   }
 
-useEffect(() => {
+  useEffect(() => {
     filters.setPage(1);
   }, [filters.month, filters.year, filters.status, filters.search]);
 
@@ -111,11 +116,10 @@ useEffect(() => {
 
   const handleDeleteIncome = async (id: string, type: 'income' | 'extra') => {
     try {
-      
       const route = type === 'income' ? 'incomes' : 'extras';
       await api.delete(`/finance/${route}/${id}`);
 
-queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
       queryClient.invalidateQueries({ queryKey: ['extras-summary'] });
     } catch (error) {
       console.error('Erro ao excluir:', error);
@@ -134,9 +138,7 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
             >
               Exportar
             </ActionButton>
-            <ActionButton onClick={() => navigate('/record/create')}>
-              Novo Lançamento
-            </ActionButton>
+            <ActionButton onClick={() => navigate('/record/create')}>Novo Lançamento</ActionButton>
             <ActionButton
               variant="secondary"
               onClick={() => navigate('/record/chat')}
@@ -181,20 +183,112 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr style={{ borderBottom: `1px solid ${t.border.divider}` }}>
-                  <th className="px-6 py-3.5" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Descrição</th>
-                  <th className="px-6 py-3.5" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Categoria</th>
-                  <th className="px-6 py-3.5" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Data</th>
-                  <th className="px-6 py-3.5" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tipo</th>
-                  <th className="px-6 py-3.5" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
-                  <th className="px-6 py-3.5" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Valor</th>
-                  <th className="px-6 py-3.5" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Responsável</th>
-                  <th className="px-6 py-3.5 text-right" style={{ color: t.text.muted, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Ações</th>
+                  <th
+                    className="px-6 py-3.5"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Descrição
+                  </th>
+                  <th
+                    className="px-6 py-3.5"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Categoria
+                  </th>
+                  <th
+                    className="px-6 py-3.5"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Data
+                  </th>
+                  <th
+                    className="px-6 py-3.5"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Tipo
+                  </th>
+                  <th
+                    className="px-6 py-3.5"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Status
+                  </th>
+                  <th
+                    className="px-6 py-3.5"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Valor
+                  </th>
+                  <th
+                    className="px-6 py-3.5"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Responsável
+                  </th>
+                  <th
+                    className="px-6 py-3.5 text-right"
+                    style={{
+                      color: t.text.muted,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    Ações
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedRecords.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="px-6 py-10 text-center italic" style={{ color: t.text.muted }}>
+                    <td
+                      colSpan={8}
+                      className="px-6 py-10 text-center italic"
+                      style={{ color: t.text.muted }}
+                    >
                       Nenhum lançamento encontrado para este período.
                     </td>
                   </tr>
@@ -206,7 +300,12 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
                       <tr
                         key={idx}
                         className="group"
-                        style={{ background: hoveredRow === idx ? t.bg.cardHover : rowBg, borderBottom: `1px solid ${t.border.subtle}`, transition: 'background 0.2s ease', cursor: 'pointer' }}
+                        style={{
+                          background: hoveredRow === idx ? t.bg.cardHover : rowBg,
+                          borderBottom: `1px solid ${t.border.subtle}`,
+                          transition: 'background 0.2s ease',
+                          cursor: 'pointer',
+                        }}
                         onMouseEnter={() => setHoveredRow(idx)}
                         onMouseLeave={() => setHoveredRow(null)}
                       >
@@ -218,17 +317,24 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
                                 background: isIncome ? t.income.bgIcon : t.expense.bgIcon,
                               }}
                             >
-                              {isIncome
-                                ? <ArrowUpCircle size={16} style={{ color: t.income.text }} />
-                                : <ArrowDownCircle size={16} style={{ color: t.expense.text }} />
-                              }
+                              {isIncome ? (
+                                <ArrowUpCircle size={16} style={{ color: t.income.text }} />
+                              ) : (
+                                <ArrowDownCircle size={16} style={{ color: t.expense.text }} />
+                              )}
                             </div>
                             <button
                               onClick={() => navigate(`/record/detail/${tx.id}`)}
                               className="text-sm text-left transition-all duration-200"
                               style={{ fontWeight: 500, color: t.text.primary }}
-                              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; (e.currentTarget as HTMLElement).style.color = t.text.link; }}
-                              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; (e.currentTarget as HTMLElement).style.color = t.text.primary; }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.textDecoration = 'underline';
+                                (e.currentTarget as HTMLElement).style.color = t.text.link;
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.textDecoration = 'none';
+                                (e.currentTarget as HTMLElement).style.color = t.text.primary;
+                              }}
                             >
                               {tx.description}
                             </button>
@@ -292,7 +398,8 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
                               color: isIncome ? t.income.text : t.expense.text,
                             }}
                           >
-                            {isIncome ? '+ ' : '- '}{formatCurrency(tx.value)}
+                            {isIncome ? '+ ' : '- '}
+                            {formatCurrency(tx.value)}
                           </span>
                         </td>
                         <td className="px-6 py-4">
@@ -309,8 +416,15 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
                               onClick={() => navigate(`/record/detail/${tx.id}`)}
                               className="p-1.5 rounded-lg transition-all duration-200"
                               style={{ color: t.text.muted }}
-                              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = t.bg.mutedStrong; (e.currentTarget as HTMLElement).style.color = t.text.primary; }}
-                              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = t.text.muted; }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.background =
+                                  t.bg.mutedStrong;
+                                (e.currentTarget as HTMLElement).style.color = t.text.primary;
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.background = 'transparent';
+                                (e.currentTarget as HTMLElement).style.color = t.text.muted;
+                              }}
                               title="Ver detalhes"
                             >
                               <Eye size={15} />
@@ -319,8 +433,15 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
                               onClick={() => navigate(`/record/edit/${tx.id}`)}
                               className="p-1.5 rounded-lg transition-all duration-200"
                               style={{ color: t.text.muted }}
-                              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = t.bg.mutedStrong; (e.currentTarget as HTMLElement).style.color = t.text.primary; }}
-                              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = t.text.muted; }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.background =
+                                  t.bg.mutedStrong;
+                                (e.currentTarget as HTMLElement).style.color = t.text.primary;
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.background = 'transparent';
+                                (e.currentTarget as HTMLElement).style.color = t.text.muted;
+                              }}
                               title="Editar"
                             >
                               <Edit2 size={15} />
@@ -330,11 +451,22 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
                               disabled={deleteRecord.isPending}
                               className="p-1.5 rounded-lg transition-all duration-200 disabled:opacity-50"
                               style={{ color: t.text.muted }}
-                              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = t.expense.bgIcon; (e.currentTarget as HTMLElement).style.color = t.expense.text; }}
-                              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = t.text.muted; }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.background =
+                                  t.expense.bgIcon;
+                                (e.currentTarget as HTMLElement).style.color = t.expense.text;
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.background = 'transparent';
+                                (e.currentTarget as HTMLElement).style.color = t.text.muted;
+                              }}
                               title="Excluir"
                             >
-                              {deleteRecord.isPending ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}
+                              {deleteRecord.isPending ? (
+                                <Loader2 size={15} className="animate-spin" />
+                              ) : (
+                                <Trash2 size={15} />
+                              )}
                             </button>
                           </div>
                         </td>
@@ -352,11 +484,15 @@ queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
           {isLoading ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '12px 0' }}>
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} style={{
-                  height: 88, borderRadius: 14,
-                  background: t.bg.muted,
-                  animation: 'pulse 1.5s ease-in-out infinite',
-                }} />
+                <div
+                  key={i}
+                  style={{
+                    height: 88,
+                    borderRadius: 14,
+                    background: t.bg.muted,
+                    animation: 'pulse 1.5s ease-in-out infinite',
+                  }}
+                />
               ))}
             </div>
           ) : (

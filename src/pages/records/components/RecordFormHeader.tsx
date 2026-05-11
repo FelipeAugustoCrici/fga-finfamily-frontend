@@ -8,13 +8,20 @@ export function RecordFormHeader({ isEdit, isLoading }: { isEdit: boolean; isLoa
   const t = useTokens();
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+    <div
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
+    >
       <h2 style={{ fontSize: 16, fontWeight: 700, color: t.text.primary, margin: 0 }}>
         {isEdit ? 'Editar Lançamento' : 'Novo Lançamento'}
       </h2>
 
       <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-        <Button type="button" variant="secondary" onClick={() => navigate(-1)} style={{ padding: '6px 14px', fontSize: 13 }}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => navigate(-1)}
+          style={{ padding: '6px 14px', fontSize: 13 }}
+        >
           <X size={14} style={{ marginRight: 5 }} />
           Cancelar
         </Button>

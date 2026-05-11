@@ -1,33 +1,41 @@
-import { useState } from 'react'
-import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/Button'
-import { useCreateAdjustment } from '../hooks/useCoupleMode'
-import { AdjustmentSuggestion } from '../types/couple-mode.types'
-import { FamilyMember } from '@/pages/families/types/family.types'
+import { useState } from 'react';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { useCreateAdjustment } from '../hooks/useCoupleMode';
+import { AdjustmentSuggestion } from '../types/couple-mode.types';
+import { FamilyMember } from '@/pages/families/types/family.types';
 
 const fmt = (v: number) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
 
 interface Props {
-  isOpen: boolean
-  onClose: () => void
-  familyId: string
-  month: number
-  year: number
-  suggestion?: AdjustmentSuggestion
-  members: FamilyMember[]
+  isOpen: boolean;
+  onClose: () => void;
+  familyId: string;
+  month: number;
+  year: number;
+  suggestion?: AdjustmentSuggestion;
+  members: FamilyMember[];
 }
 
-export function AdjustmentModal({ isOpen, onClose, familyId, month, year, suggestion, members }: Props) {
-  const create = useCreateAdjustment()
-  const [amount, setAmount] = useState(suggestion ? String(suggestion.amount) : '')
-  const [description, setDescription] = useState('Ajuste de contas')
+export function AdjustmentModal({
+  isOpen,
+  onClose,
+  familyId,
+  month,
+  year,
+  suggestion,
+  members,
+}: Props) {
+  const create = useCreateAdjustment();
+  const [amount, setAmount] = useState(suggestion ? String(suggestion.amount) : '');
+  const [description, setDescription] = useState('Ajuste de contas');
 
-  const fromName = members.find((m) => m.id === suggestion?.fromPersonId)?.name ?? ''
-  const toName = members.find((m) => m.id === suggestion?.toPersonId)?.name ?? ''
+  const fromName = members.find((m) => m.id === suggestion?.fromPersonId)?.name ?? '';
+  const toName = members.find((m) => m.id === suggestion?.toPersonId)?.name ?? '';
 
   const handleConfirm = () => {
-    if (!suggestion) return
+    if (!suggestion) return;
     create.mutate(
       {
         familyId,
@@ -39,8 +47,8 @@ export function AdjustmentModal({ isOpen, onClose, familyId, month, year, sugges
         year,
       },
       { onSuccess: onClose },
-    )
-  }
+    );
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Registrar ajuste" size="sm">
@@ -71,12 +79,14 @@ export function AdjustmentModal({ isOpen, onClose, familyId, month, year, sugges
         </div>
 
         <div className="flex gap-3 justify-end">
-          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
+          <Button variant="ghost" onClick={onClose}>
+            Cancelar
+          </Button>
           <Button variant="primary" onClick={handleConfirm} disabled={create.isPending}>
             {create.isPending ? 'Registrando...' : 'Confirmar ajuste'}
           </Button>
         </div>
       </div>
     </Modal>
-  )
+  );
 }

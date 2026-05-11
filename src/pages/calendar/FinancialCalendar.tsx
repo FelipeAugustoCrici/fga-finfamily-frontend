@@ -15,7 +15,6 @@ import type { CalendarFilter, CalendarDaySummary } from './types/calendar.types'
 export function FinancialCalendar() {
   const now = new Date();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
 
   const [view, setView] = useState<CalendarView>('month');
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -35,8 +34,10 @@ export function FinancialCalendar() {
 
   const prevPeriod = () => {
     if (view === 'month') {
-      if (month === 1) { setMonth(12); setYear(y => y - 1); }
-      else setMonth(m => m - 1);
+      if (month === 1) {
+        setMonth(12);
+        setYear((y) => y - 1);
+      } else setMonth((m) => m - 1);
     } else if (view === 'week') {
       const d = new Date(selectedDate);
       d.setDate(d.getDate() - 7);
@@ -50,8 +51,10 @@ export function FinancialCalendar() {
 
   const nextPeriod = () => {
     if (view === 'month') {
-      if (month === 12) { setMonth(1); setYear(y => y + 1); }
-      else setMonth(m => m + 1);
+      if (month === 12) {
+        setMonth(1);
+        setYear((y) => y + 1);
+      } else setMonth((m) => m + 1);
     } else if (view === 'week') {
       const d = new Date(selectedDate);
       d.setDate(d.getDate() + 7);
@@ -88,35 +91,46 @@ export function FinancialCalendar() {
       />
 
       {/* View toggle + filters row */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 10,
+        }}
+      >
         <ViewToggle view={view} onChange={handleViewChange} />
         <CalendarFilters filter={filter} onChange={setFilter} />
       </div>
 
       {/* Monthly summary cards — only in month view */}
-      {view === 'month' && data?.summary && (
-        <MonthlySummaryCards summary={data.summary} />
-      )}
+      {view === 'month' && data?.summary && <MonthlySummaryCards summary={data.summary} />}
 
       {/* Calendar body */}
       {isLoading ? (
-        <div style={{
-          background: t.bg.card,
-          border: `1px solid ${t.border.default}`,
-          borderRadius: 18,
-          padding: 16,
-          boxShadow: t.shadow.card,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 12,
-        }}>
+        <div
+          style={{
+            background: t.bg.card,
+            border: `1px solid ${t.border.default}`,
+            borderRadius: 18,
+            padding: 16,
+            boxShadow: t.shadow.card,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 12,
+          }}
+        >
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}>
             {Array.from({ length: 7 }).map((_, i) => (
               <Skeleton key={i} height={12} borderRadius={4} />
             ))}
           </div>
           {Array.from({ length: 5 }).map((_, row) => (
-            <div key={row} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}>
+            <div
+              key={row}
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}
+            >
               {Array.from({ length: 7 }).map((_, col) => (
                 <Skeleton key={col} height={72} borderRadius={10} />
               ))}
@@ -126,13 +140,15 @@ export function FinancialCalendar() {
       ) : (
         <>
           {view === 'month' && (
-            <div style={{
-              background: t.bg.card,
-              border: `1px solid ${t.border.default}`,
-              borderRadius: 18,
-              padding: 16,
-              boxShadow: t.shadow.card,
-            }}>
+            <div
+              style={{
+                background: t.bg.card,
+                border: `1px solid ${t.border.default}`,
+                borderRadius: 18,
+                padding: 16,
+                boxShadow: t.shadow.card,
+              }}
+            >
               <CalendarGrid
                 month={month}
                 year={year}

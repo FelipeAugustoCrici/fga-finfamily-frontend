@@ -21,7 +21,7 @@ export function PersonExpenses({ data }: PersonExpensesProps) {
   return (
     <Card title="Despesas por Pessoa">
       <div className="space-y-4">
-        {data.map((person, index) => (
+        {data.map((person, _index) => (
           <div key={person.id} className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

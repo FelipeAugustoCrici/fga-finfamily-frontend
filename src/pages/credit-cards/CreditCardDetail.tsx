@@ -24,17 +24,20 @@ export function CreditCardDetail() {
   const fmt = (v: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
 
-  if (isLoading) return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24, padding: '24px 0' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <Skeleton height={180} borderRadius={18} />
-        <Skeleton height={120} borderRadius={18} />
+  if (isLoading)
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24, padding: '24px 0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <Skeleton height={180} borderRadius={18} />
+          <Skeleton height={120} borderRadius={18} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Skeleton key={i} height={64} borderRadius={12} />
+          ))}
+        </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {[1,2,3,4,5].map(i => <Skeleton key={i} height={64} borderRadius={12} />)}
-      </div>
-    </div>
-  );
+    );
   if (!card) return <div className="text-center py-16 text-primary-500">Cartão não encontrado</div>;
 
   const usedAmount = card.limitAmount - card.availableLimit;
@@ -81,7 +84,9 @@ export function CreditCardDetail() {
                   style={{ width: `${usedPercent}%` }}
                 />
               </div>
-              <p className="text-xs text-primary-400 text-center">{usedPercent.toFixed(0)}% do limite utilizado</p>
+              <p className="text-xs text-primary-400 text-center">
+                {usedPercent.toFixed(0)}% do limite utilizado
+              </p>
             </div>
           </Card>
 
@@ -101,7 +106,11 @@ export function CreditCardDetail() {
                   <InvoiceStatusBadge status={nextInvoice.status} />
                 </div>
                 {nextInvoice.status !== 'paid' && (
-                  <Button size="sm" className="w-full mt-2" onClick={() => setPayInvoice(nextInvoice)}>
+                  <Button
+                    size="sm"
+                    className="w-full mt-2"
+                    onClick={() => setPayInvoice(nextInvoice)}
+                  >
                     Pagar Fatura
                   </Button>
                 )}
@@ -121,7 +130,10 @@ export function CreditCardDetail() {
             ) : (
               <div className="space-y-2">
                 {invoices.map((invoice) => (
-                  <div key={invoice.id} className="flex items-center justify-between p-3 rounded-lg border border-primary-100 hover:bg-primary-50 transition-colors">
+                  <div
+                    key={invoice.id}
+                    className="flex items-center justify-between p-3 rounded-lg border border-primary-100 hover:bg-primary-50 transition-colors"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
                         <CreditCard size={18} className="text-primary-600" />
@@ -130,19 +142,33 @@ export function CreditCardDetail() {
                         <p className="text-sm font-semibold text-primary-800">
                           {String(invoice.referenceMonth).padStart(2, '0')}/{invoice.referenceYear}
                         </p>
-                        <p className="text-xs text-primary-500">Vence {formatShortDate(invoice.dueDate)}</p>
+                        <p className="text-xs text-primary-500">
+                          Vence {formatShortDate(invoice.dueDate)}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <p className="text-sm font-bold text-primary-800">{fmt(invoice.totalAmount)}</p>
+                        <p className="text-sm font-bold text-primary-800">
+                          {fmt(invoice.totalAmount)}
+                        </p>
                         <InvoiceStatusBadge status={invoice.status} />
                       </div>
                       <div className="flex gap-1">
-                        <Button size="sm" variant="ghost" onClick={() => navigate(`/credit-cards/invoices/${invoice.id}`)}>                          Ver
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => navigate(`/credit-cards/invoices/${invoice.id}`)}
+                        >
+                          {' '}
+                          Ver
                         </Button>
                         {invoice.status !== 'paid' && (
-                          <Button size="sm" variant="secondary" onClick={() => setPayInvoice(invoice)}>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => setPayInvoice(invoice)}
+                          >
                             Pagar
                           </Button>
                         )}
@@ -159,7 +185,10 @@ export function CreditCardDetail() {
             <Card title="Compras na Fatura Atual">
               <div className="space-y-2">
                 {openInvoice.installments.map((inst) => (
-                  <div key={inst.id} className="flex items-center justify-between p-3 rounded-lg bg-primary-50/50">
+                  <div
+                    key={inst.id}
+                    className="flex items-center justify-between p-3 rounded-lg bg-primary-50/50"
+                  >
                     <div>
                       <p className="text-sm font-medium text-primary-800">
                         {inst.purchase?.description}
@@ -182,8 +211,17 @@ export function CreditCardDetail() {
         </div>
       </div>
 
-      <PurchaseFormModal isOpen={purchaseModalOpen} onClose={() => setPurchaseModalOpen(false)} familyId={card.familyId} defaultCardId={id} />
-      <PayInvoiceModal isOpen={!!payInvoice} onClose={() => setPayInvoice(null)} invoice={payInvoice} />
+      <PurchaseFormModal
+        isOpen={purchaseModalOpen}
+        onClose={() => setPurchaseModalOpen(false)}
+        familyId={card.familyId}
+        defaultCardId={id}
+      />
+      <PayInvoiceModal
+        isOpen={!!payInvoice}
+        onClose={() => setPayInvoice(null)}
+        invoice={payInvoice}
+      />
     </div>
   );
 }
