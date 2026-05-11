@@ -3,17 +3,12 @@ import _ from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { SkeletonDashboard } from '@/components/ui/Skeleton';
 import {
-  ArrowUpCircle,
-  ArrowDownCircle,
-  Wallet,
-  TrendingUp,
   Loader2,
   AlertTriangle,
 } from 'lucide-react';
 
 import { useDashboard } from './hooks/useDashboard';
-import { BalanceCard } from './components/BalanceCard';
-import { SummaryCardNew } from './components/SummaryCardNew';
+import { KpiGrid } from './components/KpiGrid';
 import { TransactionsList } from './components/TransactionsList';
 import { MembersContribution } from './components/MembersContribution';
 import { FinancialHealth } from './components/FinancialHealth';
@@ -120,48 +115,14 @@ export const DashboardNew = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-        <div className="lg:col-span-2">
-          <BalanceCard
-            balance={summary.totals?.balance || 0}
-            incomes={summary.totals?.incomes || 0}
-            expenses={summary.totals?.expenses || 0}
-          />
-        </div>
-
-        <div className="lg:col-span-3 grid grid-cols-2 gap-4">
-          <SummaryCardNew
-            title="Entradas"
-            value={summary.totals?.incomes || 0}
-            type="income"
-            icon={ArrowUpCircle}
-            change={summary.comparison?.incomeChange}
-            subtitle="do mês atual"
-          />
-          <SummaryCardNew
-            title="Saídas"
-            value={summary.totals?.expenses || 0}
-            type="expense"
-            icon={ArrowDownCircle}
-            change={summary.comparison?.expenseChange}
-            subtitle="do mês atual"
-          />
-          <SummaryCardNew
-            title="Saldo Total"
-            value={summary.totals?.balance || 0}
-            type="balance"
-            icon={Wallet}
-            subtitle="resultado do mês"
-          />
-          <SummaryCardNew
-            title="Meta Investimento"
-            value={(summary.totals?.salary || 0) * 0.2}
-            type="investment"
-            icon={TrendingUp}
-            subtitle="20% da renda"
-          />
-        </div>
-      </div>
+      <KpiGrid
+        balance={summary.totals?.balance || 0}
+        incomes={summary.totals?.incomes || 0}
+        expenses={summary.totals?.expenses || 0}
+        salary={summary.totals?.salary || 0}
+        incomeChange={summary.comparison?.incomeChange}
+        expenseChange={summary.comparison?.expenseChange}
+      />
 
       {(summary.totals?.incomes > 0 || summary.aiReport) && (
         <AIInsight

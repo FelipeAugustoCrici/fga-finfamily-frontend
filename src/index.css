@@ -346,3 +346,15 @@ button, a { transition: all 0.2s ease-in-out; }
     display: none;
   }
 }
+
+/* KPI grid: 2 cols on tablet, 1 col on mobile */
+@media (max-width: 1023px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 479px) {
+  .kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
