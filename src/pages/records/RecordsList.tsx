@@ -81,7 +81,6 @@ export function RecordsList() {
     mes: filters.month,
     ano: filters.year,
     familiaId: familyId,
-    status: filters.status,
   });
 
   const people = families.flatMap((f) => f.members || []);
