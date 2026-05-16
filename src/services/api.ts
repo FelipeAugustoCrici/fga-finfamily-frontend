@@ -60,19 +60,41 @@ export const financeService = {
     status?: string,
     page: number = 1,
     limit: number = 10,
+    filters?: {
+      search?: string;
+      categoryId?: string;
+      personId?: string;
+      tipo?: string;
+      valorMin?: string;
+      valorMax?: string;
+      dataInicio?: string;
+      dataFim?: string;
+      ordenacao?: string;
+    },
   ) {
-    let url = `${prefix}/expenses?month=${month}&year=${year}&page=${page}&limit=${limit}`;
-    if (familyId) url += `&familyId=${familyId}`;
-    if (status && status !== 'ALL') url += `&status=${status}`;
+    const params = new URLSearchParams({
+      month: String(month),
+      year: String(year),
+      page: String(page),
+      limit: String(limit),
+    });
+    if (familyId) params.set('familyId', familyId);
+    if (status && status !== 'ALL') params.set('status', status);
+    if (filters?.search)     params.set('search',     filters.search);
+    if (filters?.categoryId) params.set('categoryId', filters.categoryId);
+    if (filters?.personId)   params.set('personId',   filters.personId);
+    if (filters?.tipo)       params.set('tipo',        filters.tipo);
+    if (filters?.valorMin)   params.set('valorMin',    filters.valorMin);
+    if (filters?.valorMax)   params.set('valorMax',    filters.valorMax);
+    if (filters?.dataInicio) params.set('dataInicio',  filters.dataInicio);
+    if (filters?.dataFim)    params.set('dataFim',     filters.dataFim);
+    if (filters?.ordenacao && filters.ordenacao !== 'recente')
+      params.set('ordenacao', filters.ordenacao);
+
     const response = await api.get<{
       data: Expense[];
-      pagination: {
-        page: number;
-        limit: number;
-        total: number;
-        totalPages: number;
-      };
-    }>(url);
+      pagination: { page: number; limit: number; total: number; totalPages: number };
+    }>(`${prefix}/expenses?${params.toString()}`);
     return response.data;
   },
 

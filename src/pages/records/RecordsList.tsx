@@ -24,12 +24,15 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { RecordsFilters } from './components/RecordsFilters';
 import { StatusBadge } from './components/StatusBadge';
 import { IncomeSummaryCards } from './components/IncomeSummaryCards';
+import { RecordsResumoCards } from './components/RecordsResumoCards';
 import { MobileRecordsList } from './components/MobileRecordsList';
 import { QuickLaunchInput } from './components/QuickLaunch/QuickLaunchInput';
 import { useRecordFilters } from './hooks/useRecordFilters';
 import { useRecords } from './hooks/useRecords';
+import { useRecordsResumo } from './hooks/useRecordsResumo';
 import { useDeleteRecord } from './hooks/useDeleteRecord';
 import { useUpdateRecordStatus } from './hooks/useUpdateRecordStatus';
+import { useCategories } from '@/pages/categories/hooks/useCategories';
 import { formatCurrency } from './utils/formatters';
 import { UnifiedRecord, RecordStatus } from './types/record.types';
 import { familyService } from '@/pages/families/services/families.service';
@@ -61,33 +64,39 @@ export function RecordsList() {
     filters.status,
     filters.page,
     itemsPerPage,
+    {
+      search: filters.search,
+      categoryId: filters.categoryId,
+      personId: filters.personId,
+      tipo: filters.tipo,
+      valorMin: filters.valorMin,
+      valorMax: filters.valorMax,
+      dataInicio: filters.dataInicio,
+      dataFim: filters.dataFim,
+      ordenacao: filters.ordenacao,
+    },
   );
+
+  const resumo = useRecordsResumo({
+    mes: filters.month,
+    ano: filters.year,
+    familiaId: familyId,
+    status: filters.status,
+  });
 
   const people = families.flatMap((f) => f.members || []);
+  const { data: categories = [] } = useCategories();
 
-  const filteredRecords = records.filter((item) =>
-    item.description?.toLowerCase().includes(filters.search.toLowerCase()),
-  );
-
-  const shouldUseFrontendPagination = filters.search.length > 0;
-
-  let paginatedRecords = filteredRecords;
-  let totalItems = pagination?.total || 0;
-  let totalPages = pagination?.totalPages || 1;
-
-  if (shouldUseFrontendPagination) {
-    totalItems = filteredRecords.length;
-    totalPages = Math.ceil(totalItems / itemsPerPage);
-    const startIndex = (filters.page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    paginatedRecords = filteredRecords.slice(startIndex, endIndex);
-  } else {
-    paginatedRecords = filteredRecords;
-  }
+  const filteredRecords = records;
+  const paginatedRecords = records;
+  const totalItems = pagination?.total || 0;
+  const totalPages = pagination?.totalPages || 1;
 
   useEffect(() => {
     filters.setPage(1);
-  }, [filters.month, filters.year, filters.status, filters.search]);
+  }, [filters.month, filters.year, filters.status, filters.search,
+      filters.categoryId, filters.personId, filters.tipo,
+      filters.valorMin, filters.valorMax, filters.dataInicio, filters.dataFim]);
 
   const getPersonName = (personId: string) => {
     for (const family of families) {
@@ -155,6 +164,12 @@ export function RecordsList() {
 
       {}
 
+      <RecordsResumoCards
+        data={resumo.data}
+        isLoading={resumo.isLoading}
+        isError={resumo.isError}
+      />
+
       {}
       <IncomeSummaryCards
         month={filters.month}
@@ -167,13 +182,34 @@ export function RecordsList() {
       <Card className="overflow-hidden">
         <RecordsFilters
           search={filters.search}
-          onSearchChange={filters.setSearch}
           month={filters.month}
           year={filters.year}
           status={filters.status}
+          categoryId={filters.categoryId}
+          personId={filters.personId}
+          tipo={filters.tipo}
+          valorMin={filters.valorMin}
+          valorMax={filters.valorMax}
+          dataInicio={filters.dataInicio}
+          dataFim={filters.dataFim}
+          ordenacao={filters.ordenacao}
+          activeCount={filters.activeCount}
+          categories={categories}
+          people={people}
+          onSearchChange={filters.setSearch}
           onMonthChange={filters.setMonth}
           onYearChange={filters.setYear}
           onStatusChange={filters.setStatus}
+          onCategoryChange={filters.setCategoryId}
+          onPersonChange={filters.setPersonId}
+          onTipoChange={filters.setTipo}
+          onValorMinChange={filters.setValorMin}
+          onValorMaxChange={filters.setValorMax}
+          onDataInicioChange={filters.setDataInicio}
+          onDataFimChange={filters.setDataFim}
+          onOrdenacaoChange={filters.setOrdenacao}
+          onReset={filters.resetFilters}
+          onApplyMultiple={filters.setMultiple}
         />
 
         {}

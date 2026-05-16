@@ -5,7 +5,7 @@ import { financeService } from '@/services/api';
 import { ConfirmModal } from '@/components/ui/Modal';
 import { useTokens } from '@/hooks/useTokens';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { ChevronDown, Edit2, Trash2 } from 'lucide-react';
+import { Edit2, Trash2, ChevronDown } from 'lucide-react';
 import _ from 'lodash';
 
 interface IncomeSummaryCardsProps {
@@ -28,7 +28,8 @@ export function IncomeSummaryCards({
 }: IncomeSummaryCardsProps) {
   const navigate = useNavigate();
   const t = useTokens();
-  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+  const isDark = t.bg.page === '#020617';
+  const [expanded, setExpanded] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{
     id: string;
     type: 'income' | 'extra';
@@ -46,11 +47,8 @@ export function IncomeSummaryCards({
     queryFn: () => financeService.getExtras(month, year),
   });
 
-  const extras = Array.isArray(extrasData) ? extrasData : extrasData?.data || [];
+  const extras = Array.isArray(extrasData) ? extrasData : (extrasData as any)?.data || [];
   const isLoading = isLoadingIncomes || isLoadingExtras;
-
-  const toggleCard = (personId: string) =>
-    setExpandedCards((prev) => ({ ...prev, [personId]: !prev[personId] }));
 
   const handleConfirmDelete = () => {
     if (itemToDelete && onDelete) {
@@ -59,15 +57,7 @@ export function IncomeSummaryCards({
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} height={144} borderRadius={18} />
-        ))}
-      </div>
-    );
-  }
+  if (isLoading) return <Skeleton height={120} borderRadius={16} />;
 
   const incomesByPerson = _.groupBy(incomes, 'personId');
   const extrasByPerson = _.groupBy(extras, 'personId');
@@ -89,204 +79,206 @@ export function IncomeSummaryCards({
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {personSummaries.map(
-          ({ person, salary, bonus, total, incomes: pIncomes, extras: pExtras }) => {
-            const isExpanded = expandedCards[person.id];
-            const hasItems = pIncomes.length > 0 || pExtras.length > 0;
-            const familyPct = familyTotal > 0 ? (total / familyTotal) * 100 : 0;
-            const initials = person.name
-              .split(' ')
-              .map((n: string) => n[0])
-              .slice(0, 2)
-              .join('')
-              .toUpperCase();
+      <div
+        className="rounded-2xl overflow-hidden transition-all duration-200"
+        style={{
+          background: t.bg.card,
+          border: `1px solid ${t.border.default}`,
+          boxShadow: t.shadow.card,
+        }}
+      >
+        {/* Header */}
+        <button
+          className="w-full flex items-center justify-between px-5 py-3.5"
+          style={{ borderBottom: expanded ? `1px solid ${t.border.divider}` : 'none' }}
+          onClick={() => setExpanded((v) => !v)}
+        >
+          <div className="flex items-center gap-3">
+            <p className="text-sm font-semibold" style={{ color: t.text.primary }}>
+              Renda Familiar
+            </p>
+            <span
+              className="text-xs font-bold px-2 py-0.5 rounded-full"
+              style={{
+                background: t.income.bgIcon,
+                color: t.income.text,
+              }}
+            >
+              {fmt(familyTotal)}
+            </span>
+          </div>
+          <ChevronDown
+            size={15}
+            style={{
+              color: t.text.muted,
+              transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease',
+            }}
+          />
+        </button>
 
-            return (
-              <div
-                key={person.id}
-                className="rounded-2xl overflow-hidden"
-                style={{
-                  background: t.bg.card,
-                  border: `1px solid ${t.border.default}`,
-                  boxShadow: t.shadow.card,
-                }}
-              >
-                <div className="p-5">
-                  {}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
-                        style={{
-                          background: t.income.bgIcon,
-                          color: t.income.text,
-                        }}
-                      >
-                        {initials}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold" style={{ color: t.text.primary }}>
-                          {person.name}
-                        </p>
-                        <p className="text-xs" style={{ color: t.text.subtle }}>
-                          Rendimentos do mês
-                        </p>
-                      </div>
-                    </div>
-                    {hasItems && (
-                      <button
-                        onClick={() => toggleCard(person.id)}
-                        className="p-1.5 rounded-lg transition-all duration-200"
-                        style={{ color: t.text.muted }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = t.bg.muted)}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                      >
-                        <ChevronDown
-                          size={16}
-                          style={{
-                            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                            transition: 'transform 0.2s ease',
-                          }}
-                        />
-                      </button>
-                    )}
-                  </div>
+        {/* Collapsed: barra compacta com avatares */}
+        {!expanded && (
+          <div className="px-5 py-3 flex items-center gap-3 flex-wrap">
+            {personSummaries.map(({ person, total }) => {
+              const pct = familyTotal > 0 ? (total / familyTotal) * 100 : 0;
+              const initials = person.name
+                .split(' ')
+                .map((n: string) => n[0])
+                .slice(0, 2)
+                .join('')
+                .toUpperCase();
 
-                  {}
-                  <div className="mb-4">
-                    <p className="text-2xl font-black" style={{ color: t.income.text }}>
-                      {fmt(total)}
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: t.text.subtle }}>
-                      {familyPct.toFixed(0)}% da renda familiar
-                    </p>
-                  </div>
-
-                  {}
+              return (
+                <div key={person.id} className="flex items-center gap-2 min-w-0">
                   <div
-                    className="w-full h-1.5 rounded-full overflow-hidden mb-4"
-                    style={{ background: t.bg.mutedStrong }}
+                    className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
+                    style={{ background: t.income.bgIcon, color: t.income.text }}
                   >
-                    <div
-                      className="h-full rounded-full transition-all duration-700"
-                      style={{
-                        width: `${familyPct}%`,
-                        background: `linear-gradient(90deg, ${t.income.text}, ${t.income.textAlt})`,
-                      }}
-                    />
+                    {initials}
                   </div>
-
-                  {}
-                  <div className="flex items-center gap-3">
-                    {salary > 0 && (
-                      <div className="flex items-center gap-1.5">
-                        <div
-                          className="w-2 h-2 rounded-full"
-                          style={{ background: t.income.text }}
-                        />
-                        <span className="text-xs" style={{ color: t.text.muted }}>
-                          Salário{' '}
-                          <span style={{ color: t.text.secondary, fontWeight: 600 }}>
-                            {fmt(salary)}
-                          </span>
-                        </span>
-                      </div>
-                    )}
-                    {bonus > 0 && (
-                      <div className="flex items-center gap-1.5">
-                        <div
-                          className="w-2 h-2 rounded-full"
-                          style={{ background: t.investment.text }}
-                        />
-                        <span className="text-xs" style={{ color: t.text.muted }}>
-                          Extra{' '}
-                          <span style={{ color: t.text.secondary, fontWeight: 600 }}>
-                            {fmt(bonus)}
-                          </span>
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  <span className="text-xs font-medium truncate" style={{ color: t.text.secondary }}>
+                    {person.name.split(' ')[0]}
+                  </span>
+                  <span className="text-xs font-bold" style={{ color: t.income.text }}>
+                    {fmt(total)}
+                  </span>
+                  <span className="text-xs" style={{ color: t.text.subtle }}>
+                    {pct.toFixed(0)}%
+                  </span>
+                  {personSummaries.indexOf(personSummaries.find(s => s.person.id === person.id)!) < personSummaries.length - 1 && (
+                    <span style={{ color: t.border.subtle, marginLeft: 4 }}>·</span>
+                  )}
                 </div>
+              );
+            })}
+          </div>
+        )}
 
-                {}
-                {isExpanded && hasItems && (
-                  <div
-                    className="px-5 pb-4 pt-3 space-y-1"
-                    style={{ borderTop: `1px solid ${t.border.divider}` }}
-                  >
-                    {[
-                      ...pIncomes.map((i: any) => ({ ...i, kind: 'income' as const })),
-                      ...pExtras.map((e: any) => ({ ...e, kind: 'extra' as const })),
-                    ].map((item) => (
-                      <div key={item.id} className="flex items-center justify-between py-1.5 group">
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <div
-                            className="w-1.5 h-1.5 rounded-full shrink-0"
-                            style={{
-                              background:
-                                item.kind === 'income' ? t.income.text : t.investment.text,
-                            }}
-                          />
-                          <span className="text-xs truncate" style={{ color: t.text.secondary }}>
-                            {item.description}
-                          </span>
-                        </div>
+        {/* Expanded: lista detalhada por pessoa */}
+        {expanded && (
+          <div className="divide-y" style={{ borderColor: t.border.divider }}>
+            {personSummaries.map(({ person, total, incomes: pIncomes, extras: pExtras }) => {
+              const pct = familyTotal > 0 ? (total / familyTotal) * 100 : 0;
+              const initials = person.name
+                .split(' ')
+                .map((n: string) => n[0])
+                .slice(0, 2)
+                .join('')
+                .toUpperCase();
+              const allItems = [
+                ...pIncomes.map((i: any) => ({ ...i, kind: 'income' as const })),
+                ...pExtras.map((e: any) => ({ ...e, kind: 'extra' as const })),
+              ];
+
+              return (
+                <div key={person.id} className="px-5 py-3">
+                  {/* Pessoa: avatar + nome + valor + barra */}
+                  <div className="flex items-center gap-3 mb-2">
+                    <div
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
+                      style={{ background: t.income.bgIcon, color: t.income.text }}
+                    >
+                      {initials}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-semibold truncate" style={{ color: t.text.primary }}>
+                          {person.name}
+                        </span>
                         <div className="flex items-center gap-2 shrink-0 ml-2">
+                          <span className="text-xs font-bold" style={{ color: t.income.text }}>
+                            {fmt(total)}
+                          </span>
                           <span
-                            className="text-xs font-semibold"
+                            className="text-xs px-1.5 py-0.5 rounded-full"
                             style={{
-                              color: item.kind === 'income' ? t.income.text : t.investment.text,
+                              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+                              color: t.text.muted,
                             }}
                           >
-                            {fmt(item.value)}
+                            {pct.toFixed(0)}%
                           </span>
-                          <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-                            <button
-                              onClick={() => navigate(`/record/edit/${item.id}`)}
-                              className="p-1 rounded transition-colors"
-                              style={{ color: t.text.muted }}
-                              onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = t.bg.mutedStrong)
-                              }
-                              onMouseLeave={(e) =>
-                                (e.currentTarget.style.background = 'transparent')
-                              }
-                            >
-                              <Edit2 size={12} />
-                            </button>
-                            <button
-                              onClick={() =>
-                                setItemToDelete({
-                                  id: item.id,
-                                  type: item.kind,
-                                  description: item.description,
-                                })
-                              }
-                              className="p-1 rounded transition-colors"
-                              style={{ color: t.text.muted }}
-                              onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLElement).style.background =
-                                  t.expense.bgIcon;
-                                (e.currentTarget as HTMLElement).style.color = t.expense.text;
-                              }}
-                              onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLElement).style.background = 'transparent';
-                                (e.currentTarget as HTMLElement).style.color = t.text.muted;
-                              }}
-                            >
-                              <Trash2 size={12} />
-                            </button>
-                          </div>
                         </div>
                       </div>
-                    ))}
+                      {/* Barra de progresso discreta */}
+                      <div
+                        className="w-full h-1 rounded-full overflow-hidden"
+                        style={{ background: t.bg.mutedStrong }}
+                      >
+                        <div
+                          className="h-full rounded-full transition-all duration-700"
+                          style={{
+                            width: `${pct}%`,
+                            background: `linear-gradient(90deg, ${t.income.text}, ${t.income.textAlt})`,
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-            );
-          },
+
+                  {/* Itens individuais */}
+                  {allItems.length > 0 && (
+                    <div className="ml-10 space-y-0.5">
+                      {allItems.map((item) => (
+                        <div key={item.id} className="flex items-center justify-between py-1 group">
+                          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                            <div
+                              className="w-1.5 h-1.5 rounded-full shrink-0"
+                              style={{
+                                background: item.kind === 'income' ? t.income.text : t.investment.text,
+                              }}
+                            />
+                            <span className="text-xs truncate" style={{ color: t.text.muted }}>
+                              {item.description}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                            <span
+                              className="text-xs font-semibold"
+                              style={{
+                                color: item.kind === 'income' ? t.income.text : t.investment.text,
+                              }}
+                            >
+                              {fmt(item.value)}
+                            </span>
+                            <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button
+                                onClick={() => navigate(`/record/edit/${item.id}`)}
+                                className="p-1 rounded transition-colors"
+                                style={{ color: t.text.muted }}
+                                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = t.bg.mutedStrong)}
+                                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
+                              >
+                                <Edit2 size={11} />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  setItemToDelete({ id: item.id, type: item.kind, description: item.description })
+                                }
+                                className="p-1 rounded transition-colors"
+                                style={{ color: t.text.muted }}
+                                onMouseEnter={(e) => {
+                                  (e.currentTarget as HTMLElement).style.background = t.expense.bgIcon;
+                                  (e.currentTarget as HTMLElement).style.color = t.expense.text;
+                                }}
+                                onMouseLeave={(e) => {
+                                  (e.currentTarget as HTMLElement).style.background = 'transparent';
+                                  (e.currentTarget as HTMLElement).style.color = t.text.muted;
+                                }}
+                              >
+                                <Trash2 size={11} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
 
