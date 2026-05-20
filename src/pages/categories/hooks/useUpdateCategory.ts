@@ -12,6 +12,7 @@ export function useUpdateCategory() {
       categoryService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['categories-paginated'] });
       showToast({
         title: 'Sucesso',
         description: 'Categoria atualizada com sucesso!',

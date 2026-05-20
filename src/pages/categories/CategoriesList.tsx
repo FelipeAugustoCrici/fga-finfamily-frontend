@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Loader2, Trash2, Tag, TrendingDown, TrendingUp, Layers } from 'lucide-react';
+import { Plus, Loader2, Trash2, Tag, TrendingDown, TrendingUp, Layers, Pencil, Check, X } from 'lucide-react';
 import { SkeletonList } from '@/components/ui/Skeleton';
 import { ActionButton } from '@/components/ui/ActionButton';
 
@@ -16,6 +16,7 @@ import { categorySchema, type CategoryFormData } from './schemas/category.schema
 import { useCategoriesPaginated } from './hooks/useCategories';
 import { useCreateCategory } from './hooks/useCreateCategory';
 import { useDeleteCategory } from './hooks/useDeleteCategory';
+import { useUpdateCategory } from './hooks/useUpdateCategory';
 import { Category } from './types/category.types';
 import { useUserFamily } from '@/hooks/useUserInfo';
 
@@ -37,13 +38,35 @@ export function CategoriesList() {
 
   const createCategory = useCreateCategory();
   const deleteCategory = useDeleteCategory();
+  const updateCategory = useUpdateCategory();
 
   const [activeTab, setActiveTab] = useState<'expense' | 'income'>('expense');
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState('');
   const [expensePage, setExpensePage] = useState(1);
   const [incomePage, setIncomePage] = useState(1);
   const [createSuccess, setCreateSuccess] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const startEdit = (cat: Category) => {
+    setEditingId(cat.id);
+    setEditingName(cat.name);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingName('');
+  };
+
+  const confirmEdit = (cat: Category) => {
+    const trimmed = editingName.trim();
+    if (!trimmed || trimmed === cat.name) { cancelEdit(); return; }
+    updateCategory.mutate(
+      { id: cat.id, data: { name: trimmed, type: cat.type } },
+      { onSuccess: cancelEdit, onError: cancelEdit },
+    );
+  };
 
   const { data: expenseData, isLoading: loadingExpenses } = useCategoriesPaginated(
     'expense',
@@ -395,6 +418,7 @@ export function CategoriesList() {
                 {activeData.data.map((cat, idx) => {
                   const isHovered = hoveredId === cat.id;
                   const isLast = idx === activeData.data.length - 1;
+                  const isEditing = editingId === cat.id;
                   return (
                     <div
                       key={cat.id}
@@ -406,23 +430,21 @@ export function CategoriesList() {
                         justifyContent: 'space-between',
                         padding: '13px 18px',
                         borderBottom: isLast ? 'none' : `1px solid ${t.border.divider}`,
-                        background: isHovered ? t.bg.cardHover : 'transparent',
+                        background: isEditing
+                          ? isDark ? 'rgba(99,102,241,0.06)' : '#f5f3ff'
+                          : isHovered ? t.bg.cardHover : 'transparent',
                         transition: 'background 0.15s ease',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
                         <div
                           style={{
                             width: 36,
                             height: 36,
                             borderRadius: 10,
                             background: isExpense
-                              ? isDark
-                                ? 'rgba(239,68,68,0.12)'
-                                : '#fef2f2'
-                              : isDark
-                                ? 'rgba(16,185,129,0.12)'
-                                : '#ecfdf5',
+                              ? isDark ? 'rgba(239,68,68,0.12)' : '#fef2f2'
+                              : isDark ? 'rgba(16,185,129,0.12)' : '#ecfdf5',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -431,49 +453,121 @@ export function CategoriesList() {
                         >
                           <Tag
                             size={16}
-                            color={
-                              isExpense
-                                ? isDark
-                                  ? '#fca5a5'
-                                  : '#dc2626'
-                                : isDark
-                                  ? '#6ee7b7'
-                                  : '#166534'
-                            }
+                            color={isExpense ? (isDark ? '#fca5a5' : '#dc2626') : (isDark ? '#6ee7b7' : '#166534')}
                           />
                         </div>
-                        <div>
-                          <p style={{ fontSize: 13, fontWeight: 700, color: t.text.primary }}>
-                            {cat.name}
-                          </p>
-                          <p style={{ fontSize: 11, color: t.text.muted }}>
-                            {isExpense ? 'Categoria de despesa' : 'Categoria de receita'}
-                          </p>
-                        </div>
+
+                        {isEditing ? (
+                          /* Inline edit input */
+                          <input
+                            autoFocus
+                            value={editingName}
+                            onChange={(e) => setEditingName(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') confirmEdit(cat);
+                              if (e.key === 'Escape') cancelEdit();
+                            }}
+                            style={{
+                              flex: 1,
+                              height: 34,
+                              padding: '0 10px',
+                              borderRadius: 8,
+                              border: `1.5px solid ${t.border.focus}`,
+                              background: t.bg.input,
+                              color: t.text.primary,
+                              fontSize: 13,
+                              fontWeight: 600,
+                              outline: 'none',
+                              boxShadow: t.shadow.focus,
+                            }}
+                          />
+                        ) : (
+                          <div>
+                            <p style={{ fontSize: 13, fontWeight: 700, color: t.text.primary }}>
+                              {cat.name}
+                            </p>
+                            <p style={{ fontSize: 11, color: t.text.muted }}>
+                              {isExpense ? 'Categoria de despesa' : 'Categoria de receita'}
+                            </p>
+                          </div>
+                        )}
                       </div>
 
-                      {}
-                      <button
-                        onClick={() => setCategoryToDelete(cat)}
+                      {/* Actions */}
+                      <div
                         style={{
                           display: 'flex',
                           alignItems: 'center',
                           gap: 6,
-                          padding: '6px 12px',
-                          borderRadius: 8,
-                          border: `1px solid ${isDark ? 'rgba(239,68,68,0.25)' : '#fecaca'}`,
-                          background: isDark ? 'rgba(239,68,68,0.08)' : '#fef2f2',
-                          color: isDark ? '#fca5a5' : '#dc2626',
-                          fontSize: 12,
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          opacity: isHovered ? 1 : 0,
+                          flexShrink: 0,
+                          opacity: isHovered || isEditing ? 1 : 0,
                           transition: 'opacity 0.15s ease',
                         }}
                       >
-                        <Trash2 size={13} />
-                        Excluir
-                      </button>
+                        {isEditing ? (
+                          <>
+                            <button
+                              onClick={() => confirmEdit(cat)}
+                              disabled={updateCategory.isPending}
+                              style={{
+                                display: 'flex', alignItems: 'center', gap: 5,
+                                padding: '6px 12px', borderRadius: 8, border: 'none',
+                                background: '#6366f1', color: '#fff',
+                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                              }}
+                            >
+                              {updateCategory.isPending
+                                ? <Loader2 size={12} className="animate-spin" />
+                                : <Check size={12} />}
+                              Salvar
+                            </button>
+                            <button
+                              onClick={cancelEdit}
+                              style={{
+                                display: 'flex', alignItems: 'center', gap: 5,
+                                padding: '6px 10px', borderRadius: 8,
+                                border: `1px solid ${t.border.default}`,
+                                background: 'transparent', color: t.text.muted,
+                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                              }}
+                            >
+                              <X size={12} />
+                              Cancelar
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => startEdit(cat)}
+                              style={{
+                                display: 'flex', alignItems: 'center', gap: 5,
+                                padding: '6px 12px', borderRadius: 8,
+                                border: `1px solid ${isDark ? 'rgba(99,102,241,0.25)' : '#c7d2fe'}`,
+                                background: isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff',
+                                color: isDark ? '#a5b4fc' : '#4338ca',
+                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                              }}
+                            >
+                              <Pencil size={12} />
+                              Renomear
+                            </button>
+                            <button
+                              onClick={() => setCategoryToDelete(cat)}
+                              style={{
+                                display: 'flex', alignItems: 'center', gap: 5,
+                                padding: '6px 12px', borderRadius: 8,
+                                border: `1px solid ${isDark ? 'rgba(239,68,68,0.25)' : '#fecaca'}`,
+                                background: isDark ? 'rgba(239,68,68,0.08)' : '#fef2f2',
+                                color: isDark ? '#fca5a5' : '#dc2626',
+                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                              }}
+                            >
+                              <Trash2 size={12} />
+                              Excluir
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
