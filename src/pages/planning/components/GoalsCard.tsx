@@ -55,10 +55,10 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
           </Button>
 
           {goals.length === 0 ? (
-            <div className="text-center py-10 text-slate-400">
-              <Target size={40} className="mx-auto mb-3 opacity-30" />
-              <p className="text-sm">Nenhuma meta ainda</p>
-              <p className="text-xs mt-1">Crie sua primeira meta financeira!</p>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 0', gap: 8 }}>
+              <Target size={40} style={{ opacity: 0.3, color: '#94a3b8' }} />
+              <p style={{ fontSize: 13, color: '#94a3b8', margin: 0 }}>Nenhuma meta ainda</p>
+              <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>Crie sua primeira meta financeira!</p>
             </div>
           ) : (
             <div className="space-y-3">

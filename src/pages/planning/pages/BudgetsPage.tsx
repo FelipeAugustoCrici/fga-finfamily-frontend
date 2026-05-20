@@ -11,6 +11,7 @@ import { useBudgets } from '../hooks/useBudgets';
 import { useDeleteBudget } from '../hooks/useDeleteBudget';
 import { api } from '@/services/api.service';
 import { financeService } from '@/services/api';
+import { PiggyBank } from 'lucide-react';
 
 const fmt = (v: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
@@ -226,7 +227,9 @@ export function BudgetsPage() {
           >
             Defina limites por categoria e acompanhe seus gastos em tempo real
           </p>
-          <ActionButton onClick={() => setModalOpen(true)}>Criar primeiro orçamento</ActionButton>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <ActionButton onClick={() => setModalOpen(true)}>Criar primeiro orçamento</ActionButton>
+          </div>
         </div>
       )}
 

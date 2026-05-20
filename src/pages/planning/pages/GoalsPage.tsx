@@ -132,7 +132,9 @@ export function GoalsPage() {
           >
             Crie sua primeira meta financeira e comece a acompanhar seu progresso
           </p>
-          <ActionButton onClick={() => setModalOpen(true)}>Criar primeira meta</ActionButton>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <ActionButton onClick={() => setModalOpen(true)}>Criar primeira meta</ActionButton>
+          </div>
         </div>
       )}
 

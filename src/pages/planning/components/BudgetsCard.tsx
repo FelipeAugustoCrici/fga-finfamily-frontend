@@ -58,10 +58,10 @@ export function BudgetsCard({ onCreateNew }: { onCreateNew: () => void }) {
           </Button>
 
           {budgets.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <PiggyBank size={48} className="mx-auto mb-3 opacity-30" />
-              <p>Nenhum orçamento definido</p>
-              <p className="text-sm mt-1">Defina limites para suas categorias!</p>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 0', gap: 8 }}>
+              <PiggyBank size={40} style={{ opacity: 0.3, color: '#94a3b8' }} />
+              <p style={{ fontSize: 13, color: '#94a3b8', margin: 0 }}>Nenhum orçamento definido</p>
+              <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>Defina limites para suas categorias!</p>
             </div>
           ) : (
             <div className="space-y-3">
