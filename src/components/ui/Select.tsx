@@ -111,7 +111,8 @@ export function Select({
     }
     if (!open) setSearch('');
     if (open && containerRef.current) {
-      setContainerWidth(containerRef.current.offsetWidth);
+      // Use getBoundingClientRect for accurate width including borders
+      setContainerWidth(containerRef.current.getBoundingClientRect().width);
     }
   }, [open, searchable]);
 
@@ -283,7 +284,7 @@ export function Select({
             boxShadow: t.shadow.drop,
             minWidth: containerWidth,
             width: containerWidth,
-            overflow: 'hidden',
+            overflow: 'clip',
           }}
         >
           {}
@@ -357,7 +358,7 @@ export function Select({
           )}
 
           {}
-          <div style={{ maxHeight: 240, overflowY: 'auto', overflowX: 'hidden', padding: '6px 0', scrollbarGutter: 'stable' }}>
+          <div style={{ maxHeight: 240, overflowY: 'auto', overflowX: 'hidden', padding: '6px 0' }}>
             {filtered.length === 0 ? (
               <div
                 style={{
@@ -394,6 +395,8 @@ export function Select({
                       color: isSelected ? t.text.link : t.text.secondary,
                       fontWeight: isSelected ? 600 : 400,
                       transition: 'background 0.12s',
+                      width: '100%',
+                      boxSizing: 'border-box',
                     }}
                     onMouseEnter={(e) => {
                       if (!isSelected && !opt.disabled)
