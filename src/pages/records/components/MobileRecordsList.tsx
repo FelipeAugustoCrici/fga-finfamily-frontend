@@ -242,6 +242,7 @@ function RecordCard({
   deleteLoading,
   onStatusChange,
   updateLoading,
+  onPartialPayment,
 }: {
   record: UnifiedRecord;
   getPersonName: (id: string) => string;
@@ -249,6 +250,7 @@ function RecordCard({
   deleteLoading: boolean;
   onStatusChange: (id: string, status: RecordStatus) => void;
   updateLoading: boolean;
+  onPartialPayment?: (record: UnifiedRecord) => void;
 }) {
   const t = useTokens();
   const isDark = t.bg.page === '#020617';
@@ -304,6 +306,27 @@ function RecordCard({
           }}
         >
           {record.description}
+          {record.originExpenseId && (
+            <span
+              title={`Saldo transferido de ${String(record.originMonth).padStart(2,'0')}/${record.originYear}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 3,
+                fontSize: 10,
+                fontWeight: 700,
+                padding: '1px 5px',
+                borderRadius: 5,
+                background: 'rgba(245,158,11,0.12)',
+                color: '#f59e0b',
+                border: '1px solid rgba(245,158,11,0.25)',
+                marginLeft: 6,
+                verticalAlign: 'middle',
+              }}
+            >
+              ↩ {String(record.originMonth).padStart(2,'0')}/{record.originYear}
+            </span>
+          )}
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
@@ -330,6 +353,7 @@ function RecordCard({
           <StatusBadge
             status={record.status || 'PENDING'}
             onChange={(s) => onStatusChange(record.id, s)}
+            onPartialPayment={record.originalType === 'expense' ? () => onPartialPayment?.(record) : undefined}
             disabled={updateLoading || record.originalType !== 'expense'}
           />
           <span
@@ -390,6 +414,7 @@ interface Props {
   deleteLoading: boolean;
   onStatusChange: (id: string, status: RecordStatus) => void;
   updateLoading: boolean;
+  onPartialPayment?: (record: UnifiedRecord) => void;
 }
 
 export function MobileRecordsList({
@@ -399,6 +424,7 @@ export function MobileRecordsList({
   deleteLoading,
   onStatusChange,
   updateLoading,
+  onPartialPayment,
 }: Props) {
   const t = useTokens();
   const groups = groupByDate(records);
@@ -463,6 +489,7 @@ export function MobileRecordsList({
                 deleteLoading={deleteLoading}
                 onStatusChange={onStatusChange}
                 updateLoading={updateLoading}
+                onPartialPayment={onPartialPayment}
               />
             ))}
           </div>

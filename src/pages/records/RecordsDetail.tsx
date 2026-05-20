@@ -21,8 +21,13 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  CreditCard,
+  SplitSquareHorizontal,
 } from 'lucide-react';
 import { formatMediumDate, formatShortDate } from '@/common/utils/date';
+import { PartialPaymentModal } from './components/PartialPaymentModal';
+import { PaymentHistory } from './components/PaymentHistory';
+import { useExpensePayments } from './hooks/useExpensePayments';
 
 const TYPE_CONFIG = {
   expense: {
@@ -76,6 +81,12 @@ const STATUS_CONFIG: Record<
     bg: (d) => (d ? 'rgba(239,68,68,0.15)' : '#fee2e2'),
     icon: AlertCircle,
   },
+  PARTIALLY_PAID: {
+    label: 'Parc. Pago',
+    color: '#818cf8',
+    bg: (d) => (d ? 'rgba(99,102,241,0.15)' : '#eef2ff'),
+    icon: SplitSquareHorizontal,
+  },
 };
 
 function InfoRow({
@@ -115,6 +126,7 @@ export function RecordsDetail() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const t = useTokens();
   const isDark = t.bg.page === '#020617';
 
@@ -160,6 +172,11 @@ export function RecordsDetail() {
 
   const formatCurrency = (val: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+
+  const isExpense = record?.recordType === 'expense';
+  const paidAmount = record?.paidAmount ?? 0;
+  const remaining = isExpense ? (record?.value ?? 0) - paidAmount : 0;
+  const { data: payments = [] } = useExpensePayments(isExpense ? id : undefined);
 
   if (isLoading) {
     return <SkeletonDetail t={t} />;
@@ -370,6 +387,25 @@ export function RecordsDetail() {
                           Compartilhado
                         </span>
                       )}
+                      {/* Origin badge — transferred balance from previous month */}
+                      {record.originExpenseId && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 700,
+                            padding: '3px 10px',
+                            borderRadius: 999,
+                            background: 'rgba(245,158,11,0.12)',
+                            color: '#f59e0b',
+                            border: '1px solid rgba(245,158,11,0.25)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 4,
+                          }}
+                        >
+                          ↩ Saldo de {String(record.originMonth).padStart(2,'0')}/{record.originYear}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -464,6 +500,15 @@ export function RecordsDetail() {
               )}
             </div>
           </div>
+
+          {/* Payment history */}
+          {isExpense && payments.length > 0 && (
+            <PaymentHistory
+              expenseId={id!}
+              payments={payments}
+              totalValue={record.value}
+            />
+          )}
 
           {}
           <div
@@ -565,6 +610,78 @@ export function RecordsDetail() {
 
         {}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Payment progress card — only for expenses */}
+          {isExpense && (
+            <div
+              style={{
+                background: t.bg.card,
+                border: `1px solid ${t.border.default}`,
+                borderRadius: 18,
+                padding: '18px 18px',
+                boxShadow: t.shadow.card,
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: t.text.muted,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: 12,
+                }}
+              >
+                Pagamento
+              </p>
+              <div style={{ marginBottom: 12 }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontSize: 11,
+                    color: t.text.muted,
+                    marginBottom: 6,
+                  }}
+                >
+                  <span>Progresso</span>
+                  <span style={{ fontWeight: 700, color: t.text.primary }}>
+                    {record.value > 0 ? ((paidAmount / record.value) * 100).toFixed(0) : 0}%
+                  </span>
+                </div>
+                <div
+                  style={{
+                    height: 8,
+                    borderRadius: 99,
+                    background: isDark ? 'rgba(255,255,255,0.08)' : '#f1f5f9',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      borderRadius: 99,
+                      background: remaining <= 0.001 ? '#10b981' : '#6366f1',
+                      width: `${record.value > 0 ? Math.min(100, (paidAmount / record.value) * 100) : 0}%`,
+                      transition: 'width 0.4s ease',
+                    }}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {[
+                  { label: 'Valor total', value: formatCurrency(record.value), color: t.text.primary },
+                  { label: 'Total pago', value: formatCurrency(paidAmount), color: '#10b981' },
+                  { label: 'Saldo pendente', value: formatCurrency(Math.max(0, remaining)), color: remaining <= 0.001 ? t.text.muted : '#f59e0b' },
+                ].map((row) => (
+                  <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 12, color: t.text.muted }}>{row.label}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: row.color }}>{row.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {}
           <div
             style={{
@@ -588,6 +705,28 @@ export function RecordsDetail() {
               Ações
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {/* Payment button — only for expenses with pending balance */}
+              {isExpense && remaining > 0.001 && (
+                <button
+                  onClick={() => setShowPaymentModal(true)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    padding: '10px 14px',
+                    borderRadius: 10,
+                    cursor: 'pointer',
+                    background: isDark ? 'rgba(16,185,129,0.12)' : '#f0fdf4',
+                    border: `1px solid ${isDark ? 'rgba(16,185,129,0.30)' : '#a7f3d0'}`,
+                    color: isDark ? '#6ee7b7' : '#166534',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <CreditCard size={15} /> Registrar pagamento
+                </button>
+              )}
               <button
                 onClick={() => navigate(`/record/edit/${id}`)}
                 style={{
@@ -710,6 +849,18 @@ export function RecordsDetail() {
         variant="danger"
         isLoading={deleteMutation.isPending}
       />
+
+      {showPaymentModal && isExpense && (
+        <PartialPaymentModal
+          expenseId={id!}
+          totalValue={record.value}
+          paidAmount={paidAmount}
+          description={record.description}
+          expenseMonth={record.month ?? new Date(record.date).getMonth() + 1}
+          expenseYear={record.year ?? new Date(record.date).getFullYear()}
+          onClose={() => setShowPaymentModal(false)}
+        />
+      )}
     </div>
   );
 }

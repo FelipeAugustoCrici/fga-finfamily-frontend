@@ -65,6 +65,21 @@ export const recordService = {
     return response.data;
   },
 
+  async addPayment(expenseId: string, data: { amount: number; paidAt?: string; note?: string; transferToNextMonth?: boolean }) {
+    const response = await api.post(`/finance/expenses/${expenseId}/payments`, data);
+    return response.data;
+  },
+
+  async getPayments(expenseId: string) {
+    const response = await api.get(`/finance/expenses/${expenseId}/payments`);
+    return response.data;
+  },
+
+  async deletePayment(expenseId: string, paymentId: string) {
+    const response = await api.delete(`/finance/expenses/${expenseId}/payments/${paymentId}`);
+    return response.data;
+  },
+
   async delete(id: string): Promise<void> {
     await api.delete(`/finance/expenses/${id}`);
   },

@@ -1,6 +1,6 @@
 export type RecordKind = 'income' | 'expense';
 
-export type RecordStatus = 'PENDING' | 'PAID' | 'OVERDUE';
+export type RecordStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'PARTIALLY_PAID';
 
 export type RecordOrigin =
   | 'expenses'
@@ -17,11 +17,23 @@ export type RecordCategory = {
   name: string;
 };
 
+export type ExpensePayment = {
+  id: string;
+  expenseId: string;
+  amount: number;
+  paidAt: string;
+  note?: string | null;
+  remainingAfter: number;
+  createdAt: string;
+};
+
 export type UnifiedRecord = {
   id: string;
   description: string;
   value: number;
   date: string;
+  month?: number;
+  year?: number;
   personId: string;
   type: RecordKind;
   originalType: RecordOrigin;
@@ -30,6 +42,10 @@ export type UnifiedRecord = {
   recurringId?: string | null;
   sourceId?: string | null;
   status?: RecordStatus;
+  paidAmount?: number;
+  originExpenseId?: string | null;
+  originMonth?: number | null;
+  originYear?: number | null;
 };
 
 export interface Record {

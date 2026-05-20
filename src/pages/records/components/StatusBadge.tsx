@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, Clock, AlertCircle, ChevronDown } from 'lucide-react';
+import { Check, Clock, AlertCircle, ChevronDown, SplitSquareHorizontal } from 'lucide-react';
 import { cn } from '@/components/ui/Button';
 import { useTokens } from '@/hooks/useTokens';
 import { RecordStatus } from '../types/record.types';
@@ -8,16 +8,17 @@ import { RecordStatus } from '../types/record.types';
 interface StatusBadgeProps {
   status: RecordStatus;
   onChange: (status: RecordStatus) => void;
+  onPartialPayment?: () => void;
   disabled?: boolean;
 }
 
-export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
+export function StatusBadge({ status, onChange, onPartialPayment, disabled }: StatusBadgeProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [pos, setPos] = useState({ top: 0, left: 0 });
+  const [pos, setPos] = useState<{ top?: number; bottom?: number; left: number }>({ left: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
   const t = useTokens();
 
-  const statusConfig = {
+  const statusConfig: Record<RecordStatus, { label: string; icon: any; style: React.CSSProperties }> = {
     PENDING: {
       label: 'Pendente',
       icon: Clock,
@@ -45,6 +46,15 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
         border: `1px solid ${t.expense.border}`,
       },
     },
+    PARTIALLY_PAID: {
+      label: 'Parc. Pago',
+      icon: SplitSquareHorizontal,
+      style: {
+        background: 'rgba(99,102,241,0.12)',
+        color: '#818cf8',
+        border: '1px solid rgba(99,102,241,0.25)',
+      },
+    },
   };
 
   const current = statusConfig[status || 'PENDING'];
@@ -68,7 +78,15 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
     if (disabled) return;
     if (!isOpen && btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
-      setPos({ top: rect.bottom + 4, left: rect.left });
+      const DROPDOWN_HEIGHT = 148; // 4 items × ~32px + 12px padding
+      const spaceBelow = window.innerHeight - rect.bottom;
+      if (spaceBelow < DROPDOWN_HEIGHT) {
+        // Open upward
+        setPos({ bottom: window.innerHeight - rect.top + 4, left: rect.left });
+      } else {
+        // Open downward
+        setPos({ top: rect.bottom + 4, left: rect.left });
+      }
     }
     setIsOpen((o) => !o);
   };
@@ -105,6 +123,7 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
               style={{
                 position: 'fixed',
                 top: pos.top,
+                bottom: pos.bottom,
                 left: pos.left,
                 zIndex: 9999,
                 width: 144,
@@ -126,8 +145,13 @@ export function StatusBadge({ status, onChange, disabled }: StatusBadgeProps) {
                     key={key}
                     onClick={(e) => {
                       e.stopPropagation();
-                      onChange(key);
-                      setIsOpen(false);
+                      if (key === 'PARTIALLY_PAID' && onPartialPayment) {
+                        setIsOpen(false);
+                        onPartialPayment();
+                      } else {
+                        onChange(key);
+                        setIsOpen(false);
+                      }
                     }}
                     onMouseDown={(e) => e.stopPropagation()}
                     className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium transition-colors duration-150"

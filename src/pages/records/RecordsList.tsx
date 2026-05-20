@@ -27,6 +27,7 @@ import { IncomeSummaryCards } from './components/IncomeSummaryCards';
 import { RecordsResumoCards } from './components/RecordsResumoCards';
 import { MobileRecordsList } from './components/MobileRecordsList';
 import { QuickLaunchInput } from './components/QuickLaunch/QuickLaunchInput';
+import { PartialPaymentModal } from './components/PartialPaymentModal';
 import { useRecordFilters } from './hooks/useRecordFilters';
 import { useRecords } from './hooks/useRecords';
 import { useRecordsResumo } from './hooks/useRecordsResumo';
@@ -47,6 +48,7 @@ export function RecordsList() {
 
   const [recordToDelete, setRecordToDelete] = useState<UnifiedRecord | null>(null);
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
+  const [paymentRecord, setPaymentRecord] = useState<UnifiedRecord | null>(null);
   const itemsPerPage = 10;
   const t = useTokens();
 
@@ -376,6 +378,27 @@ export function RecordsList() {
                             >
                               {tx.description}
                             </button>
+                            {tx.originExpenseId && (
+                              <span
+                                title={`Saldo transferido de ${String(tx.originMonth).padStart(2,'0')}/${tx.originYear}`}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 3,
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  padding: '2px 6px',
+                                  borderRadius: 5,
+                                  background: 'rgba(245,158,11,0.12)',
+                                  color: '#f59e0b',
+                                  border: '1px solid rgba(245,158,11,0.25)',
+                                  whiteSpace: 'nowrap',
+                                  marginLeft: 4,
+                                }}
+                              >
+                                ↩ {String(tx.originMonth).padStart(2,'0')}/{tx.originYear}
+                              </span>
+                            )}
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -424,6 +447,7 @@ export function RecordsList() {
                           <StatusBadge
                             status={tx.status || 'PENDING'}
                             onChange={(newStatus) => handleStatusChange(tx.id, newStatus)}
+                            onPartialPayment={tx.originalType === 'expense' ? () => setPaymentRecord(tx) : undefined}
                             disabled={updateStatus.isPending || tx.originalType !== 'expense'}
                           />
                         </td>
@@ -541,6 +565,7 @@ export function RecordsList() {
               deleteLoading={deleteRecord.isPending}
               onStatusChange={(id, status) => handleStatusChange(id, status)}
               updateLoading={updateStatus.isPending}
+              onPartialPayment={(record) => setPaymentRecord(record)}
             />
           )}
         </div>
@@ -569,6 +594,18 @@ export function RecordsList() {
         variant="danger"
         isLoading={deleteRecord.isPending}
       />
+
+      {paymentRecord && (
+        <PartialPaymentModal
+          expenseId={paymentRecord.id}
+          totalValue={paymentRecord.value}
+          paidAmount={paymentRecord.paidAmount ?? 0}
+          description={paymentRecord.description}
+          expenseMonth={paymentRecord.month ?? filters.month}
+          expenseYear={paymentRecord.year ?? filters.year}
+          onClose={() => setPaymentRecord(null)}
+        />
+      )}
     </div>
   );
 }
