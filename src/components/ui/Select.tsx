@@ -357,7 +357,7 @@ export function Select({
           )}
 
           {}
-          <div style={{ maxHeight: 240, overflowY: 'auto', padding: '6px 0' }}>
+          <div style={{ maxHeight: 240, overflowY: 'auto', overflowX: 'hidden', padding: '6px 0', scrollbarGutter: 'stable' }}>
             {filtered.length === 0 ? (
               <div
                 style={{
