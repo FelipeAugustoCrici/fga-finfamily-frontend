@@ -10,6 +10,7 @@ import { RecordDetailsForm } from './RecordDetailsForm';
 import { ToggleCards } from './ToggleCards';
 import { SummarySection } from './SummarySection';
 import { Select } from '@/components/ui/Select';
+import { FormActionBar } from '@/components/ui/FormActionBar';
 import { Record } from '../types/record.types';
 
 const recordSchema = z.object({
@@ -220,6 +221,9 @@ export function RecordForm({
             <SummarySection people={people} categories={categories} />
           </div>
         </div>
+
+        {/* Sticky action bar */}
+        <FormActionBar isLoading={!!isLoading} isEdit={!!initialData?.id} />
       </form>
     </FormProvider>
   );

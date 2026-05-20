@@ -11,6 +11,7 @@ export function useUpdateRecordStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['records'] });
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
+      queryClient.invalidateQueries({ queryKey: ['records-resumo'] });
     },
   });
 }

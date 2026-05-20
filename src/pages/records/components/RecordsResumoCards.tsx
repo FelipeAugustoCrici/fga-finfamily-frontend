@@ -11,11 +11,14 @@ import {
   Users,
 } from 'lucide-react';
 import { RecordsResumoResponse } from '../types/records-resumo.types';
+import { RecordStatus } from '../types/record.types';
 
 interface Props {
   data?: RecordsResumoResponse;
   isLoading: boolean;
   isError: boolean;
+  activeStatus?: RecordStatus | 'ALL';
+  onStatusFilter?: (status: RecordStatus | 'ALL') => void;
 }
 
 const fmt = (v: number) =>
@@ -45,19 +48,64 @@ interface CardProps {
   accentColor: string;
   accentBg: string;
   t: ReturnType<typeof useTokens>;
+  filterStatus?: RecordStatus;
+  activeStatus?: RecordStatus | 'ALL';
+  onStatusFilter?: (status: RecordStatus | 'ALL') => void;
 }
 
-function ResumoCard({ icon, label, value, sub, variacao, accentColor, accentBg, t }: CardProps) {
+function ResumoCard({
+  icon,
+  label,
+  value,
+  sub,
+  variacao,
+  accentColor,
+  accentBg,
+  t,
+  filterStatus,
+  activeStatus,
+  onStatusFilter,
+}: CardProps) {
+  const isClickable = !!filterStatus && !!onStatusFilter;
+  const isActive = isClickable && activeStatus === filterStatus;
+
+  const handleClick = () => {
+    if (!isClickable) return;
+    // Toggle: clicking the active filter clears it
+    onStatusFilter!(isActive ? 'ALL' : filterStatus!);
+  };
+
   return (
     <div
+      role={isClickable ? 'button' : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onClick={handleClick}
+      onKeyDown={(e) => {
+        if (isClickable && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
       className="rounded-2xl p-4 flex flex-col gap-2 transition-all duration-200"
       style={{
-        background: t.bg.card,
-        border: `1px solid ${t.border.default}`,
-        boxShadow: t.shadow.card,
+        background: isActive ? `${accentColor}18` : t.bg.card,
+        border: isActive
+          ? `1.5px solid ${accentColor}55`
+          : `1px solid ${t.border.default}`,
+        boxShadow: isActive ? `0 0 0 3px ${accentColor}18` : t.shadow.card,
+        cursor: isClickable ? 'pointer' : 'default',
+        userSelect: 'none',
       }}
-      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = t.bg.cardHover)}
-      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = t.bg.card)}
+      onMouseEnter={(e) => {
+        if (!isActive)
+          (e.currentTarget as HTMLElement).style.background = isClickable
+            ? `${accentColor}10`
+            : t.bg.cardHover;
+      }}
+      onMouseLeave={(e) => {
+        if (!isActive)
+          (e.currentTarget as HTMLElement).style.background = t.bg.card;
+      }}
     >
       <div className="flex items-center justify-between">
         <div
@@ -66,13 +114,29 @@ function ResumoCard({ icon, label, value, sub, variacao, accentColor, accentBg, 
         >
           {icon}
         </div>
-        <VariacaoIndicador variacao={variacao} />
+        <div className="flex items-center gap-1.5">
+          <VariacaoIndicador variacao={variacao} />
+          {isActive && (
+            <span
+              className="text-xs font-semibold px-1.5 py-0.5 rounded-md"
+              style={{
+                background: `${accentColor}22`,
+                color: accentColor,
+                fontSize: 9,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Filtrado
+            </span>
+          )}
+        </div>
       </div>
       <div>
         <p className="text-xs font-medium mb-0.5" style={{ color: t.text.muted }}>
           {label}
         </p>
-        <p className="text-lg font-black leading-tight" style={{ color: t.text.primary }}>
+        <p className="text-lg font-black leading-tight" style={{ color: isActive ? accentColor : t.text.primary }}>
           {value}
         </p>
         {sub && (
@@ -95,7 +159,7 @@ function SkeletonCards() {
   );
 }
 
-export function RecordsResumoCards({ data, isLoading, isError }: Props) {
+export function RecordsResumoCards({ data, isLoading, isError, activeStatus, onStatusFilter }: Props) {
   const t = useTokens();
 
   if (isLoading) return <SkeletonCards />;
@@ -124,6 +188,9 @@ export function RecordsResumoCards({ data, isLoading, isError }: Props) {
       variacao: totalPago.variacao,
       accentColor: t.income.text,
       accentBg: t.income.bgIcon,
+      filterStatus: 'PAID',
+      activeStatus,
+      onStatusFilter,
       t,
     },
     {
@@ -133,6 +200,9 @@ export function RecordsResumoCards({ data, isLoading, isError }: Props) {
       sub: `${totalPendente.quantidade} lançamento${totalPendente.quantidade !== 1 ? 's' : ''}`,
       accentColor: t.warning.text,
       accentBg: t.warning.bg,
+      filterStatus: 'PENDING',
+      activeStatus,
+      onStatusFilter,
       t,
     },
     {
@@ -142,6 +212,9 @@ export function RecordsResumoCards({ data, isLoading, isError }: Props) {
       sub: `${totalAtrasado.quantidade} lançamento${totalAtrasado.quantidade !== 1 ? 's' : ''}`,
       accentColor: t.expense.text,
       accentBg: t.expense.bgIcon,
+      filterStatus: 'OVERDUE',
+      activeStatus,
+      onStatusFilter,
       t,
     },
     {

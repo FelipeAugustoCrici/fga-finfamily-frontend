@@ -51,6 +51,7 @@ export function useCreateRecord() {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['incomes'] });
       queryClient.invalidateQueries({ queryKey: ['extras'] });
+      queryClient.invalidateQueries({ queryKey: ['records-resumo'] });
       queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
       queryClient.invalidateQueries({ queryKey: ['extras-summary'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-summary'] });

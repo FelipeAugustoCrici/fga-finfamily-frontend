@@ -119,11 +119,13 @@ export function DatePicker({
   const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (parsed) {
+    // Only sync the calendar view when the picker is closed, to avoid
+    // overwriting the user's in-progress month/year navigation while open.
+    if (parsed && !open) {
       setViewYear(parsed.year);
       setViewMonth(parsed.month);
     }
-  }, [value]);
+  }, [value, open]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -198,7 +200,9 @@ export function DatePicker({
   ];
   while (cells.length % 7 !== 0) cells.push(null);
 
-  const yearRange = Array.from({ length: 100 }, (_, i) => now.getFullYear() - i).reverse();
+  const startYear = 2025;
+  const endYear = now.getFullYear() + 10;
+  const yearRange = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
 
   const popoverPos: React.CSSProperties = dropUp
     ? { bottom: sz.height + 8, top: 'auto' }
@@ -467,7 +471,16 @@ export function DatePicker({
                     <button
                       key={m}
                       type="button"
-                      onClick={() => setViewMonth(i + 1)}
+                      onClick={() => {
+                        const newMonth = i + 1;
+                        setViewMonth(newMonth);
+                        // Keep the currently selected day, or default to 1
+                        const currentDay = parsed?.day ?? 1;
+                        // Clamp day to valid range for the new month
+                        const maxDay = daysInMonth(viewYear, newMonth);
+                        const day = Math.min(currentDay, maxDay);
+                        onChange?.(formatISO(viewYear, newMonth, day));
+                      }}
                       style={{
                         ...btnBase(
                           isActive

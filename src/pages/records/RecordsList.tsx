@@ -167,6 +167,8 @@ export function RecordsList() {
         data={resumo.data}
         isLoading={resumo.isLoading}
         isError={resumo.isError}
+        activeStatus={filters.status}
+        onStatusFilter={filters.setStatus}
       />
 
       {}

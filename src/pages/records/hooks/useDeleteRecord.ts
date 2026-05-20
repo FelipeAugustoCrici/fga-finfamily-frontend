@@ -13,6 +13,9 @@ export function useDeleteRecord() {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       queryClient.invalidateQueries({ queryKey: ['incomes'] });
       queryClient.invalidateQueries({ queryKey: ['extras'] });
+      queryClient.invalidateQueries({ queryKey: ['records-resumo'] });
+      queryClient.invalidateQueries({ queryKey: ['incomes-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['extras-summary'] });
       showToast({
         title: 'Sucesso',
         description: 'Lançamento excluído com sucesso!',
