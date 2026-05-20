@@ -198,6 +198,18 @@ function AIChatFAB({ onClick, isOpen }: { onClick: () => void; isOpen: boolean }
   );
 }
 
+// ─── Section label ────────────────────────────────────────────────────────────
+
+function SidebarSection({ label }: { label: string }) {
+  return (
+    <p
+      className="px-4 pt-4 pb-1 text-xs font-bold tracking-widest uppercase text-primary-600 select-none"
+    >
+      {label}
+    </p>
+  );
+}
+
 // ─── Nav config ───────────────────────────────────────────────────────────────
 
 const recordsSubItems: SubItem[] = [
@@ -212,16 +224,6 @@ const planningSubItems: SubItem[] = [
   { to: '/reports', icon: BarChart3, label: 'Relatórios' },
 ];
 
-const familySubItems: SubItem[] = [
-  { to: '/family', icon: Users, label: 'Membros' },
-  { to: '/couple-mode', icon: Heart, label: 'Modo Casal' },
-];
-
-const settingsSubItems: SubItem[] = [
-  { to: '/category', icon: Tags, label: 'Categorias' },
-  { to: '/profile', icon: User, label: 'Meu Perfil' },
-];
-
 // ─── Sidebar nav content (shared between desktop + mobile) ───────────────────
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -231,11 +233,11 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const isRecords =
     p.startsWith('/record') || p.startsWith('/calendar') || p.startsWith('/credit-cards');
   const isPlanning = p.startsWith('/planning') || p.startsWith('/reports');
-  const isFamily = p.startsWith('/family') || p.startsWith('/couple-mode');
-  const isSettings = p.startsWith('/category') || p.startsWith('/profile');
 
   return (
-    <nav className="flex-1 space-y-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-700 scrollbar-track-transparent">
+    <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-700 scrollbar-track-transparent">
+      {/* Principal */}
+      <SidebarSection label="Principal" />
       <SidebarItem
         to="/"
         icon={LayoutDashboard}
@@ -244,6 +246,8 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         onNavigate={onNavigate}
       />
 
+      {/* Financeiro */}
+      <SidebarSection label="Financeiro" />
       <SidebarAccordion
         icon={ListOrdered}
         label="Lançamentos"
@@ -258,18 +262,38 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         isActive={isPlanning}
         onNavigate={onNavigate}
       />
-      <SidebarAccordion
+
+      {/* Família */}
+      <SidebarSection label="Família" />
+      <SidebarItem
+        to="/family"
         icon={Users}
-        label="Família"
-        items={familySubItems}
-        isActive={isFamily}
+        label="Membros"
+        active={p.startsWith('/family')}
         onNavigate={onNavigate}
       />
-      <SidebarAccordion
-        icon={Settings}
-        label="Configurações"
-        items={settingsSubItems}
-        isActive={isSettings}
+      <SidebarItem
+        to="/couple-mode"
+        icon={Heart}
+        label="Modo Casal"
+        active={p.startsWith('/couple-mode')}
+        onNavigate={onNavigate}
+      />
+
+      {/* Configurações */}
+      <SidebarSection label="Configurações" />
+      <SidebarItem
+        to="/category"
+        icon={Tags}
+        label="Categorias"
+        active={p.startsWith('/category')}
+        onNavigate={onNavigate}
+      />
+      <SidebarItem
+        to="/profile"
+        icon={User}
+        label="Meu Perfil"
+        active={p.startsWith('/profile')}
         onNavigate={onNavigate}
       />
     </nav>
