@@ -35,7 +35,7 @@ export function CalendarDayCell({
     <div
       onClick={onClick}
       className={cn(
-        'min-h-[100px] p-2 rounded-xl border cursor-pointer transition-all duration-150 flex flex-col gap-1',
+        'min-h-[52px] sm:min-h-[100px] p-1 sm:p-2 rounded-lg sm:rounded-xl min-w-0 overflow-hidden border cursor-pointer transition-all duration-150 flex flex-col gap-1',
         isCurrentMonth
           ? 'bg-white border-primary-100 hover:border-primary-300 hover:shadow-sm'
           : 'bg-primary-50/30 border-primary-50',
@@ -47,7 +47,7 @@ export function CalendarDayCell({
       <div className="flex items-center justify-between">
         <span
           className={cn(
-            'text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full',
+            'text-xs sm:text-sm font-bold w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-full',
             isToday ? 'bg-primary-600 text-white' : 'text-primary-700',
           )}
         >
@@ -63,7 +63,7 @@ export function CalendarDayCell({
 
       {}
       {hasEvents && (
-        <div className="flex flex-col gap-0.5 flex-1">
+        <div className="hidden sm:flex flex-col gap-0.5 flex-1">
           {summary.events.slice(0, MAX_VISIBLE).map((e) => (
             <CalendarEventItem key={e.id} event={e} compact />
           ))}
@@ -79,7 +79,7 @@ export function CalendarDayCell({
       {hasEvents && (
         <div
           className={cn(
-            'text-xs font-bold mt-auto pt-1 border-t border-primary-50 font-mono',
+            'hidden sm:block text-xs font-bold mt-auto pt-1 border-t border-primary-50 font-mono',
             summary.balance >= 0 ? 'text-success-600' : 'text-danger-600',
           )}
         >

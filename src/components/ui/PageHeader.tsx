@@ -143,7 +143,11 @@ export function PageHeader({
           </div>
         )}
 
-        {actions && <div className="flex items-center gap-2">{actions}</div>}
+        {actions && (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto [&>button]:w-full [&>button]:justify-center sm:[&>button]:w-auto">
+            {actions}
+          </div>
+        )}
       </div>
     </div>
   );

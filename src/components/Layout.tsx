@@ -334,7 +334,7 @@ export const Layout = () => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 md:ml-64 flex flex-col min-h-screen">
+      <main className="flex-1 min-w-0 md:ml-64 flex flex-col min-h-screen">
         {/* Mobile top bar */}
         <div className="md:hidden flex items-center px-4 py-3 bg-white border-b border-primary-100">
           <button className="p-2 text-primary-600" onClick={() => setIsMobileMenuOpen(true)}>

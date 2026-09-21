@@ -15,7 +15,6 @@ import {
   Trash2,
   Loader2,
   Eye,
-  Download,
   MessageSquarePlus,
 } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
@@ -142,13 +141,6 @@ export function RecordsList() {
       <PageHeader
         actions={
           <>
-            <ActionButton
-              variant="secondary"
-              onClick={() => window.print()}
-              icon={<Download size={15} />}
-            >
-              Exportar
-            </ActionButton>
             <ActionButton onClick={() => navigate('/record/create')}>Novo Lançamento</ActionButton>
             <ActionButton
               variant="secondary"

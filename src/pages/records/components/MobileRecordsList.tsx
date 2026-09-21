@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 import {
   ArrowUpCircle,
   ArrowDownCircle,
@@ -20,20 +21,17 @@ import type { UnifiedRecord, RecordStatus } from '../types/record.types';
 // ─── Date grouping helpers ────────────────────────────────────────────────────
 
 function groupLabel(dateStr: string): string {
-  const date = new Date(dateStr + 'T00:00:00');
-  const today = new Date();
-  const yesterday = new Date();
-  yesterday.setDate(today.getDate() - 1);
+  const date = moment(dateStr);
+  if (!date.isValid()) return 'Sem data';
 
-  const sameDay = (a: Date, b: Date) =>
-    a.getDate() === b.getDate() &&
-    a.getMonth() === b.getMonth() &&
-    a.getFullYear() === b.getFullYear();
+  if (date.isSame(moment(), 'day')) return 'Hoje';
+  if (date.isSame(moment().subtract(1, 'day'), 'day')) return 'Ontem';
 
-  if (sameDay(date, today)) return 'Hoje';
-  if (sameDay(date, yesterday)) return 'Ontem';
-
-  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+  return date.toDate().toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 function groupByDate(records: UnifiedRecord[]): { label: string; items: UnifiedRecord[] }[] {
@@ -62,7 +60,7 @@ function ActionMenu({
   updateLoading: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [pos, setPos] = useState({ top: 0, right: 0 });
+  const [pos, setPos] = useState<{ top?: number; bottom?: number; right: number }>({ right: 0 });
   const btnRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   const t = useTokens();
@@ -72,10 +70,16 @@ function ActionMenu({
     e.stopPropagation();
     if (btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
-      setPos({
-        top: rect.bottom + 4,
-        right: window.innerWidth - rect.right,
-      });
+      // itens (~39px cada) + divisor + bordas; "Marcar como pago" some quando já está pago
+      const menuHeight = (record.status !== 'PAID' ? 4 : 3) * 39 + 6;
+      const right = window.innerWidth - rect.right;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      // Sem espaço abaixo: abre para cima, acima do botão
+      setPos(
+        spaceBelow < menuHeight + 12
+          ? { bottom: window.innerHeight - rect.top + 4, right }
+          : { top: rect.bottom + 4, right },
+      );
     }
     setOpen((o) => !o);
   };
@@ -122,6 +126,7 @@ function ActionMenu({
               style={{
                 position: 'fixed',
                 top: pos.top,
+                bottom: pos.bottom,
                 right: pos.right,
                 zIndex: 9999,
                 background: t.bg.card,
@@ -349,7 +354,7 @@ function RecordCard({
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
           <StatusBadge
             status={record.status || 'PENDING'}
             onChange={(s) => onStatusChange(record.id, s)}

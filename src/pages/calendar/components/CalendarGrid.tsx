@@ -44,16 +44,19 @@ export function CalendarGrid({ month, year, days, onDayClick }: Props) {
   return (
     <div>
       {}
-      <div className="grid grid-cols-7 gap-2 mb-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
         {WEEKDAYS.map((w) => (
-          <div key={w} className="text-center text-xs font-bold text-primary-400 uppercase py-2">
+          <div
+            key={w}
+            className="text-center text-[10px] sm:text-xs font-bold text-primary-400 uppercase py-2"
+          >
             {w}
           </div>
         ))}
       </div>
 
       {}
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {cells.map((cell, idx) => {
           const dateKey = `${cell.year}-${String(cell.month).padStart(2, '0')}-${String(cell.day).padStart(2, '0')}`;
           return (
