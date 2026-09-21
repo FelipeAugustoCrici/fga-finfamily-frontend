@@ -1,5 +1,6 @@
 ﻿import React, { forwardRef, useState, useEffect, useRef } from 'react';
 import { Input } from './Input';
+import { cn } from './Button';
 
 interface CurrencyInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -65,6 +66,7 @@ export const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
         icon={icon}
         type="text"
         inputMode="numeric"
+        className={cn('font-mono', props.className)}
         value={displayValue}
         onChange={handleChange}
         onFocus={(e) => {

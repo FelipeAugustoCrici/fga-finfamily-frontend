@@ -84,11 +84,17 @@ export function MembersContribution({ perPerson }: Props) {
                     <p className="text-sm font-bold truncate" style={{ color: t.text.secondary }}>
                       {p.name}
                     </p>
-                    <span className="text-sm font-bold ml-2" style={{ color: t.text.secondary }}>
+                    <span
+                      className="text-sm font-bold ml-2 font-mono"
+                      style={{ color: t.text.secondary }}
+                    >
                       {p.contributionPercent.toFixed(1)}%
                     </span>
                   </div>
-                  <p className="text-xs" style={{ color: t.text.subtle }}>
+                  <p
+                    className="text-xs"
+                    style={{ color: t.text.subtle, fontFamily: "'Space Mono', monospace" }}
+                  >
                     {fmt(p.income)}
                   </p>
                 </div>
@@ -141,7 +147,10 @@ export function MembersContribution({ perPerson }: Props) {
                   {p.name}
                 </p>
               </div>
-              <p className="text-sm font-bold" style={{ color: t.text.primary }}>
+              <p
+                className="text-sm font-bold"
+                style={{ color: t.text.primary, fontFamily: "'Space Mono', monospace" }}
+              >
                 {fmt(p.proportionalExpense)}
               </p>
             </div>

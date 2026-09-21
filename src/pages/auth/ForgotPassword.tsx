@@ -8,7 +8,7 @@ import { useTokens } from '@/hooks/useTokens';
 export function ForgotPassword() {
   const navigate = useNavigate();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const [step, setStep] = useState<'request' | 'confirm'>('request');
   const [email, setEmail] = useState('');

@@ -15,7 +15,7 @@ const fmt = (v: number) =>
 
 export function PaymentHistory({ expenseId, payments, totalValue }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const deletePayment = useDeletePayment(expenseId);
 
   if (payments.length === 0) return null;
@@ -102,7 +102,14 @@ export function PaymentHistory({ expenseId, payments, totalValue }: Props) {
               >
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#10b981' }}>
+                    <span
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: '#10b981',
+                        fontFamily: "'Space Mono', monospace",
+                      }}
+                    >
                       {fmt(payment.amount)}
                     </span>
                     <span
@@ -115,11 +122,15 @@ export function PaymentHistory({ expenseId, payments, totalValue }: Props) {
                         color: '#10b981',
                       }}
                     >
-                      {percentPaid}% quitado
+                      <span style={{ fontFamily: "'Space Mono', monospace" }}>{percentPaid}%</span>{' '}
+                      quitado
                     </span>
                   </div>
                   <p style={{ fontSize: 11, color: t.text.muted, margin: '2px 0 0' }}>
-                    {formatShortDate(payment.paidAt)} · Saldo restante: {fmt(payment.remainingAfter)}
+                    {formatShortDate(payment.paidAt)} · Saldo restante:{' '}
+                    <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                      {fmt(payment.remainingAfter)}
+                    </span>
                   </p>
                   {payment.note && (
                     <p style={{ fontSize: 11, color: t.text.subtle, margin: '2px 0 0', fontStyle: 'italic' }}>
@@ -135,7 +146,7 @@ export function PaymentHistory({ expenseId, payments, totalValue }: Props) {
                   style={{
                     width: 28,
                     height: 28,
-                    borderRadius: 7,
+                    borderRadius: 999,
                     border: 'none',
                     background: 'transparent',
                     cursor: 'pointer',

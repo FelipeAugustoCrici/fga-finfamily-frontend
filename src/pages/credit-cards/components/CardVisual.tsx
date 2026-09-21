@@ -54,8 +54,10 @@ export function CardVisual({ card, compact = false }: CardVisualProps) {
           <>
             <div className="mb-3">
               <p className="text-white/60 text-xs mb-1">Limite disponível</p>
-              <p className="text-xl font-bold">{fmt(card.availableLimit)}</p>
-              <p className="text-white/60 text-xs">de {fmt(card.limitAmount)}</p>
+              <p className="text-xl font-bold font-mono">{fmt(card.availableLimit)}</p>
+              <p className="text-white/60 text-xs">
+                de <span className="font-mono">{fmt(card.limitAmount)}</span>
+              </p>
             </div>
 
             <div className="w-full bg-white/20 rounded-full h-1.5 mb-3">

@@ -30,7 +30,7 @@ export function Toaster() {
             {description && <ToastDescription>{description}</ToastDescription>}
           </div>
 
-          <ToastClose className="absolute top-3 right-3 rounded-md p-1 text-primary-400 hover:text-primary-700 focus:outline-none">
+          <ToastClose className="absolute top-3 right-3 rounded-full p-1 text-primary-400 hover:text-primary-700 focus:outline-none">
             <X size={16} />
           </ToastClose>
 

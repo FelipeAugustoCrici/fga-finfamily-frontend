@@ -22,7 +22,7 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
   const animatedExpenses = useCountUp(expenses, 650);
 
   const darkCard = {
-    background: 'linear-gradient(135deg, #020617 0%, #0f172a 60%, #1e293b 100%)',
+    background: 'linear-gradient(135deg, #12161a 0%, #1a2027 60%, #232a32 100%)',
     boxShadow: '0 10px 40px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2)',
   };
 
@@ -48,7 +48,7 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
       ? '#ffffff'
       : '#f87171'
     : isPositive
-      ? '#0f172a'
+      ? '#1c2b2d'
       : '#dc2626';
 
   const badgeStyle = isPositive
@@ -146,7 +146,7 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
         <div className="mb-8">
           <div
             className="text-5xl font-black tracking-tight transition-all duration-300"
-            style={{ color: balanceColor }}
+            style={{ color: balanceColor, fontFamily: "'Space Mono', monospace" }}
           >
             {visible ? fmt(animatedBalance) : 'R$ ••••••'}
           </div>
@@ -181,7 +181,10 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
                 Entradas
               </span>
             </div>
-            <p className="text-lg font-bold" style={{ color: incomeVal }}>
+            <p
+              className="text-lg font-bold"
+              style={{ color: incomeVal, fontFamily: "'Space Mono', monospace" }}
+            >
               {visible ? fmt(animatedIncomes) : 'R$ ••••'}
             </p>
           </div>
@@ -205,7 +208,10 @@ export function BalanceCard({ balance, incomes, expenses }: Props) {
                 Saídas
               </span>
             </div>
-            <p className="text-lg font-bold" style={{ color: expenseVal }}>
+            <p
+              className="text-lg font-bold"
+              style={{ color: expenseVal, fontFamily: "'Space Mono', monospace" }}
+            >
               {visible ? fmt(animatedExpenses) : 'R$ ••••'}
             </p>
           </div>

@@ -17,7 +17,7 @@ import { transformToMonthlyData } from './utils/reports-helpers';
 export function Reports() {
   const filters = useUrlFilters({ defaultPage: 1 });
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const selectedPeriod = (parseInt(filters.search) || 6) as 3 | 6 | 12;
   const setSelectedPeriod = (period: 3 | 6 | 12) => filters.setSearch(String(period));
@@ -95,7 +95,7 @@ export function Reports() {
                 onClick={() => setSelectedPeriod(period)}
                 style={{
                   padding: '6px 14px',
-                  borderRadius: 10,
+                  borderRadius: 999,
                   border: 'none',
                   fontSize: 12,
                   fontWeight: 700,

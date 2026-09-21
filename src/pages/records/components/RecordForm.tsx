@@ -8,7 +8,7 @@ import { RecordFormHeader } from './RecordFormHeader';
 import { RecordTypeSelector } from './RecordTypeSelector';
 import { RecordDetailsForm } from './RecordDetailsForm';
 import { ToggleCards } from './ToggleCards';
-import { SummarySection } from './SummarySection';
+import { RecordReceiptPreview } from './RecordReceiptPreview';
 import { Select } from '@/components/ui/Select';
 import { FormActionBar } from '@/components/ui/FormActionBar';
 import { Record } from '../types/record.types';
@@ -135,12 +135,12 @@ export function RecordForm({
             style={{
               background: t.bg.card,
               border: `1px solid ${t.border.default}`,
-              borderRadius: 16,
-              padding: 20,
+              borderRadius: 14,
+              padding: 24,
               boxShadow: t.shadow.card,
               display: 'flex',
               flexDirection: 'column',
-              gap: 20,
+              gap: 22,
             }}
           >
             {/* Smart input */}
@@ -218,7 +218,7 @@ export function RecordForm({
 
           {/* Right column — sticky preview */}
           <div className="record-form-preview">
-            <SummarySection people={people} categories={categories} />
+            <RecordReceiptPreview people={people} categories={categories} />
           </div>
         </div>
 

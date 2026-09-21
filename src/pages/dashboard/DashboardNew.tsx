@@ -64,7 +64,7 @@ export const DashboardNew = () => {
         <SkeletonDashboard
           t={{
             bg: {
-              card: isDark ? '#0f172a' : '#ffffff',
+              card: isDark ? '#1a2027' : '#ffffff',
               muted: isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
               mutedStrong: isDark ? 'rgba(255,255,255,0.10)' : '#e2e8f0',
             },
@@ -231,7 +231,7 @@ export const DashboardNew = () => {
                         {item.categoryName}
                       </span>
                     </div>
-                    <span className={cn('text-sm font-bold', pctCls)}>
+                    <span className={cn('text-sm font-bold font-mono', pctCls)}>
                       {Math.round(item.percent)}%
                     </span>
                   </div>
@@ -244,11 +244,11 @@ export const DashboardNew = () => {
                   <div className="flex justify-between text-xs text-primary-500">
                     <span>
                       Gasto:{' '}
-                      <span className="font-semibold text-primary-700">{fmt(item.spent)}</span>
+                      <span className="font-semibold text-primary-700 font-mono">{fmt(item.spent)}</span>
                     </span>
                     <span>
                       Limite:{' '}
-                      <span className="font-semibold text-primary-700">{fmt(item.limit)}</span>
+                      <span className="font-semibold text-primary-700 font-mono">{fmt(item.limit)}</span>
                     </span>
                   </div>
                 </div>
@@ -265,7 +265,7 @@ export const DashboardNew = () => {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-primary-500 font-medium">Renda Fixa</span>
-                  <span className="text-primary-800 font-bold">
+                  <span className="text-primary-800 font-bold font-mono">
                     {fmt(summary.totals.fixedIncome || 0)}
                   </span>
                 </div>
@@ -285,7 +285,7 @@ export const DashboardNew = () => {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-primary-500 font-medium">Renda Variável</span>
-                  <span className="text-primary-800 font-bold">
+                  <span className="text-primary-800 font-bold font-mono">
                     {fmt(summary.totals.variableIncome || 0)}
                   </span>
                 </div>
@@ -314,7 +314,7 @@ export const DashboardNew = () => {
               </p>
               <div className="flex items-end gap-2">
                 <span
-                  className="text-3xl font-black"
+                  className="text-3xl font-black font-mono"
                   style={{ color: isDark ? '#6ee7b7' : '#166534' }}
                 >
                   {(summary.totals.predictableIncomePercent || 0).toFixed(1)}%
@@ -331,7 +331,7 @@ export const DashboardNew = () => {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-primary-500 font-medium">Gastos Fixos</span>
-                  <span className="text-primary-800 font-bold">
+                  <span className="text-primary-800 font-bold font-mono">
                     {fmt(summary.totals.fixedExpenses || 0)}
                   </span>
                 </div>
@@ -351,7 +351,7 @@ export const DashboardNew = () => {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-primary-500 font-medium">Gastos Variáveis</span>
-                  <span className="text-primary-800 font-bold">
+                  <span className="text-primary-800 font-bold font-mono">
                     {fmt(summary.totals.variableExpenses || 0)}
                   </span>
                 </div>
@@ -379,7 +379,7 @@ export const DashboardNew = () => {
                 Comprometimento da Renda
               </p>
               <div className="flex items-end gap-2">
-                <span className="text-3xl font-black text-primary-800">
+                <span className="text-3xl font-black text-primary-800 font-mono">
                   {(summary.totals.fixedExpenseCommitment || 0).toFixed(1)}%
                 </span>
                 <span className="text-sm text-primary-500 pb-1">da renda mensal</span>
@@ -426,9 +426,9 @@ export const DashboardNew = () => {
                   : isDark
                     ? 'rgba(255,255,255,0.07)'
                     : '#e2e8f0';
-              const goalTitleClr = isDark ? '#e2e8f0' : '#1e293b';
-              const goalSubClr = isDark ? '#64748b' : '#94a3b8';
-              const goalPctClr = isDark ? '#f1f5f9' : '#1e293b';
+              const goalTitleClr = isDark ? '#dde3e5' : '#263638';
+              const goalSubClr = isDark ? '#6b7880' : '#8a9391';
+              const goalPctClr = isDark ? '#eef1f2' : '#1c2b2d';
               const trackBg = isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0';
               return (
                 <div
@@ -450,7 +450,7 @@ export const DashboardNew = () => {
                     </p>
                   </div>
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-lg font-bold" style={{ color: goalPctClr }}>
+                    <span className="text-lg font-bold font-mono" style={{ color: goalPctClr }}>
                       {pct.toFixed(0)}%
                     </span>
                     <span

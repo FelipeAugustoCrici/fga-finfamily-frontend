@@ -105,11 +105,13 @@ export function CreditCardsCard({ onCreateNew: _onCreateNew }: { onCreateNew: ()
                       <div className="flex justify-between text-xs text-primary-500">
                         <span>
                           Disponível:{' '}
-                          <span className="font-medium text-success-600">
+                          <span className="font-medium text-success-600 font-mono">
                             {fmt(card.availableLimit)}
                           </span>
                         </span>
-                        <span>{usedPercent.toFixed(0)}% usado</span>
+                        <span>
+                          <span className="font-mono">{usedPercent.toFixed(0)}%</span> usado
+                        </span>
                       </div>
                       <div className="w-full bg-primary-100 rounded-full h-1.5">
                         <div

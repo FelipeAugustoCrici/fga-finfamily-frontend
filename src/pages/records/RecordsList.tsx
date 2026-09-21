@@ -458,6 +458,7 @@ export function RecordsList() {
                               fontWeight: 600,
                               fontSize: '14px',
                               color: isIncome ? t.income.text : t.expense.text,
+                              fontFamily: "'Space Mono', monospace",
                             }}
                           >
                             {isIncome ? '+ ' : '- '}

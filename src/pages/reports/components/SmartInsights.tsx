@@ -184,7 +184,7 @@ const GROUP_LABELS: Record<string, string> = {
 
 export function SmartInsights({ summaries, current, previous }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const insights = buildInsights(summaries, current, previous);
   if (insights.length === 0) return null;

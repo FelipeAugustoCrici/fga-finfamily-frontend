@@ -195,10 +195,16 @@ export function SummaryCardNew({ title, value, type, icon: Icon, change, subtitl
           >
             {isPositiveChange ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
             {}
-            <span className="hidden sm:inline" style={{ whiteSpace: 'nowrap' }}>
+            <span
+              className="hidden sm:inline"
+              style={{ whiteSpace: 'nowrap', fontFamily: "'Space Mono', monospace" }}
+            >
               {fmt(Math.abs(change!))}
             </span>
-            <span className="sm:hidden" style={{ whiteSpace: 'nowrap' }}>
+            <span
+              className="sm:hidden"
+              style={{ whiteSpace: 'nowrap', fontFamily: "'Space Mono', monospace" }}
+            >
               R${fmtCompact(Math.abs(change!))}
             </span>
           </div>
@@ -232,6 +238,7 @@ export function SummaryCardNew({ title, value, type, icon: Icon, change, subtitl
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          fontFamily: "'Space Mono', monospace",
         }}
       >
         {fmt(animatedValue)}

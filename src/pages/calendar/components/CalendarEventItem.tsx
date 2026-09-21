@@ -41,7 +41,7 @@ export function CalendarEventItem({ event, compact = false }: Props) {
         {event.isRecurring && <RefreshCw size={9} className="text-primary-400 shrink-0" />}
         {isOverdue && <AlertCircle size={9} className="text-danger-500 shrink-0" />}
         <span className={cn('truncate font-medium', colorClass)}>{event.description}</span>
-        <span className={cn('shrink-0 font-bold', colorClass)}>{fmt(event.amount)}</span>
+        <span className={cn('shrink-0 font-bold font-mono', colorClass)}>{fmt(event.amount)}</span>
       </div>
     );
   }
@@ -61,7 +61,7 @@ export function CalendarEventItem({ event, compact = false }: Props) {
         </p>
       </div>
       <div className="text-right shrink-0">
-        <p className={cn('text-sm font-bold', colorClass)}>
+        <p className={cn('text-sm font-bold font-mono', colorClass)}>
           {isIncome ? '+' : '-'} {fmt(event.amount)}
         </p>
         {event.status && (

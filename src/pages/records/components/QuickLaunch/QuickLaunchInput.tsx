@@ -174,25 +174,15 @@ export function QuickLaunchInput() {
   };
 
   const isActive = focused || open;
-  const borderColor = isActive
-    ? isDark
-      ? '#818cf8'
-      : '#6366f1'
-    : isDark
-      ? 'rgba(99,102,241,0.25)'
-      : '#ddd6fe';
-  const boxShadow = isActive
-    ? isDark
-      ? '0 0 0 3px rgba(99,102,241,0.2), 0 4px 20px rgba(99,102,241,0.15)'
-      : '0 0 0 3px rgba(99,102,241,0.15), 0 4px 20px rgba(99,102,241,0.1)'
-    : 'none';
+  const borderColor = isActive ? t.quickInput.borderFocus : t.quickInput.border;
+  const boxShadow = isActive ? t.quickInput.shadow : 'none';
 
   return (
     <div ref={containerRef} style={{ position: 'relative', width: '100%' }} data-quick-launch>
       {/* Main input card */}
       <div
         style={{
-          background: isDark ? 'rgba(99,102,241,0.06)' : '#faf5ff',
+          background: isDark ? 'rgba(92,185,138,0.07)' : '#e7f0e9',
           border: `2px solid ${borderColor}`,
           borderRadius: open ? '20px 20px 0 0' : 20,
           boxShadow,
@@ -212,10 +202,10 @@ export function QuickLaunchInput() {
             borderRadius: 12,
             flexShrink: 0,
             background: isActive
-              ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'
+              ? t.quickInput.borderFocus
               : isDark
-                ? 'rgba(99,102,241,0.2)'
-                : '#ede9fe',
+                ? 'rgba(92,185,138,0.2)'
+                : t.income.bgIcon,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -223,7 +213,7 @@ export function QuickLaunchInput() {
             transform: isActive ? 'scale(1.05)' : 'scale(1)',
           }}
         >
-          <Sparkles size={16} color={isActive ? '#fff' : isDark ? '#a5b4fc' : '#7c3aed'} />
+          <Sparkles size={16} color={isActive ? '#fff' : isDark ? t.income.textAlt : t.income.text} />
         </div>
 
         {/* Label + input stacked */}
@@ -238,17 +228,15 @@ export function QuickLaunchInput() {
         >
           <span
             style={{
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: 800,
               letterSpacing: '0.08em',
-              color: isDark ? '#a5b4fc' : '#7c3aed',
+              color: isDark ? t.income.textAlt : t.income.text,
               textTransform: 'uppercase',
               marginBottom: 2,
-              opacity: isActive ? 1 : 0.7,
-              transition: 'opacity 0.2s',
             }}
           >
-            💬 Registrar com IA
+            Registrar com IA · digite o gasto ou ganho
           </span>
           <input
             ref={inputRef}
@@ -333,11 +321,11 @@ export function QuickLaunchInput() {
             left: 0,
             right: 0,
             zIndex: 50,
-            background: isDark ? '#1a1a2e' : '#ffffff',
+            background: t.quickInput.dropBg,
             border: `2px solid ${borderColor}`,
-            borderTop: `1px solid ${isDark ? 'rgba(99,102,241,0.15)' : '#ede9fe'}`,
+            borderTop: `1px solid ${isDark ? 'rgba(92,185,138,0.15)' : t.income.border}`,
             borderRadius: '0 0 20px 20px',
-            boxShadow: isDark ? '0 16px 40px rgba(0,0,0,0.4)' : '0 16px 40px rgba(99,102,241,0.12)',
+            boxShadow: t.quickInput.dropShadow,
             padding: '16px',
             display: 'flex',
             flexDirection: 'column',
@@ -361,9 +349,9 @@ export function QuickLaunchInput() {
                 fontSize: 11,
                 borderRadius: 10,
                 padding: '7px 12px',
-                color: isDark ? '#fcd34d' : '#92400e',
-                background: isDark ? 'rgba(245,158,11,0.1)' : '#fffbeb',
-                border: `1px solid ${isDark ? 'rgba(245,158,11,0.25)' : '#fde68a'}`,
+                color: t.warning.text,
+                background: t.warning.bg,
+                border: `1px solid ${t.warning.border}`,
               }}
             >
               Faltando:{' '}
@@ -387,11 +375,7 @@ export function QuickLaunchInput() {
                 padding: '11px 16px',
                 borderRadius: 12,
                 border: 'none',
-                background: canSave
-                  ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'
-                  : isDark
-                    ? 'rgba(255,255,255,0.06)'
-                    : '#f1f5f9',
+                background: canSave ? t.quickInput.borderFocus : t.bg.mutedStrong,
                 color: canSave ? '#fff' : t.text.disabled,
                 fontSize: 13,
                 fontWeight: 700,
@@ -420,10 +404,10 @@ export function QuickLaunchInput() {
                 alignItems: 'center',
                 gap: 6,
                 padding: '11px 14px',
-                borderRadius: 12,
-                border: `1px solid ${isDark ? 'rgba(99,102,241,0.3)' : '#c7d2fe'}`,
-                background: isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff',
-                color: isDark ? '#a5b4fc' : '#4338ca',
+                borderRadius: 999,
+                border: `1px solid ${isDark ? 'rgba(92,185,138,0.3)' : t.income.border}`,
+                background: isDark ? 'rgba(92,185,138,0.08)' : t.income.bg,
+                color: t.income.text,
                 fontSize: 13,
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -444,7 +428,7 @@ export function QuickLaunchInput() {
               onClick={reset}
               style={{
                 padding: '11px 12px',
-                borderRadius: 12,
+                borderRadius: 999,
                 border: 'none',
                 background: 'none',
                 color: t.text.muted,
@@ -479,28 +463,26 @@ export function QuickLaunchInput() {
                 fontSize: 11,
                 padding: '4px 10px',
                 borderRadius: 999,
-                border: `1px solid ${isDark ? 'rgba(99,102,241,0.2)' : '#ddd6fe'}`,
-                background: isDark ? 'rgba(99,102,241,0.06)' : '#faf5ff',
-                color: isDark ? '#a5b4fc' : '#7c3aed',
+                border: `1px solid ${isDark ? 'rgba(92,185,138,0.2)' : t.income.border}`,
+                background: isDark ? 'rgba(92,185,138,0.06)' : t.income.bg,
+                color: t.income.text,
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 transition: 'all 0.15s',
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.background = isDark
-                  ? 'rgba(99,102,241,0.15)'
-                  : '#ede9fe';
-                (e.currentTarget as HTMLElement).style.borderColor = isDark
-                  ? 'rgba(99,102,241,0.4)'
-                  : '#c4b5fd';
+                  ? 'rgba(92,185,138,0.15)'
+                  : t.income.bgIcon;
+                (e.currentTarget as HTMLElement).style.borderColor = t.income.textAlt;
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.background = isDark
-                  ? 'rgba(99,102,241,0.06)'
-                  : '#faf5ff';
+                  ? 'rgba(92,185,138,0.06)'
+                  : t.income.bg;
                 (e.currentTarget as HTMLElement).style.borderColor = isDark
-                  ? 'rgba(99,102,241,0.2)'
-                  : '#ddd6fe';
+                  ? 'rgba(92,185,138,0.2)'
+                  : t.income.border;
               }}
             >
               {hint.label}

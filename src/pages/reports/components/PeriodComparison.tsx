@@ -17,7 +17,7 @@ function pctChange(curr: number, prev: number): number {
 
 export function PeriodComparison({ current, previous }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const prevLabel = `${MONTHS[previous.month - 1]}/${previous.year}`;
   const currLabel = `${MONTHS[current.month - 1]}/${current.year}`;
@@ -132,19 +132,23 @@ export function PeriodComparison({ current, previous }: Props) {
                   color: t.text.primary,
                   lineHeight: 1,
                   marginBottom: 6,
+                  fontFamily: "'Space Mono', monospace",
                 }}
               >
                 {formatCurrency(curr)}
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <Icon size={13} style={{ color, flexShrink: 0 }} />
-                <span style={{ fontSize: 12, fontWeight: 700, color }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color, fontFamily: "'Space Mono', monospace" }}>
                   {isNeutral ? 'Estável' : `${isUp ? '+' : ''}${pct.toFixed(1)}%`}
                 </span>
                 <span style={{ fontSize: 11, color: t.text.subtle }}>vs {prevLabel}</span>
               </div>
               <p style={{ fontSize: 11, color: t.text.subtle, marginTop: 4 }}>
-                Anterior: {formatCurrency(prev)}
+                Anterior:{' '}
+                <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                  {formatCurrency(prev)}
+                </span>
               </p>
             </div>
           );

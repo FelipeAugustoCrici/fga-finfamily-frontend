@@ -128,7 +128,7 @@ export function RecordsDetail() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const { data: record, isLoading } = useQuery({
     queryKey: ['record-detail', id],
@@ -220,7 +220,7 @@ export function RecordsDetail() {
             style={{
               width: 36,
               height: 36,
-              borderRadius: 10,
+              borderRadius: 999,
               background: t.bg.muted,
               border: `1px solid ${t.border.default}`,
               display: 'flex',
@@ -431,6 +431,7 @@ export function RecordsDetail() {
                       color: type.color,
                       lineHeight: 1,
                       letterSpacing: '-0.02em',
+                      fontFamily: "'Space Mono', monospace",
                     }}
                   >
                     {formatCurrency(record.value)}
@@ -675,7 +676,16 @@ export function RecordsDetail() {
                 ].map((row) => (
                   <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: 12, color: t.text.muted }}>{row.label}</span>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: row.color }}>{row.value}</span>
+                    <span
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: row.color,
+                        fontFamily: "'Space Mono', monospace",
+                      }}
+                    >
+                      {row.value}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -714,7 +724,7 @@ export function RecordsDetail() {
                     alignItems: 'center',
                     gap: 10,
                     padding: '10px 14px',
-                    borderRadius: 10,
+                    borderRadius: 999,
                     cursor: 'pointer',
                     background: isDark ? 'rgba(16,185,129,0.12)' : '#f0fdf4',
                     border: `1px solid ${isDark ? 'rgba(16,185,129,0.30)' : '#a7f3d0'}`,
@@ -734,7 +744,7 @@ export function RecordsDetail() {
                   alignItems: 'center',
                   gap: 10,
                   padding: '10px 14px',
-                  borderRadius: 10,
+                  borderRadius: 999,
                   cursor: 'pointer',
                   background: t.bg.muted,
                   border: `1px solid ${t.border.default}`,
@@ -753,7 +763,7 @@ export function RecordsDetail() {
                   alignItems: 'center',
                   gap: 10,
                   padding: '10px 14px',
-                  borderRadius: 10,
+                  borderRadius: 999,
                   cursor: 'pointer',
                   background: isDark ? 'rgba(239,68,68,0.10)' : '#fef2f2',
                   border: `1px solid ${isDark ? 'rgba(239,68,68,0.25)' : '#fecaca'}`,

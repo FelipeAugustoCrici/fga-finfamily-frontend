@@ -28,7 +28,8 @@ export function IncomeSummaryCards({
 }: IncomeSummaryCardsProps) {
   const navigate = useNavigate();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const personAccents = [t.extra, t.investment, t.income, t.expense];
+  const accentFor = (i: number) => personAccents[i % personAccents.length];
   const [expanded, setExpanded] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{
     id: string;
@@ -102,6 +103,7 @@ export function IncomeSummaryCards({
               style={{
                 background: t.income.bgIcon,
                 color: t.income.text,
+                fontFamily: "'Space Mono', monospace",
               }}
             >
               {fmt(familyTotal)}
@@ -120,8 +122,9 @@ export function IncomeSummaryCards({
         {/* Collapsed: barra compacta com avatares */}
         {!expanded && (
           <div className="px-5 py-3 flex items-center gap-3 flex-wrap">
-            {personSummaries.map(({ person, total }) => {
+            {personSummaries.map(({ person, total }, idx) => {
               const pct = familyTotal > 0 ? (total / familyTotal) * 100 : 0;
+              const accent = accentFor(idx);
               const initials = person.name
                 .split(' ')
                 .map((n: string) => n[0])
@@ -132,21 +135,27 @@ export function IncomeSummaryCards({
               return (
                 <div key={person.id} className="flex items-center gap-2 min-w-0">
                   <div
-                    className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
-                    style={{ background: t.income.bgIcon, color: t.income.text }}
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                    style={{ background: accent.bgIcon, color: accent.text }}
                   >
                     {initials}
                   </div>
                   <span className="text-xs font-medium truncate" style={{ color: t.text.secondary }}>
                     {person.name.split(' ')[0]}
                   </span>
-                  <span className="text-xs font-bold" style={{ color: t.income.text }}>
+                  <span
+                    className="text-xs font-bold"
+                    style={{ color: t.text.primary, fontFamily: "'Space Mono', monospace" }}
+                  >
                     {fmt(total)}
                   </span>
-                  <span className="text-xs" style={{ color: t.text.subtle }}>
+                  <span
+                    className="text-xs"
+                    style={{ color: t.text.subtle, fontFamily: "'Space Mono', monospace" }}
+                  >
                     {pct.toFixed(0)}%
                   </span>
-                  {personSummaries.indexOf(personSummaries.find(s => s.person.id === person.id)!) < personSummaries.length - 1 && (
+                  {idx < personSummaries.length - 1 && (
                     <span style={{ color: t.border.subtle, marginLeft: 4 }}>·</span>
                   )}
                 </div>
@@ -158,8 +167,9 @@ export function IncomeSummaryCards({
         {/* Expanded: lista detalhada por pessoa */}
         {expanded && (
           <div className="divide-y" style={{ borderColor: t.border.divider }}>
-            {personSummaries.map(({ person, total, incomes: pIncomes, extras: pExtras }) => {
+            {personSummaries.map(({ person, total, incomes: pIncomes, extras: pExtras }, idx) => {
               const pct = familyTotal > 0 ? (total / familyTotal) * 100 : 0;
+              const accent = accentFor(idx);
               const initials = person.name
                 .split(' ')
                 .map((n: string) => n[0])
@@ -170,56 +180,97 @@ export function IncomeSummaryCards({
                 ...pIncomes.map((i: any) => ({ ...i, kind: 'income' as const })),
                 ...pExtras.map((e: any) => ({ ...e, kind: 'extra' as const })),
               ];
+              const singleItem = allItems.length === 1 ? allItems[0] : null;
 
               return (
-                <div key={person.id} className="px-5 py-3">
-                  {/* Pessoa: avatar + nome + valor + barra */}
-                  <div className="flex items-center gap-3 mb-2">
+                <div key={person.id} className="px-5 py-3.5">
+                  {/* Pessoa: avatar + nome + barra + valor + ações */}
+                  <div className="flex items-center gap-3">
                     <div
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
-                      style={{ background: t.income.bgIcon, color: t.income.text }}
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                      style={{ background: accent.bgIcon, color: accent.text }}
                     >
                       {initials}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-semibold truncate" style={{ color: t.text.primary }}>
-                          {person.name}
-                        </span>
-                        <div className="flex items-center gap-2 shrink-0 ml-2">
-                          <span className="text-xs font-bold" style={{ color: t.income.text }}>
-                            {fmt(total)}
-                          </span>
-                          <span
-                            className="text-xs px-1.5 py-0.5 rounded-full"
-                            style={{
-                              background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
-                              color: t.text.muted,
-                            }}
-                          >
-                            {pct.toFixed(0)}%
-                          </span>
-                        </div>
-                      </div>
-                      {/* Barra de progresso discreta */}
+                      <span
+                        className="text-sm font-bold truncate block mb-1.5"
+                        style={{ color: t.text.primary }}
+                      >
+                        {person.name.split(' ')[0]}
+                      </span>
+                      {/* Barra de progresso */}
                       <div
-                        className="w-full h-1 rounded-full overflow-hidden"
+                        className="w-full h-1.5 rounded-full overflow-hidden"
                         style={{ background: t.bg.mutedStrong }}
                       >
                         <div
                           className="h-full rounded-full transition-all duration-700"
-                          style={{
-                            width: `${pct}%`,
-                            background: `linear-gradient(90deg, ${t.income.text}, ${t.income.textAlt})`,
-                          }}
+                          style={{ width: `${pct}%`, background: accent.textAlt }}
                         />
                       </div>
                     </div>
+                    <div className="flex flex-col items-end shrink-0 ml-2">
+                      <span
+                        className="text-sm font-bold"
+                        style={{ color: t.text.primary, fontFamily: "'Space Mono', monospace" }}
+                      >
+                        {fmt(total)}
+                      </span>
+                      <span
+                        className="text-xs"
+                        style={{ color: t.text.subtle, fontFamily: "'Space Mono', monospace" }}
+                      >
+                        {pct.toFixed(0)}%
+                      </span>
+                    </div>
+                    {singleItem && (
+                      <div className="flex items-center gap-1.5 shrink-0 ml-1">
+                        <button
+                          onClick={() => navigate(`/record/edit/${singleItem.id}`)}
+                          className="w-7 h-7 rounded-lg border flex items-center justify-center transition-colors"
+                          style={{ borderColor: t.border.default, color: t.text.muted }}
+                          onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = t.bg.mutedStrong;
+                            (e.currentTarget as HTMLElement).style.color = t.text.primary;
+                          }}
+                          onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = 'transparent';
+                            (e.currentTarget as HTMLElement).style.color = t.text.muted;
+                          }}
+                        >
+                          <Edit2 size={13} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            setItemToDelete({
+                              id: singleItem.id,
+                              type: singleItem.kind,
+                              description: singleItem.description,
+                            })
+                          }
+                          className="w-7 h-7 rounded-lg border flex items-center justify-center transition-colors"
+                          style={{ borderColor: t.border.default, color: t.text.muted }}
+                          onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = t.expense.bgIcon;
+                            (e.currentTarget as HTMLElement).style.color = t.expense.text;
+                            (e.currentTarget as HTMLElement).style.borderColor = t.expense.border;
+                          }}
+                          onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.background = 'transparent';
+                            (e.currentTarget as HTMLElement).style.color = t.text.muted;
+                            (e.currentTarget as HTMLElement).style.borderColor = t.border.default;
+                          }}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Itens individuais */}
-                  {allItems.length > 0 && (
-                    <div className="ml-10 space-y-0.5">
+                  {/* Itens individuais — só quando há mais de um lançamento */}
+                  {allItems.length > 1 && (
+                    <div className="ml-12 mt-2 space-y-0.5">
                       {allItems.map((item) => (
                         <div key={item.id} className="flex items-center justify-between py-1 group">
                           <div className="flex items-center gap-1.5 flex-1 min-w-0">
@@ -238,6 +289,7 @@ export function IncomeSummaryCards({
                               className="text-xs font-semibold"
                               style={{
                                 color: item.kind === 'income' ? t.income.text : t.investment.text,
+                                fontFamily: "'Space Mono', monospace",
                               }}
                             >
                               {fmt(item.value)}

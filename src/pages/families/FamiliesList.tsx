@@ -32,7 +32,7 @@ import { AddMemberModal } from './components/AddMemberModal';
 export function FamiliesList() {
   const navigate = useNavigate();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const { data: families = [], isLoading } = useFamilies();
   const createFamily = useCreateFamily();
@@ -402,7 +402,7 @@ export function FamiliesList() {
                         style={{
                           width: 32,
                           height: 32,
-                          borderRadius: 8,
+                          borderRadius: 999,
                           border: 'none',
                           background: isMenuOpen ? t.bg.mutedStrong : 'transparent',
                           color: t.text.muted,

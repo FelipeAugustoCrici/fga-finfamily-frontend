@@ -93,7 +93,10 @@ export function TransactionsList({ transactions }: Props) {
                 </div>
                 <p
                   className="text-sm font-bold shrink-0"
-                  style={{ color: isIncome ? t.income.text : t.expense.text }}
+                  style={{
+                    color: isIncome ? t.income.text : t.expense.text,
+                    fontFamily: "'Space Mono', monospace",
+                  }}
                 >
                   {isIncome ? '+ ' : '- '}
                   {fmt(tx.value)}

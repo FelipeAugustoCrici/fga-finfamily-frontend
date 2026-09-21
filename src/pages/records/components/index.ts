@@ -7,4 +7,4 @@ export * from './FamilySelector';
 export * from './RecordTypeSelector';
 export * from './RecordDetailsForm';
 export * from './RecurrenceSection';
-export * from './SummarySection';
+export * from './RecordReceiptPreview';

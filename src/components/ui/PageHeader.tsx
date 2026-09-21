@@ -97,7 +97,7 @@ export function PageHeader({
 
         <button
           onClick={toggle}
-          className="p-2.5 rounded-xl border transition-colors"
+          className="p-2.5 rounded-full border transition-colors"
           style={{
             backgroundColor: isDark ? 'rgba(110,231,183,0.12)' : '#ecfdf5',
             borderColor: isDark ? 'rgba(110,231,183,0.2)' : '#d1fae5',
@@ -110,7 +110,7 @@ export function PageHeader({
 
         {showPeriod && month !== undefined && year !== undefined && (
           <div
-            className="flex items-center rounded-xl overflow-hidden"
+            className="flex items-center rounded-full overflow-hidden"
             style={{
               background: t.bg.card,
               border: `1px solid ${t.border.default}`,

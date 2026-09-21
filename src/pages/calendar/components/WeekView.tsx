@@ -61,7 +61,16 @@ function EventPill({ ev }: { ev: CalendarFinancialEvent }) {
       >
         {ev.description}
       </span>
-      <span style={{ fontSize: 10, fontWeight: 700, color, flexShrink: 0, marginLeft: 2 }}>
+      <span
+        style={{
+          fontSize: 10,
+          fontWeight: 700,
+          color,
+          flexShrink: 0,
+          marginLeft: 2,
+          fontFamily: "'Space Mono', monospace",
+        }}
+      >
         {fmt(ev.amount)}
       </span>
     </div>
@@ -76,7 +85,7 @@ interface Props {
 
 export function WeekView({ referenceDate, days, onDayClick }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const today = toKey(new Date());
   const dayMap = new Map(days.map((d) => [d.date, d]));
   const weekDates = getWeekDates(referenceDate);
@@ -215,6 +224,7 @@ export function WeekView({ referenceDate, days, onDayClick }: Props) {
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
+                      fontFamily: "'Space Mono', monospace",
                     }}
                   >
                     {summary!.balance >= 0 ? '+' : ''}

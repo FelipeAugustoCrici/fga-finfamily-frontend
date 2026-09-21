@@ -9,7 +9,7 @@ interface MonthlyEvolutionProps {
 
 export function MonthlyEvolution({ data }: MonthlyEvolutionProps) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const avgIncome = calculateAverage(data.map((d) => d.income));
   const avgExpense = calculateAverage(data.map((d) => d.expense));
@@ -124,12 +124,22 @@ export function MonthlyEvolution({ data }: MonthlyEvolutionProps) {
                 </div>
                 <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
                   <span
-                    style={{ fontSize: 12, color: isDark ? '#6ee7b7' : '#059669', fontWeight: 600 }}
+                    style={{
+                      fontSize: 12,
+                      color: isDark ? '#6ee7b7' : '#059669',
+                      fontWeight: 600,
+                      fontFamily: "'Space Mono', monospace",
+                    }}
                   >
                     +{formatCurrency(month.income)}
                   </span>
                   <span
-                    style={{ fontSize: 12, color: isDark ? '#fca5a5' : '#dc2626', fontWeight: 600 }}
+                    style={{
+                      fontSize: 12,
+                      color: isDark ? '#fca5a5' : '#dc2626',
+                      fontWeight: 600,
+                      fontFamily: "'Space Mono', monospace",
+                    }}
                   >
                     -{formatCurrency(month.expense)}
                   </span>
@@ -146,6 +156,7 @@ export function MonthlyEvolution({ data }: MonthlyEvolutionProps) {
                           : '#dc2626',
                       minWidth: 80,
                       textAlign: 'right',
+                      fontFamily: "'Space Mono', monospace",
                     }}
                   >
                     {isPositive ? '+' : ''}
@@ -235,7 +246,9 @@ export function MonthlyEvolution({ data }: MonthlyEvolutionProps) {
         ].map(({ label, value, color }) => (
           <div key={label} style={{ textAlign: 'center' }}>
             <p style={{ fontSize: 10, color: t.text.muted, marginBottom: 3 }}>{label}</p>
-            <p style={{ fontSize: 14, fontWeight: 800, color }}>{formatCurrency(value)}</p>
+            <p style={{ fontSize: 14, fontWeight: 800, color, fontFamily: "'Space Mono', monospace" }}>
+              {formatCurrency(value)}
+            </p>
           </div>
         ))}
       </div>

@@ -15,7 +15,7 @@ const OPTIONS: { value: CalendarView; label: string }[] = [
 
 export function ViewToggle({ view, onChange }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   return (
     <div
@@ -36,7 +36,7 @@ export function ViewToggle({ view, onChange }: Props) {
             onClick={() => onChange(opt.value)}
             style={{
               padding: '6px 16px',
-              borderRadius: 9,
+              borderRadius: 999,
               border: 'none',
               cursor: 'pointer',
               fontSize: 13,

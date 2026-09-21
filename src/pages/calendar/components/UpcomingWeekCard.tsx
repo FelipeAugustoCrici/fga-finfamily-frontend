@@ -56,7 +56,7 @@ export function UpcomingWeekCard() {
 
           <div className="flex items-center justify-between text-xs text-primary-500 px-1">
             <span>Total a pagar</span>
-            <span className="font-bold text-danger-600">{fmt(totalExpense)}</span>
+            <span className="font-bold text-danger-600 font-mono">{fmt(totalExpense)}</span>
           </div>
 
           <div className="space-y-1.5 max-h-48 overflow-y-auto">

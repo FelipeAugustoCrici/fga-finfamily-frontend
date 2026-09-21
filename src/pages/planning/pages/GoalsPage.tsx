@@ -39,7 +39,7 @@ const PROGRESS_COLORS: Record<string, { from: string; to: string; glow: string }
 
 export function GoalsPage() {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -269,7 +269,7 @@ export function GoalsPage() {
                       style={{
                         width: 28,
                         height: 28,
-                        borderRadius: 8,
+                        borderRadius: 999,
                         border: 'none',
                         background: 'transparent',
                         cursor: 'pointer',
@@ -295,7 +295,7 @@ export function GoalsPage() {
                       style={{
                         width: 28,
                         height: 28,
-                        borderRadius: 8,
+                        borderRadius: 999,
                         border: 'none',
                         background: 'transparent',
                         cursor: 'pointer',
@@ -336,11 +336,19 @@ export function GoalsPage() {
                         fontWeight: 900,
                         color: barColors.from,
                         lineHeight: 1,
+                        fontFamily: "'Space Mono', monospace",
                       }}
                     >
                       {pct.toFixed(0)}%
                     </span>
-                    <span style={{ fontSize: 11, color: t.text.muted, textAlign: 'right' }}>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        color: t.text.muted,
+                        textAlign: 'right',
+                        fontFamily: "'Space Mono', monospace",
+                      }}
+                    >
                       {fmt(goal.currentValue)}
                       <br />
                       <span style={{ color: t.text.subtle }}>de {fmt(goal.targetValue)}</span>
@@ -431,7 +439,14 @@ export function GoalsPage() {
                         >
                           {item.icon} {item.label}
                         </p>
-                        <p style={{ fontSize: 11, fontWeight: 700, color: item.color }}>
+                        <p
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 700,
+                            color: item.color,
+                            fontFamily: "'Space Mono', monospace",
+                          }}
+                        >
                           {item.value}
                         </p>
                       </div>
@@ -457,7 +472,11 @@ export function GoalsPage() {
                       style={{ color: isDark ? '#38bdf8' : '#0284c7', flexShrink: 0 }}
                     />
                     <p style={{ fontSize: 11, color: isDark ? '#7dd3fc' : '#0369a1' }}>
-                      Média {fmt(insights.monthlyAvg)}/mês
+                      Média{' '}
+                      <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                        {fmt(insights.monthlyAvg)}
+                      </span>
+                      /mês
                       {insights.estimatedMonths !== null &&
                         insights.estimatedMonths > 0 &&
                         ` · conclui em ${insights.estimatedMonths} ${insights.estimatedMonths === 1 ? 'mês' : 'meses'}`}
@@ -485,7 +504,11 @@ export function GoalsPage() {
                         style={{ color: isDark ? '#a78bfa' : '#7c3aed', flexShrink: 0 }}
                       />
                       <p style={{ fontSize: 11, color: isDark ? '#c4b5fd' : '#5b21b6' }}>
-                        Guardar {fmt(insights.suggestedMonthly)}/mês para bater o prazo
+                        Guardar{' '}
+                        <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                          {fmt(insights.suggestedMonthly)}
+                        </span>
+                        /mês para bater o prazo
                       </p>
                     </div>
                   )}
@@ -497,7 +520,7 @@ export function GoalsPage() {
                     style={{
                       width: '100%',
                       padding: '10px 0',
-                      borderRadius: 12,
+                      borderRadius: 999,
                       border: `1.5px solid ${isDark ? 'rgba(99,102,241,0.3)' : '#c7d2fe'}`,
                       background: isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff',
                       color: isDark ? '#a5b4fc' : '#4338ca',

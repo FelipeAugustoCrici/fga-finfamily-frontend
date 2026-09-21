@@ -30,7 +30,7 @@ export function NewPassword() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -117,7 +117,7 @@ export function CreditCardsSummary({ month, year }: Props) {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-primary-500 font-medium">Limite Usado</span>
-              <span className="text-primary-800 font-bold">{fmt(totalUsed)}</span>
+              <span className="text-primary-800 font-bold font-mono">{fmt(totalUsed)}</span>
             </div>
             <div
               className="w-full h-2 rounded-full overflow-hidden"
@@ -135,7 +135,7 @@ export function CreditCardsSummary({ month, year }: Props) {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-primary-500 font-medium">Faturas em Aberto</span>
-              <span className="text-danger-600 font-bold">{fmt(totalOpen)}</span>
+              <span className="text-danger-600 font-bold font-mono">{fmt(totalOpen)}</span>
             </div>
             <div
               className="w-full h-2 rounded-full overflow-hidden"
@@ -156,7 +156,7 @@ export function CreditCardsSummary({ month, year }: Props) {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-primary-500 font-medium">Parcelamentos Futuros</span>
-              <span className="text-primary-800 font-bold">{fmt(futureInstallments)}</span>
+              <span className="text-primary-800 font-bold font-mono">{fmt(futureInstallments)}</span>
             </div>
             <div
               className="w-full h-2 rounded-full overflow-hidden"
@@ -177,7 +177,7 @@ export function CreditCardsSummary({ month, year }: Props) {
             Índice de Utilização
           </p>
           <div className="flex items-end gap-2">
-            <span className="text-3xl font-bold" style={{ color: utilizationColor }}>
+            <span className="text-3xl font-bold font-mono" style={{ color: utilizationColor }}>
               {usedPercent.toFixed(1)}%
             </span>
             <span className="text-sm text-primary-500 pb-1">do limite total utilizado</span>
@@ -220,7 +220,9 @@ export function CreditCardsSummary({ month, year }: Props) {
               >
                 <CreditCard size={15} className="flex-shrink-0" />
                 <span>
-                  Você já utilizou {usedPercent.toFixed(0)}% do limite total dos seus cartões
+                  Você já utilizou{' '}
+                  <span className="font-mono">{usedPercent.toFixed(0)}%</span> do limite total dos
+                  seus cartões
                 </span>
               </div>
             )}

@@ -94,7 +94,7 @@ export function QuickLaunchPreview({
           Valor
         </span>
         <span
-          className="font-semibold"
+          className="font-semibold font-mono"
           style={{ color: parsed.amount !== null ? semantic.text : t.text.disabled }}
         >
           {parsed.amount !== null ? fmt(parsed.amount) : '—'}

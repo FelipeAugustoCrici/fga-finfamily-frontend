@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
+import { Button, cn } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useInvoiceById } from './hooks/useCreditCards';
 import { InvoiceStatusBadge } from './components/InvoiceStatusBadge';
@@ -71,14 +71,16 @@ export function InvoiceDetail() {
         {[
           { label: 'Fechamento', value: formatShortDate(invoice.closingDate) },
           { label: 'Vencimento', value: formatShortDate(invoice.dueDate) },
-          { label: 'Total', value: fmt(invoice.totalAmount) },
+          { label: 'Total', value: fmt(invoice.totalAmount), mono: true },
           { label: 'Status', value: <InvoiceStatusBadge status={invoice.status} /> },
         ].map((item) => (
           <Card key={item.label}>
             <p className="text-xs text-primary-500 uppercase font-medium tracking-wider mb-1">
               {item.label}
             </p>
-            <div className="text-lg font-bold text-primary-800">{item.value}</div>
+            <div className={cn('text-lg font-bold text-primary-800', item.mono && 'font-mono')}>
+              {item.value}
+            </div>
           </Card>
         ))}
       </div>
@@ -123,7 +125,9 @@ export function InvoiceDetail() {
                         </span>
                       </div>
                     </div>
-                    <span className="text-sm font-bold text-primary-800">{fmt(inst.amount)}</span>
+                    <span className="text-sm font-bold text-primary-800 font-mono">
+                      {fmt(inst.amount)}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -138,7 +142,7 @@ export function InvoiceDetail() {
               {Object.entries(byCategory).map(([cat, items]) => (
                 <div key={cat} className="flex justify-between text-sm">
                   <span className="text-primary-600">{cat}</span>
-                  <span className="font-medium text-primary-800">
+                  <span className="font-medium text-primary-800 font-mono">
                     {fmt(items.reduce((s, i) => s + i.amount, 0))}
                   </span>
                 </div>
@@ -151,7 +155,7 @@ export function InvoiceDetail() {
               {Object.entries(byPerson).map(([person, items]) => (
                 <div key={person} className="flex justify-between text-sm">
                   <span className="text-primary-600">{person}</span>
-                  <span className="font-medium text-primary-800">
+                  <span className="font-medium text-primary-800 font-mono">
                     {fmt(items.reduce((s, i) => s + i.amount, 0))}
                   </span>
                 </div>

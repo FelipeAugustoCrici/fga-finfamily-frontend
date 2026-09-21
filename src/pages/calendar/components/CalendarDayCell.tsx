@@ -79,7 +79,7 @@ export function CalendarDayCell({
       {hasEvents && (
         <div
           className={cn(
-            'text-xs font-bold mt-auto pt-1 border-t border-primary-50',
+            'text-xs font-bold mt-auto pt-1 border-t border-primary-50 font-mono',
             summary.balance >= 0 ? 'text-success-600' : 'text-danger-600',
           )}
         >

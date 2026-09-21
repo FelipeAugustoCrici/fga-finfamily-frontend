@@ -42,7 +42,7 @@ function CreditCardItem({
   onNavigate: (id: string) => void;
 }) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const [payInvoice, setPayInvoice] = useState<CreditCardInvoice | null>(null);
 
   const { data: invoices = [] } = useInvoices(card.id);
@@ -143,11 +143,25 @@ function CreditCardItem({
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
             <span style={{ fontSize: 11, color: t.text.muted }}>
               Usado:{' '}
-              <span style={{ color: t.text.secondary, fontWeight: 600 }}>{fmt(usedAmount)}</span>
+              <span
+                style={{
+                  color: t.text.secondary,
+                  fontWeight: 600,
+                  fontFamily: "'Space Mono', monospace",
+                }}
+              >
+                {fmt(usedAmount)}
+              </span>
             </span>
             <span style={{ fontSize: 11, color: t.text.muted }}>
               Disponível:{' '}
-              <span style={{ color: t.income.text, fontWeight: 600 }}>
+              <span
+                style={{
+                  color: t.income.text,
+                  fontWeight: 600,
+                  fontFamily: "'Space Mono', monospace",
+                }}
+              >
                 {fmt(card.availableLimit)}
               </span>
             </span>
@@ -188,11 +202,11 @@ function CreditCardItem({
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 12px' }}>
               {[
-                { label: 'Total', value: fmt(openInvoice.totalAmount), highlight: true },
+                { label: 'Total', value: fmt(openInvoice.totalAmount), highlight: true, mono: true },
                 { label: 'Vencimento', value: formatShortDate(openInvoice.dueDate) },
                 { label: 'Fechamento', value: formatShortDate(openInvoice.closingDate) },
-                { label: 'Limite total', value: fmt(card.limitAmount) },
-              ].map(({ label, value, highlight }) => (
+                { label: 'Limite total', value: fmt(card.limitAmount), mono: true },
+              ].map(({ label, value, highlight, mono }) => (
                 <div key={label}>
                   <p style={{ fontSize: 10, color: t.text.subtle }}>{label}</p>
                   <p
@@ -200,6 +214,7 @@ function CreditCardItem({
                       fontSize: 12,
                       fontWeight: highlight ? 700 : 500,
                       color: highlight ? t.text.primary : t.text.secondary,
+                      fontFamily: mono ? "'Space Mono', monospace" : undefined,
                     }}
                   >
                     {value}
@@ -271,6 +286,7 @@ function CreditCardItem({
                       color: t.text.primary,
                       flexShrink: 0,
                       marginLeft: 8,
+                      fontFamily: "'Space Mono', monospace",
                     }}
                   >
                     {fmt(inst.amount)}
@@ -296,7 +312,7 @@ function CreditCardItem({
             style={{
               flex: 1,
               padding: '8px 0',
-              borderRadius: 10,
+              borderRadius: 999,
               border: `1px solid ${t.border.default}`,
               background: 'transparent',
               color: t.text.secondary,
@@ -324,7 +340,7 @@ function CreditCardItem({
             style={{
               flex: 1,
               padding: '8px 0',
-              borderRadius: 10,
+              borderRadius: 999,
               border: 'none',
               background: isDark ? 'rgba(99,102,241,0.18)' : 'rgba(99,102,241,0.10)',
               color: t.text.link,
@@ -357,7 +373,7 @@ function CreditCardItem({
               style={{
                 flex: 1,
                 padding: '8px 0',
-                borderRadius: 10,
+                borderRadius: 999,
                 border: 'none',
                 background: isDark ? 'rgba(34,197,94,0.15)' : 'rgba(34,197,94,0.10)',
                 color: t.income.text,
@@ -390,7 +406,7 @@ function CreditCardItem({
             style={{
               width: 36,
               height: 36,
-              borderRadius: 10,
+              borderRadius: 999,
               border: `1px solid ${t.border.default}`,
               background: 'transparent',
               color: t.text.muted,
@@ -566,7 +582,13 @@ export function CreditCardsList() {
                 </div>
                 <div>
                   <p
-                    style={{ fontSize: 18, fontWeight: 800, color: t.text.primary, lineHeight: 1 }}
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 800,
+                      color: t.text.primary,
+                      lineHeight: 1,
+                      fontFamily: "'Space Mono', monospace",
+                    }}
                   >
                     {value}
                   </p>

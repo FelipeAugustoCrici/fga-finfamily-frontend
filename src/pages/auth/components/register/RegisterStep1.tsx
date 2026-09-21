@@ -25,7 +25,7 @@ export function RegisterStep1({
   onSubmit,
 }: Step1Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const showRules = focused === 'password' || password.length > 0;
   const [localPasswordFocused, setLocalPasswordFocused] = useState(false);
 

@@ -10,26 +10,11 @@ interface ToggleCardProps {
   description: string;
   checked: boolean;
   onToggle: () => void;
-  color?: string;
 }
 
-function ToggleCard({
-  icon,
-  title,
-  description,
-  checked,
-  onToggle,
-  color = '#6366f1',
-}: ToggleCardProps) {
+function ToggleCard({ icon, title, description, checked, onToggle }: ToggleCardProps) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
   const [hovered, setHovered] = useState(false);
-
-  const activeBg = isDark ? `${color}14` : `${color}0d`;
-  const activeBorder = isDark ? `${color}50` : `${color}60`;
-  const activeText = isDark ? `${color}dd` : color;
-  const inactiveBg = hovered ? t.bg.cardHover : t.bg.card;
-  const inactiveBorder = hovered ? t.border.focus : t.border.default;
 
   return (
     <button
@@ -40,20 +25,19 @@ function ToggleCard({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 8,
-        padding: '12px 14px',
+        gap: 10,
+        padding: 14,
         borderRadius: 12,
-        border: `1.5px solid ${checked ? activeBorder : inactiveBorder}`,
-        background: checked ? activeBg : inactiveBg,
+        border: `1px solid ${checked ? t.text.primary : hovered ? t.border.strong : t.border.default}`,
+        background: checked ? t.bg.cardHover : t.bg.card,
         cursor: 'pointer',
         textAlign: 'left',
         width: '100%',
-        transition: 'all 0.18s ease',
-        boxShadow: checked ? `0 0 0 3px ${color}18` : 'none',
+        transition: 'all 0.15s ease',
       }}
     >
-      {/* Top row: icon + dot indicator */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Top row: icon box + switch */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div
           style={{
             width: 30,
@@ -62,60 +46,49 @@ function ToggleCard({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: checked
-              ? isDark
-                ? `${color}25`
-                : `${color}18`
-              : isDark
-                ? 'rgba(255,255,255,0.06)'
-                : 'rgba(0,0,0,0.04)',
-            color: checked ? activeText : t.text.muted,
-            transition: 'all 0.18s ease',
+            background: checked ? t.text.primary : t.bg.mutedStrong,
+            color: checked ? t.bg.card : t.text.muted,
+            transition: 'all 0.15s ease',
             flexShrink: 0,
           }}
         >
           {icon}
         </div>
 
-        {/* Status dot */}
+        {/* Switch */}
         <div
           style={{
-            width: 7,
-            height: 7,
-            borderRadius: '50%',
-            background: checked ? color : isDark ? 'rgba(255,255,255,0.15)' : '#cbd5e1',
-            transition: 'background 0.18s ease',
-            boxShadow: checked ? `0 0 6px ${color}80` : 'none',
+            width: 32,
+            height: 18,
+            borderRadius: 20,
+            background: checked ? t.text.primary : t.bg.mutedStrong,
+            position: 'relative',
+            transition: 'background 0.15s',
+            flexShrink: 0,
           }}
-        />
+        >
+          <span
+            style={{
+              content: '',
+              width: 14,
+              height: 14,
+              borderRadius: '50%',
+              background: t.bg.card,
+              position: 'absolute',
+              top: 2,
+              left: checked ? 16 : 2,
+              transition: 'left 0.15s',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+              display: 'block',
+            }}
+          />
+        </div>
       </div>
 
       {/* Text */}
       <div>
-        <p
-          style={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: checked ? activeText : t.text.primary,
-            margin: 0,
-            lineHeight: 1.3,
-            transition: 'color 0.18s ease',
-          }}
-        >
-          {title}
-        </p>
-        <p
-          style={{
-            fontSize: 11,
-            color: checked ? activeText : t.text.muted,
-            margin: '2px 0 0',
-            opacity: checked ? 0.8 : 0.7,
-            lineHeight: 1.4,
-            transition: 'color 0.18s ease',
-          }}
-        >
-          {description}
-        </p>
+        <p style={{ fontSize: 14, fontWeight: 600, color: t.text.primary, margin: 0 }}>{title}</p>
+        <p style={{ fontSize: 12.5, color: t.text.muted, margin: '2px 0 0' }}>{description}</p>
       </div>
     </button>
   );
@@ -137,7 +110,7 @@ export function ToggleCards({ showShared = true }: ToggleCardsProps) {
         style={{
           display: 'grid',
           gridTemplateColumns: showShared ? '1fr 1fr' : '1fr',
-          gap: 10,
+          gap: 12,
         }}
       >
         {showShared && (
@@ -147,7 +120,6 @@ export function ToggleCards({ showShared = true }: ToggleCardsProps) {
             description="Dividir entre membros"
             checked={!!isShared}
             onToggle={() => setValue('isShared', !isShared)}
-            color="#6366f1"
           />
         )}
         <ToggleCard
@@ -156,7 +128,6 @@ export function ToggleCards({ showShared = true }: ToggleCardsProps) {
           description="Repetir mensalmente"
           checked={!!isRecurring}
           onToggle={() => setValue('isRecurring', !isRecurring)}
-          color="#6366f1"
         />
       </div>
 

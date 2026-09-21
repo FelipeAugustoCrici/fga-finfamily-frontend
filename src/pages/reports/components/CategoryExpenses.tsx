@@ -29,8 +29,8 @@ export function CategoryExpenses({ data, total }: CategoryExpensesProps) {
                 <span className="font-medium text-primary-700">{category.name}</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-primary-600">{category.percentage}%</span>
-                <span className="font-semibold text-primary-800">
+                <span className="text-primary-600 font-mono">{category.percentage}%</span>
+                <span className="font-semibold text-primary-800 font-mono">
                   {formatCurrency(category.value)}
                 </span>
               </div>
@@ -48,7 +48,7 @@ export function CategoryExpenses({ data, total }: CategoryExpensesProps) {
       <div className="mt-6 pt-6 border-t border-primary-100">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-primary-700">Total de Despesas</span>
-          <span className="text-xl font-bold text-danger-600">{formatCurrency(total)}</span>
+          <span className="text-xl font-bold text-danger-600 font-mono">{formatCurrency(total)}</span>
         </div>
       </div>
     </Card>

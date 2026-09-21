@@ -51,8 +51,8 @@ export function GoalDetailModal({ goal, isOpen, onClose, onContribute }: Props) 
 
         <div className="space-y-2">
           <div className="flex justify-between items-end">
-            <span className="text-3xl font-bold text-slate-800">{pct.toFixed(0)}%</span>
-            <span className="text-sm text-slate-500">
+            <span className="text-3xl font-bold text-slate-800 font-mono">{pct.toFixed(0)}%</span>
+            <span className="text-sm text-slate-500 font-mono">
               {fmt(goal.currentValue)} / {fmt(goal.targetValue)}
             </span>
           </div>
@@ -68,7 +68,7 @@ export function GoalDetailModal({ goal, isOpen, onClose, onContribute }: Props) 
         <div className="grid grid-cols-2 gap-3">
           <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
             <p className="text-xs text-slate-500">Falta</p>
-            <p className="font-semibold text-slate-800">{fmt(remaining)}</p>
+            <p className="font-semibold text-slate-800 font-mono">{fmt(remaining)}</p>
           </div>
           {deadlineDays !== null && (
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
@@ -86,7 +86,7 @@ export function GoalDetailModal({ goal, isOpen, onClose, onContribute }: Props) 
                 <TrendingUp size={11} /> Sugestão mensal
               </p>
               <p className="font-semibold text-sky-700">
-                {fmt(monthlyNeeded)}/mês para bater o prazo
+                <span className="font-mono">{fmt(monthlyNeeded)}</span>/mês para bater o prazo
               </p>
             </div>
           )}
@@ -110,7 +110,7 @@ export function GoalDetailModal({ goal, isOpen, onClose, onContribute }: Props) 
                   className="flex justify-between items-center text-sm py-2 border-b border-slate-100 last:border-0"
                 >
                   <div>
-                    <span className="text-slate-700 font-medium">{fmt(c.value)}</span>
+                    <span className="text-slate-700 font-medium font-mono">{fmt(c.value)}</span>
                     {c.observation && (
                       <span className="text-slate-400 ml-2 text-xs">— {c.observation}</span>
                     )}

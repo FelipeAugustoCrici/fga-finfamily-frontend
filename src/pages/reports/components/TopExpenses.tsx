@@ -23,7 +23,7 @@ const MONTHS = [
 
 export function TopExpenses({ summary }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const allExpenses = summary.details?.expenses ?? [];
   const totalPeriod = allExpenses.reduce((a: number, e: any) => a + e.value, 0);
@@ -128,7 +128,13 @@ export function TopExpenses({ summary }: Props) {
                   </p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
                     {pctOfTotal > 0 && (
-                      <span style={{ fontSize: 10, color: t.text.subtle }}>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          color: t.text.subtle,
+                          fontFamily: "'Space Mono', monospace",
+                        }}
+                      >
                         {pctOfTotal.toFixed(1)}%
                       </span>
                     )}
@@ -137,6 +143,7 @@ export function TopExpenses({ summary }: Props) {
                         fontSize: 12,
                         fontWeight: 800,
                         color: isDark ? '#fca5a5' : '#dc2626',
+                        fontFamily: "'Space Mono', monospace",
                       }}
                     >
                       {formatCurrency(exp.value)}

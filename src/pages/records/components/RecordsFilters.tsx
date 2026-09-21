@@ -158,7 +158,7 @@ export function RecordsFilters({
   onOrdenacaoChange, onReset, onApplyMultiple,
 }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const [searchFocused, setSearchFocused] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -352,7 +352,7 @@ export function RecordsFilters({
             {/* header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: `1px solid ${t.border.divider}` }}>
               <p style={{ fontSize: 15, fontWeight: 700, color: t.text.primary }}>Filtros</p>
-              <button onClick={() => setDrawerOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: t.text.muted, display: 'flex', padding: 4, borderRadius: 8 }}>
+              <button onClick={() => setDrawerOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: t.text.muted, display: 'flex', padding: 4, borderRadius: 999 }}>
                 <X size={18} />
               </button>
             </div>

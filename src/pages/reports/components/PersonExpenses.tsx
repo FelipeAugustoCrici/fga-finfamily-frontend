@@ -30,10 +30,12 @@ export function PersonExpenses({ data }: PersonExpensesProps) {
                 </div>
                 <div>
                   <p className="font-semibold text-primary-800">{person.name}</p>
-                  <p className="text-xs text-primary-500">{person.percentage}% do total</p>
+                  <p className="text-xs text-primary-500">
+                    <span className="font-mono">{person.percentage}%</span> do total
+                  </p>
                 </div>
               </div>
-              <span className="text-lg font-bold text-primary-800">
+              <span className="text-lg font-bold text-primary-800 font-mono">
                 {formatCurrency(person.total)}
               </span>
             </div>

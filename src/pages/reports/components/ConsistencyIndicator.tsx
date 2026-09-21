@@ -11,7 +11,7 @@ const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', '
 
 export function ConsistencyIndicator({ summaries }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const positiveMonths = summaries.filter((s) => s.totals.balance > 0).length;
   const negativeMonths = summaries.length - positiveMonths;
@@ -110,7 +110,8 @@ export function ConsistencyIndicator({ summaries }: Props) {
             </span>
           </p>
           <p style={{ fontSize: 11, color: t.text.muted, marginTop: 4 }}>
-            {consistencyPct}% de consistência
+            <span style={{ fontFamily: "'Space Mono', monospace" }}>{consistencyPct}%</span> de
+            consistência
           </p>
         </div>
 
@@ -232,7 +233,12 @@ export function ConsistencyIndicator({ summaries }: Props) {
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 11, color: t.text.muted }}>Receita média</span>
               <span
-                style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#6ee7b7' : '#059669' }}
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: isDark ? '#6ee7b7' : '#059669',
+                  fontFamily: "'Space Mono', monospace",
+                }}
               >
                 {formatCurrency(avgIncome)}
               </span>
@@ -240,7 +246,12 @@ export function ConsistencyIndicator({ summaries }: Props) {
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 11, color: t.text.muted }}>Despesa média</span>
               <span
-                style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#fca5a5' : '#dc2626' }}
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: isDark ? '#fca5a5' : '#dc2626',
+                  fontFamily: "'Space Mono', monospace",
+                }}
               >
                 {formatCurrency(avgExpense)}
               </span>
@@ -260,6 +271,7 @@ export function ConsistencyIndicator({ summaries }: Props) {
                       : isDark
                         ? '#fca5a5'
                         : '#dc2626',
+                  fontFamily: "'Space Mono', monospace",
                 }}
               >
                 {formatCurrency(avgBalance)}

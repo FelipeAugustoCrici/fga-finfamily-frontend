@@ -124,8 +124,10 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                     {}
                     <div className="space-y-1.5 mb-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-2xl font-bold text-slate-800">{pct.toFixed(0)}%</span>
-                        <span className="text-xs text-slate-500">
+                        <span className="text-2xl font-bold text-slate-800 font-mono">
+                          {pct.toFixed(0)}%
+                        </span>
+                        <span className="text-xs text-slate-500 font-mono">
                           {fmt(goal.currentValue)} / {fmt(goal.targetValue)}
                         </span>
                       </div>
@@ -146,7 +148,7 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                             <Plus size={9} /> Este mês
                           </p>
                           <p
-                            className={`text-xs font-bold ${insights.thisMonthTotal > 0 ? 'text-emerald-600' : 'text-slate-400'}`}
+                            className={`text-xs font-bold font-mono ${insights.thisMonthTotal > 0 ? 'text-emerald-600' : 'text-slate-400'}`}
                           >
                             {insights.thisMonthTotal > 0 ? `+${fmt(insights.thisMonthTotal)}` : '—'}
                           </p>
@@ -155,7 +157,7 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                           <p className="text-xs text-slate-400 mb-0.5 flex items-center justify-center gap-0.5">
                             <Minus size={9} /> Falta
                           </p>
-                          <p className="text-xs font-bold text-rose-500">
+                          <p className="text-xs font-bold text-rose-500 font-mono">
                             {fmt(insights.remaining)}
                           </p>
                         </div>
@@ -179,7 +181,7 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                       <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-sky-50 border border-sky-100 rounded-lg mb-3">
                         <TrendingUp size={11} className="text-sky-500 shrink-0" />
                         <p className="text-xs text-sky-700">
-                          Média {fmt(insights.monthlyAvg)}/mês
+                          Média <span className="font-mono">{fmt(insights.monthlyAvg)}</span>/mês
                           {insights.estimatedMonths !== null &&
                             insights.estimatedMonths > 0 &&
                             ` → conclui em ${insights.estimatedMonths} ${insights.estimatedMonths === 1 ? 'mês' : 'meses'}`}
@@ -194,7 +196,8 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                         <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-violet-50 border border-violet-100 rounded-lg mb-3">
                           <Calendar size={11} className="text-violet-500 shrink-0" />
                           <p className="text-xs text-violet-700">
-                            Guardar {fmt(insights.suggestedMonthly)}/mês para bater o prazo
+                            Guardar <span className="font-mono">{fmt(insights.suggestedMonthly)}</span>
+                            /mês para bater o prazo
                           </p>
                         </div>
                       )}

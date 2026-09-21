@@ -33,7 +33,7 @@ function buildCategoryHistory(summaries: SummaryData[]) {
 
 export function CategoryTrends({ summaries }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const history = buildCategoryHistory(summaries);
 
@@ -133,13 +133,26 @@ export function CategoryTrends({ summaries }: Props) {
                       {statusLabel}
                     </span>
                     {Math.abs(change) >= 0.5 && (
-                      <span style={{ fontSize: 10, color: t.text.subtle }}>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          color: t.text.subtle,
+                          fontFamily: "'Space Mono', monospace",
+                        }}
+                      >
                         ({isUp ? '+' : ''}
                         {change.toFixed(1)}%)
                       </span>
                     )}
                   </div>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: t.text.primary }}>
+                  <span
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 800,
+                      color: t.text.primary,
+                      fontFamily: "'Space Mono', monospace",
+                    }}
+                  >
                     {formatCurrency(total)}
                   </span>
                 </div>
@@ -174,7 +187,13 @@ export function CategoryTrends({ summaries }: Props) {
                   {data.map((d, i) => (
                     <span key={i} style={{ fontSize: 10, color: t.text.subtle }}>
                       {d.month}:{' '}
-                      <span style={{ color: t.text.secondary, fontWeight: 600 }}>
+                      <span
+                        style={{
+                          color: t.text.secondary,
+                          fontWeight: 600,
+                          fontFamily: "'Space Mono', monospace",
+                        }}
+                      >
                         {formatCurrency(d.value)}
                       </span>
                       {i < data.length - 1 && <span style={{ color: t.border.default }}> · </span>}

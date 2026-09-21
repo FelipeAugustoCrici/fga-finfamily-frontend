@@ -44,7 +44,7 @@ export function CoupleModeList() {
   );
 
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const { data: families = [] } = useQuery({
     queryKey: ['families'],
@@ -122,7 +122,7 @@ export function CoupleModeList() {
           style={{
             width: 34,
             height: 34,
-            borderRadius: 10,
+            borderRadius: 999,
             border: `1px solid ${t.border.default}`,
             background: t.bg.card,
             cursor: 'pointer',
@@ -151,7 +151,7 @@ export function CoupleModeList() {
           style={{
             width: 34,
             height: 34,
-            borderRadius: 10,
+            borderRadius: 999,
             border: `1px solid ${t.border.default}`,
             background: t.bg.card,
             cursor: 'pointer',
@@ -251,6 +251,7 @@ export function CoupleModeList() {
                       color: t.text.primary,
                       letterSpacing: '-0.02em',
                       lineHeight: 1,
+                      fontFamily: "'Space Mono', monospace",
                     }}
                   >
                     {fmt(result.totalShared)}
@@ -260,7 +261,10 @@ export function CoupleModeList() {
                     {result.splitType === 'proportional' && result.totalFamilyIncome > 0 && (
                       <span style={{ color: t.text.subtle }}>
                         {' '}
-                        · Renda total: {fmt(result.totalFamilyIncome)}
+                        · Renda total:{' '}
+                        <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                          {fmt(result.totalFamilyIncome)}
+                        </span>
                       </span>
                     )}
                   </p>
@@ -318,7 +322,16 @@ export function CoupleModeList() {
                             : '#92400e',
                       }}
                     >
-                      {isBalanced ? 'Equilibrado' : `Desequilíbrio de ${fmt(maxImbalance)}`}
+                      {isBalanced ? (
+                        'Equilibrado'
+                      ) : (
+                        <>
+                          Desequilíbrio de{' '}
+                          <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                            {fmt(maxImbalance)}
+                          </span>
+                        </>
+                      )}
                     </span>
                   </div>
                   {!isBalanced && (
@@ -458,7 +471,10 @@ export function CoupleModeList() {
                                 {getMemberName(p.personId)}
                               </p>
                               <p style={{ fontSize: 11, color: t.text.muted }}>
-                                {p.proportion.toFixed(0)}% do total ideal
+                                <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                                  {p.proportion.toFixed(0)}%
+                                </span>{' '}
+                                do total ideal
                               </p>
                             </div>
                             {isOver && (
@@ -486,8 +502,22 @@ export function CoupleModeList() {
                             {isUnder && <TrendingDown size={14} color={statusColor} />}
                             {isEven && <CheckCircle2 size={14} color={statusColor} />}
                             <p style={{ fontSize: 13, fontWeight: 700, color: statusColor }}>
-                              {isOver && `Recebe ${fmt(p.balance)}`}
-                              {isUnder && `Deve ${fmt(Math.abs(p.balance))}`}
+                              {isOver && (
+                                <>
+                                  Recebe{' '}
+                                  <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                                    {fmt(p.balance)}
+                                  </span>
+                                </>
+                              )}
+                              {isUnder && (
+                                <>
+                                  Deve{' '}
+                                  <span style={{ fontFamily: "'Space Mono', monospace" }}>
+                                    {fmt(Math.abs(p.balance))}
+                                  </span>
+                                </>
+                              )}
                               {isEven && 'Contribuição equilibrada'}
                             </p>
                           </div>
@@ -514,11 +544,25 @@ export function CoupleModeList() {
                               >
                                 Pagou
                               </p>
-                              <p style={{ fontSize: 15, fontWeight: 800, color: t.text.primary }}>
+                              <p
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: 800,
+                                  color: t.text.primary,
+                                  fontFamily: "'Space Mono', monospace",
+                                }}
+                              >
                                 {fmt(effectivePaid)}
                               </p>
                               {p.adjustmentAmount !== 0 && (
-                                <p style={{ fontSize: 10, color: t.text.muted, marginTop: 2 }}>
+                                <p
+                                  style={{
+                                    fontSize: 10,
+                                    color: t.text.muted,
+                                    marginTop: 2,
+                                    fontFamily: "'Space Mono', monospace",
+                                  }}
+                                >
                                   {fmt(p.amountPaid)} + {fmt(Math.abs(p.adjustmentAmount))} ajuste
                                 </p>
                               )}
@@ -543,7 +587,14 @@ export function CoupleModeList() {
                               >
                                 Ideal
                               </p>
-                              <p style={{ fontSize: 15, fontWeight: 800, color: t.text.primary }}>
+                              <p
+                                style={{
+                                  fontSize: 15,
+                                  fontWeight: 800,
+                                  color: t.text.primary,
+                                  fontFamily: "'Space Mono', monospace",
+                                }}
+                              >
                                 {fmt(p.amountShouldPay)}
                               </p>
                             </div>
@@ -560,17 +611,34 @@ export function CoupleModeList() {
                             >
                               <span style={{ fontSize: 11, color: t.text.muted }}>
                                 Real:{' '}
-                                <strong style={{ color: t.text.secondary }}>
+                                <strong
+                                  style={{
+                                    color: t.text.secondary,
+                                    fontFamily: "'Space Mono', monospace",
+                                  }}
+                                >
                                   {pct.toFixed(0)}%
                                 </strong>
                               </span>
                               <span style={{ fontSize: 11, color: t.text.muted }}>
                                 Ideal:{' '}
-                                <strong style={{ color: t.text.secondary }}>
+                                <strong
+                                  style={{
+                                    color: t.text.secondary,
+                                    fontFamily: "'Space Mono', monospace",
+                                  }}
+                                >
                                   {idealPct.toFixed(0)}%
                                 </strong>
                               </span>
-                              <span style={{ fontSize: 11, color: statusColor, fontWeight: 700 }}>
+                              <span
+                                style={{
+                                  fontSize: 11,
+                                  color: statusColor,
+                                  fontWeight: 700,
+                                  fontFamily: "'Space Mono', monospace",
+                                }}
+                              >
                                 {pct > idealPct ? '+' : ''}
                                 {(pct - idealPct).toFixed(0)}%
                               </span>
@@ -628,7 +696,12 @@ export function CoupleModeList() {
                                 </span>
                               </div>
                               <span
-                                style={{ fontSize: 12, fontWeight: 700, color: t.text.secondary }}
+                                style={{
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                  color: t.text.secondary,
+                                  fontFamily: "'Space Mono', monospace",
+                                }}
                               >
                                 {fmt(p.configuredIncome)} ({p.proportion.toFixed(0)}%)
                               </span>
@@ -705,6 +778,7 @@ export function CoupleModeList() {
                                     fontSize: 15,
                                     fontWeight: 900,
                                     color: isDark ? '#a5b4fc' : '#4338ca',
+                                    fontFamily: "'Space Mono', monospace",
                                   }}
                                 >
                                   {fmt(s.amount)}
@@ -718,7 +792,7 @@ export function CoupleModeList() {
                                 alignItems: 'center',
                                 gap: 6,
                                 padding: '10px 18px',
-                                borderRadius: 12,
+                                borderRadius: 999,
                                 border: 'none',
                                 background: '#6366f1',
                                 color: '#ffffff',
@@ -791,6 +865,7 @@ export function CoupleModeList() {
                                   fontSize: 14,
                                   fontWeight: 800,
                                   color: isDark ? '#6ee7b7' : '#16a34a',
+                                  fontFamily: "'Space Mono', monospace",
                                 }}
                               >
                                 {fmt(a.amount)}
@@ -801,7 +876,7 @@ export function CoupleModeList() {
                                 style={{
                                   width: 28,
                                   height: 28,
-                                  borderRadius: 8,
+                                  borderRadius: 999,
                                   border: 'none',
                                   background: isDark ? 'rgba(239,68,68,0.10)' : '#fef2f2',
                                   color: isDark ? '#fca5a5' : '#dc2626',

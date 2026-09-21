@@ -75,7 +75,7 @@ export function BudgetsCard({ onCreateNew }: { onCreateNew: () => void }) {
                         </h4>
                       </div>
                       <p className="text-sm text-gray-600 mt-1">
-                        Limite: {formatCurrency(budget.limitValue)}
+                        Limite: <span className="font-mono">{formatCurrency(budget.limitValue)}</span>
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
                         {budget.month}/{budget.year}

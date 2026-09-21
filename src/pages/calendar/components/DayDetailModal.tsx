@@ -52,17 +52,21 @@ export function DayDetailModal({ daySummary, onClose }: Props) {
         <div className="grid grid-cols-3 gap-3 px-5 py-3 bg-primary-50/50 border-b border-primary-100">
           <div className="text-center">
             <p className="text-xs text-primary-500">Entradas</p>
-            <p className="text-sm font-bold text-success-600">{fmt(daySummary.totalIncome)}</p>
+            <p className="text-sm font-bold text-success-600 font-mono">
+              {fmt(daySummary.totalIncome)}
+            </p>
           </div>
           <div className="text-center">
             <p className="text-xs text-primary-500">Saídas</p>
-            <p className="text-sm font-bold text-danger-600">{fmt(daySummary.totalExpense)}</p>
+            <p className="text-sm font-bold text-danger-600 font-mono">
+              {fmt(daySummary.totalExpense)}
+            </p>
           </div>
           <div className="text-center">
             <p className="text-xs text-primary-500">Saldo</p>
             <p
               className={cn(
-                'text-sm font-bold',
+                'text-sm font-bold font-mono',
                 daySummary.balance >= 0 ? 'text-success-600' : 'text-danger-600',
               )}
             >

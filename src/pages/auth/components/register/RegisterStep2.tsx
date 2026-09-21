@@ -20,7 +20,7 @@ export function RegisterStep2({
   setFocused,
 }: Step2Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   return (
     <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>

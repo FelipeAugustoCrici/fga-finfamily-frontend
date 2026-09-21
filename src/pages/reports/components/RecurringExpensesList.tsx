@@ -44,7 +44,7 @@ export function RecurringExpensesList({ data }: RecurringExpensesListProps) {
               </div>
             </div>
             <div className="text-right">
-              <p className="font-bold text-primary-800">{formatCurrency(expense.value)}</p>
+              <p className="font-bold text-primary-800 font-mono">{formatCurrency(expense.value)}</p>
               <p
                 className={`text-xs ${
                   expense.status === 'paid' ? 'text-success-600' : 'text-warning-600'
@@ -60,11 +60,11 @@ export function RecurringExpensesList({ data }: RecurringExpensesListProps) {
       <div className="mt-6 pt-6 border-t border-primary-100 grid grid-cols-2 gap-4">
         <div>
           <p className="text-xs text-primary-500 mb-1">Total Recorrente</p>
-          <p className="text-xl font-bold text-primary-800">{formatCurrency(totalRecurring)}</p>
+          <p className="text-xl font-bold text-primary-800 font-mono">{formatCurrency(totalRecurring)}</p>
         </div>
         <div>
           <p className="text-xs text-primary-500 mb-1">Pendentes</p>
-          <p className="text-xl font-bold text-warning-600">{formatCurrency(totalPending)}</p>
+          <p className="text-xl font-bold text-warning-600 font-mono">{formatCurrency(totalPending)}</p>
         </div>
       </div>
     </Card>

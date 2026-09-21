@@ -101,7 +101,7 @@ function KpiCard({
             }}
           >
             {isUp ? <TrendingUp size={9} /> : <TrendingDown size={9} />}
-            {fmt(Math.abs(change!))}
+            <span style={{ fontFamily: "'Space Mono', monospace" }}>{fmt(Math.abs(change!))}</span>
           </span>
         )}
       </div>
@@ -129,6 +129,7 @@ function KpiCard({
             letterSpacing: '-0.02em',
             fontVariantNumeric: 'tabular-nums',
             transition: 'color 0.2s ease',
+            fontFamily: "'Space Mono', monospace",
           }}
         >
           {visible ? fmt(animated) : '••••••'}

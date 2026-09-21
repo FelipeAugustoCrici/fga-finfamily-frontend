@@ -26,7 +26,9 @@ export function RecordsTable({ records, isLoading, onEdit, onDelete }: Props) {
           <TableCell>{formatShortDate(record.date)}</TableCell>
           <TableCell
             className={
-              record.type === 'income' ? 'text-success-600 font-bold' : 'text-danger-600 font-bold'
+              record.type === 'income'
+                ? 'text-success-600 font-bold font-mono'
+                : 'text-danger-600 font-bold font-mono'
             }
           >
             {record.type === 'income' ? '+' : '-'} {formatCurrency(record.value)}

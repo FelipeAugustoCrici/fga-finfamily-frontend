@@ -68,15 +68,15 @@ export function CreditCardDetail() {
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-primary-500">Limite Total</span>
-                <span className="font-bold text-primary-800">{fmt(card.limitAmount)}</span>
+                <span className="font-bold text-primary-800 font-mono">{fmt(card.limitAmount)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-primary-500">Limite Usado</span>
-                <span className="font-bold text-danger-600">{fmt(usedAmount)}</span>
+                <span className="font-bold text-danger-600 font-mono">{fmt(usedAmount)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-primary-500">Disponível</span>
-                <span className="font-bold text-success-600">{fmt(card.availableLimit)}</span>
+                <span className="font-bold text-success-600 font-mono">{fmt(card.availableLimit)}</span>
               </div>
               <div className="w-full bg-primary-100 rounded-full h-2">
                 <div
@@ -85,7 +85,7 @@ export function CreditCardDetail() {
                 />
               </div>
               <p className="text-xs text-primary-400 text-center">
-                {usedPercent.toFixed(0)}% do limite utilizado
+                <span className="font-mono">{usedPercent.toFixed(0)}%</span> do limite utilizado
               </p>
             </div>
           </Card>
@@ -99,7 +99,7 @@ export function CreditCardDetail() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-primary-500">Valor</span>
-                  <span className="font-bold text-primary-800">{fmt(nextInvoice.totalAmount)}</span>
+                  <span className="font-bold text-primary-800 font-mono">{fmt(nextInvoice.totalAmount)}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-primary-500">Status</span>
@@ -149,7 +149,7 @@ export function CreditCardDetail() {
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <p className="text-sm font-bold text-primary-800">
+                        <p className="text-sm font-bold text-primary-800 font-mono">
                           {fmt(invoice.totalAmount)}
                         </p>
                         <InvoiceStatusBadge status={invoice.status} />
@@ -202,7 +202,7 @@ export function CreditCardDetail() {
                         <p className="text-xs text-primary-400">{inst.purchase.category.name}</p>
                       )}
                     </div>
-                    <span className="text-sm font-bold text-primary-800">{fmt(inst.amount)}</span>
+                    <span className="text-sm font-bold text-primary-800 font-mono">{fmt(inst.amount)}</span>
                   </div>
                 ))}
               </div>

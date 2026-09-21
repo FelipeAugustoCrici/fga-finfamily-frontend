@@ -1,4 +1,4 @@
-import { Loader2, Save, X } from 'lucide-react';
+import { Check, Loader2, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './Button';
 import { useTokens } from '@/hooks/useTokens';
@@ -20,7 +20,7 @@ export function FormActionBar({
 }: FormActionBarProps) {
   const navigate = useNavigate();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const handleCancel = () => {
     if (onCancel) onCancel();
@@ -34,8 +34,8 @@ export function FormActionBar({
         bottom: 0,
         zIndex: 10,
         background: isDark
-          ? 'rgba(2, 6, 23, 0.92)'
-          : 'rgba(248, 250, 252, 0.92)',
+          ? 'rgba(18, 22, 26, 0.92)'
+          : 'rgba(248, 247, 242, 0.92)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderTop: `1px solid ${t.border.default}`,
@@ -72,7 +72,7 @@ export function FormActionBar({
           {isLoading ? (
             <Loader2 size={14} style={{ marginRight: 6 }} className="animate-spin" />
           ) : (
-            <Save size={14} style={{ marginRight: 6 }} />
+            <Check size={14} style={{ marginRight: 6 }} />
           )}
           {isEdit ? editLabel : saveLabel}
         </Button>

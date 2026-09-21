@@ -66,7 +66,7 @@ function ActionMenu({
   const btnRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const handleOpen = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -97,7 +97,7 @@ function ActionMenu({
         style={{
           width: 32,
           height: 32,
-          borderRadius: 8,
+          borderRadius: 999,
           border: 'none',
           background: 'transparent',
           cursor: 'pointer',
@@ -253,7 +253,7 @@ function RecordCard({
   onPartialPayment?: (record: UnifiedRecord) => void;
 }) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const isIncome = record.type === 'income';
   const valueColor = isIncome ? (isDark ? '#6ee7b7' : '#059669') : isDark ? '#fca5a5' : '#dc2626';
 
@@ -388,6 +388,7 @@ function RecordCard({
             fontWeight: 800,
             color: valueColor,
             whiteSpace: 'nowrap',
+            fontFamily: "'Space Mono', monospace",
           }}
         >
           {isIncome ? '+' : '-'}

@@ -18,7 +18,7 @@ export function Register() {
   const navigate = useNavigate();
   const { signUp, confirm, stopLoading, loading } = useSignUp();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const { toggle } = useTheme();
 
   const [step, setStep] = useState(1);
@@ -81,7 +81,7 @@ export function Register() {
         padding: 16,
         position: 'relative',
         background: isDark
-          ? 'radial-gradient(ellipse at 40% 0%, rgba(99,102,241,0.12) 0%, #020617 55%)'
+          ? 'radial-gradient(ellipse at 40% 0%, rgba(99,102,241,0.12) 0%, #12161a 55%)'
           : 'radial-gradient(ellipse at 40% 0%, rgba(99,102,241,0.07) 0%, #f1f5f9 55%)',
       }}
     >

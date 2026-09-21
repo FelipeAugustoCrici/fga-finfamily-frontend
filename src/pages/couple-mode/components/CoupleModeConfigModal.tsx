@@ -212,7 +212,7 @@ export function CoupleModeConfigModal({
                     {systemIncome && Number(incomes[id]) !== systemIncome && (
                       <div className="flex items-center justify-end gap-1">
                         <span className="text-xs text-slate-400">
-                          Renda cadastrada: {fmt(systemIncome)}
+                          Renda cadastrada: <span className="font-mono">{fmt(systemIncome)}</span>
                         </span>
                         <button
                           type="button"

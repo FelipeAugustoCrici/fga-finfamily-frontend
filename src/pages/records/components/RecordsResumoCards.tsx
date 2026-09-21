@@ -25,12 +25,13 @@ const fmt = (v: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v ?? 0);
 
 function VariacaoIndicador({ variacao }: { variacao?: number }) {
+  const t = useTokens();
   if (variacao == null) return null;
   const isPositive = variacao >= 0;
   return (
     <span
-      className="text-xs font-semibold flex items-center gap-0.5"
-      style={{ color: isPositive ? '#6ee7b7' : '#fca5a5' }}
+      className="text-xs font-semibold flex items-center gap-0.5 font-mono"
+      style={{ color: isPositive ? t.income.textAlt : t.expense.textAlt }}
     >
       {isPositive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
       {isPositive ? '+' : ''}
@@ -136,7 +137,13 @@ function ResumoCard({
         <p className="text-xs font-medium mb-0.5" style={{ color: t.text.muted }}>
           {label}
         </p>
-        <p className="text-lg font-black leading-tight" style={{ color: isActive ? accentColor : t.text.primary }}>
+        <p
+          className="text-lg font-black leading-tight"
+          style={{
+            color: isActive ? accentColor : t.text.primary,
+            fontFamily: "'Space Mono', monospace",
+          }}
+        >
           {value}
         </p>
         {sub && (

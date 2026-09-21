@@ -42,7 +42,7 @@ interface AIChatPanelProps {
 
 export function AIChatPanel({ open, onClose }: AIChatPanelProps) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const [input, setInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -380,7 +380,7 @@ export function AIChatPanel({ open, onClose }: AIChatPanelProps) {
                                   onClick={() => commitEdit(rec.id)}
                                   style={{
                                     padding: '5px 12px',
-                                    borderRadius: 7,
+                                    borderRadius: 999,
                                     border: 'none',
                                     background: '#6366f1',
                                     color: '#fff',
@@ -396,7 +396,7 @@ export function AIChatPanel({ open, onClose }: AIChatPanelProps) {
                                   onClick={() => setEditingId(null)}
                                   style={{
                                     padding: '5px 8px',
-                                    borderRadius: 7,
+                                    borderRadius: 999,
                                     border: 'none',
                                     background: isDark ? 'rgba(255,255,255,0.08)' : '#f1f5f9',
                                     color: t.text.muted,
@@ -584,7 +584,7 @@ export function AIChatPanel({ open, onClose }: AIChatPanelProps) {
                             onClick={cancelPending}
                             style={{
                               padding: '8px 12px',
-                              borderRadius: 10,
+                              borderRadius: 999,
                               border: `1px solid ${cardBorder}`,
                               background: 'none',
                               color: t.text.muted,
@@ -688,7 +688,7 @@ export function AIChatPanel({ open, onClose }: AIChatPanelProps) {
             style={{
               width: 36,
               height: 36,
-              borderRadius: 10,
+              borderRadius: 999,
               border: 'none',
               background: input.trim()
                 ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'

@@ -47,7 +47,7 @@ export function PayInvoiceModal({ isOpen, onClose, invoice }: Props) {
           </div>
           <div className="flex justify-between">
             <span className="text-primary-500">Valor total</span>
-            <span className="font-bold text-primary-800">{fmt(invoice.totalAmount)}</span>
+            <span className="font-bold text-primary-800 font-mono">{fmt(invoice.totalAmount)}</span>
           </div>
         </div>
 

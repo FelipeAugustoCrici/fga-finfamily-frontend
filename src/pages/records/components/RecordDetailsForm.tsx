@@ -46,6 +46,18 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
               value={field.value}
               onChange={field.onChange}
               error={formState.errors.value?.message as string}
+              icon={
+                <span
+                  style={{
+                    fontFamily: "'Space Mono', monospace",
+                    fontSize: 13,
+                    color: t.text.muted,
+                  }}
+                >
+                  R$
+                </span>
+              }
+              className="font-mono"
             />
           )}
         />
@@ -66,7 +78,7 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
               <p
                 style={{
                   fontSize: 11,
-                  color: '#d97706',
+                  color: t.warning.text,
                   marginTop: 4,
                   display: 'flex',
                   alignItems: 'center',

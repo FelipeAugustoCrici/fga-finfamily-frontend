@@ -55,7 +55,8 @@ export function AdjustmentModal({
       <div className="space-y-4">
         <div className="p-4 bg-sky-50 border border-sky-100 rounded-xl text-sm text-sky-800">
           Para equilibrar, <strong>{fromName}</strong> pode contribuir com{' '}
-          <strong>{fmt(suggestion?.amount ?? 0)}</strong> para <strong>{toName}</strong>.
+          <strong className="font-mono">{fmt(suggestion?.amount ?? 0)}</strong> para{' '}
+          <strong>{toName}</strong>.
         </div>
 
         <div>

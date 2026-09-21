@@ -28,7 +28,7 @@ export function PartialPaymentModal({
   onClose,
 }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const remaining = totalValue - paidAmount;
 
   const [payFull, setPayFull] = useState(true);
@@ -154,7 +154,7 @@ export function PartialPaymentModal({
             style={{
               width: 28,
               height: 28,
-              borderRadius: 8,
+              borderRadius: 999,
               border: 'none',
               background: 'transparent',
               cursor: 'pointer',
@@ -227,7 +227,15 @@ export function PartialPaymentModal({
                 }}
               >
                 <p style={{ fontSize: 10, color: t.text.muted, margin: '0 0 2px' }}>{item.label}</p>
-                <p style={{ fontSize: 13, fontWeight: 700, color: item.color, margin: 0 }}>
+                <p
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: item.color,
+                    margin: 0,
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                >
                   {item.value}
                 </p>
               </div>
@@ -241,7 +249,7 @@ export function PartialPaymentModal({
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
-                { value: true, label: 'Pagar valor total', sub: fmt(remaining) },
+                { value: true, label: 'Pagar valor total', sub: fmt(remaining), mono: true },
                 { value: false, label: 'Registrar pagamento parcial', sub: 'Informe o valor' },
               ].map((opt) => (
                 <label
@@ -276,7 +284,16 @@ export function PartialPaymentModal({
                     <p style={{ fontSize: 13, fontWeight: 600, color: t.text.primary, margin: 0 }}>
                       {opt.label}
                     </p>
-                    <p style={{ fontSize: 11, color: t.text.muted, margin: 0 }}>{opt.sub}</p>
+                    <p
+                      style={{
+                        fontSize: 11,
+                        color: t.text.muted,
+                        margin: 0,
+                        fontFamily: opt.mono ? "'Space Mono', monospace" : undefined,
+                      }}
+                    >
+                      {opt.sub}
+                    </p>
                   </div>
                 </label>
               ))}
@@ -411,15 +428,26 @@ export function PartialPaymentModal({
             >
               {isPartial && transferToNextMonth ? (
                 <>
-                  Conta atual encerrada com <strong>{fmt(numericAmount)}</strong> pago ·{' '}
-                  Nova conta de <strong>{fmt(remainingAfterPayment)}</strong> criada em{' '}
-                  <strong>{nextMonthLabel}</strong>
+                  Conta atual encerrada com{' '}
+                  <strong style={{ fontFamily: "'Space Mono', monospace" }}>
+                    {fmt(numericAmount)}
+                  </strong>{' '}
+                  pago · Nova conta de{' '}
+                  <strong style={{ fontFamily: "'Space Mono', monospace" }}>
+                    {fmt(remainingAfterPayment)}
+                  </strong>{' '}
+                  criada em <strong>{nextMonthLabel}</strong>
                 </>
               ) : (
                 <>
-                  Após este pagamento: <strong>{fmt(paidAmount + numericAmount)}</strong> pago
-                  ({percentAfter}%) · Saldo restante:{' '}
-                  <strong>{fmt(remainingAfterPayment)}</strong>
+                  Após este pagamento:{' '}
+                  <strong style={{ fontFamily: "'Space Mono', monospace" }}>
+                    {fmt(paidAmount + numericAmount)}
+                  </strong>{' '}
+                  pago ({percentAfter}%) · Saldo restante:{' '}
+                  <strong style={{ fontFamily: "'Space Mono', monospace" }}>
+                    {fmt(remainingAfterPayment)}
+                  </strong>
                 </>
               )}
             </div>

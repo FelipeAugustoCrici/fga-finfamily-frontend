@@ -55,7 +55,10 @@ export function GoalContributionModal({ goal, isOpen, onClose }: Props) {
     <Modal isOpen={isOpen} onClose={onClose} title={`Contribuir — ${goal.description}`}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="p-3 bg-slate-50 rounded-lg text-sm text-slate-600 border border-slate-100">
-          Faltam <span className="font-semibold text-slate-800">{fmt(Math.max(remaining, 0))}</span>{' '}
+          Faltam{' '}
+          <span className="font-semibold text-slate-800 font-mono">
+            {fmt(Math.max(remaining, 0))}
+          </span>{' '}
           para atingir a meta
           <span className="block text-xs text-slate-400 mt-1">
             O valor será descontado do seu saldo automaticamente.

@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
   Sparkles,
@@ -19,6 +19,7 @@ import {
   detectRecurrenceSuggestion,
   formatRelativeDate,
 } from '../hooks/useSmartSuggestions';
+import { Tokens } from '@/theme/tokens';
 import _ from 'lodash';
 
 interface SmartInputProps {
@@ -26,16 +27,19 @@ interface SmartInputProps {
   familyId?: string;
 }
 
-const TYPE_LABEL: Record<string, { label: string; color: string; bg: string }> = {
-  expense: { label: 'Despesa', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' },
-  salary: { label: 'Salário', color: '#10b981', bg: 'rgba(16,185,129,0.12)' },
-  income: { label: 'Extra', color: '#6366f1', bg: 'rgba(99,102,241,0.12)' },
-};
+function getTypeLabel(t: Tokens): Record<string, { label: string; color: string; bg: string }> {
+  return {
+    expense: { label: 'Despesa', color: t.expense.textAlt, bg: t.expense.bg },
+    salary: { label: 'Salário', color: t.income.textAlt, bg: t.income.bg },
+    income: { label: 'Extra', color: t.extra.textAlt, bg: t.extra.bg },
+  };
+}
 
 export function SmartInput({ categories, familyId }: SmartInputProps) {
   const { setValue, watch } = useFormContext();
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
+  const TYPE_LABEL = getTypeLabel(t);
 
   const [text, setText] = useState('');
   const [parsed, setParsed] = useState<ReturnType<typeof parseSmartInput>>(null);
@@ -185,24 +189,17 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
     setShowSuggestions(false);
   };
 
-  const containerBorder = isDark
-    ? focused || parsed
-      ? 'rgba(99,102,241,0.40)'
-      : 'rgba(99,102,241,0.18)'
-    : focused || parsed
-      ? '#a5b4fc'
-      : '#ddd6fe';
-
+  const containerBorder = focused || parsed ? t.quickInput.borderFocus : t.quickInput.border;
   const inputBg = isDark ? 'rgba(255,255,255,0.05)' : '#ffffff';
-  const inputBorder = focused ? '#6366f1' : isDark ? 'rgba(255,255,255,0.10)' : '#e2e8f0';
-  const inputShadow = focused ? '0 0 0 3px rgba(99,102,241,0.18)' : 'none';
+  const inputBorder = focused ? t.quickInput.borderFocus : t.border.default;
+  const inputShadow = focused ? t.quickInput.shadow : 'none';
 
   const hasSuggestions = showSuggestions && suggestions.length > 0;
 
   return (
     <div
       style={{
-        background: isDark ? 'rgba(99,102,241,0.07)' : '#f5f3ff',
+        background: isDark ? 'rgba(92,185,138,0.08)' : '#e7f0e9',
         border: `1.5px solid ${containerBorder}`,
         borderRadius: 16,
         padding: '14px 14px 12px',
@@ -211,12 +208,12 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
     >
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-        <Zap size={12} color="#6366f1" />
+        <Zap size={12} color={t.quickInput.borderFocus} />
         <span
           style={{
             fontSize: 10,
             fontWeight: 800,
-            color: isDark ? '#a5b4fc' : '#4338ca',
+            color: isDark ? t.income.textAlt : t.income.text,
             textTransform: 'uppercase',
             letterSpacing: '0.09em',
           }}
@@ -229,8 +226,8 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
             padding: '2px 7px',
             borderRadius: 999,
             fontWeight: 700,
-            background: isDark ? 'rgba(99,102,241,0.20)' : '#e0e7ff',
-            color: isDark ? '#a5b4fc' : '#4338ca',
+            background: isDark ? 'rgba(92,185,138,0.20)' : t.income.bg,
+            color: isDark ? t.income.textAlt : t.income.text,
           }}
         >
           Beta
@@ -248,7 +245,7 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
             pointerEvents: 'none',
           }}
         >
-          <Sparkles size={15} color={focused || parsed ? '#6366f1' : t.text.muted} />
+          <Sparkles size={15} color={focused || parsed ? t.quickInput.borderFocus : t.text.muted} />
         </div>
 
         <input
@@ -310,12 +307,12 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
               left: 0,
               right: 0,
               zIndex: 50,
-              background: isDark ? '#1e1e2e' : '#ffffff',
-              border: `1.5px solid ${isDark ? 'rgba(99,102,241,0.3)' : '#c7d2fe'}`,
+              background: t.quickInput.dropBg,
+              border: `1.5px solid ${t.quickInput.dropBorder}`,
               borderTop: 'none',
               borderRadius: '0 0 10px 10px',
               overflow: 'hidden',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              boxShadow: t.quickInput.dropShadow,
             }}
           >
             {suggestions.map((s, i) => {
@@ -348,13 +345,11 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
                     textAlign: 'left',
                     background: isActive
                       ? isDark
-                        ? 'rgba(99,102,241,0.12)'
-                        : '#eef2ff'
+                        ? 'rgba(92,185,138,0.12)'
+                        : t.income.bg
                       : 'transparent',
                     borderBottom:
-                      i < suggestions.length - 1
-                        ? `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : '#f1f5f9'}`
-                        : 'none',
+                      i < suggestions.length - 1 ? `1px solid ${t.border.divider}` : 'none',
                     transition: 'background 0.1s',
                   }}
                 >
@@ -362,8 +357,7 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
                   <div
                     style={{
                       flexShrink: 0,
-                      color:
-                        s.source === 'history' ? (isDark ? '#a5b4fc' : '#6366f1') : t.text.muted,
+                      color: s.source === 'history' ? t.quickInput.borderFocus : t.text.muted,
                     }}
                   >
                     {s.source === 'history' ? <Clock size={13} /> : <Sparkles size={13} />}
@@ -387,7 +381,7 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
                       {s.isRecurring && (
                         <RefreshCw
                           size={10}
-                          style={{ color: isDark ? '#a5b4fc' : '#6366f1', flexShrink: 0 }}
+                          style={{ color: t.quickInput.borderFocus, flexShrink: 0 }}
                         />
                       )}
                     </div>
@@ -454,8 +448,8 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 6,
-                    background: isDark ? 'rgba(255,255,255,0.02)' : '#f8fafc',
-                    borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : '#f1f5f9'}`,
+                    background: isDark ? 'rgba(255,255,255,0.02)' : t.bg.cardHover,
+                    borderTop: `1px solid ${t.border.divider}`,
                   }}
                 >
                   <TrendingUp size={11} style={{ color: t.text.muted, flexShrink: 0 }} />
@@ -497,8 +491,8 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
                 fontWeight: 700,
                 padding: '4px 10px',
                 borderRadius: 999,
-                background: isDark ? 'rgba(255,255,255,0.08)' : '#ede9fe',
-                color: isDark ? '#e2e8f0' : '#5b21b6',
+                background: t.bg.mutedStrong,
+                color: t.text.secondary,
               }}
             >
               {TYPE_LABEL[parsed.type]?.label || 'Despesa'}
@@ -510,8 +504,8 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
                   fontWeight: 600,
                   padding: '4px 10px',
                   borderRadius: 999,
-                  background: isDark ? 'rgba(16,185,129,0.12)' : '#d1fae5',
-                  color: isDark ? '#6ee7b7' : '#065f46',
+                  background: t.income.bg,
+                  color: t.income.text,
                 }}
               >
                 {parsed.suggestedCategoryName}
@@ -524,8 +518,8 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
                   fontWeight: 700,
                   padding: '4px 10px',
                   borderRadius: 999,
-                  background: isDark ? 'rgba(245,158,11,0.14)' : '#fef9c3',
-                  color: isDark ? '#fcd34d' : '#92400e',
+                  background: t.warning.bg,
+                  color: t.warning.text,
                 }}
               >
                 R$ {Number(parsed.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
@@ -540,9 +534,9 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
               alignItems: 'center',
               gap: 4,
               padding: '7px 16px',
-              borderRadius: 10,
+              borderRadius: 999,
               border: 'none',
-              background: '#6366f1',
+              background: t.quickInput.borderFocus,
               color: '#ffffff',
               fontSize: 12,
               fontWeight: 700,
@@ -565,7 +559,7 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
             marginTop: 10,
             fontSize: 12,
             fontWeight: 600,
-            color: isDark ? '#6ee7b7' : '#166534',
+            color: isDark ? t.income.textAlt : t.income.text,
             display: 'flex',
             alignItems: 'center',
             gap: 6,
@@ -585,15 +579,12 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
             gap: 6,
             padding: '8px 12px',
             borderRadius: 10,
-            background: isDark ? 'rgba(245,158,11,0.1)' : '#fffbeb',
-            border: `1px solid ${isDark ? 'rgba(245,158,11,0.25)' : '#fde68a'}`,
+            background: t.warning.bg,
+            border: `1px solid ${t.warning.border}`,
           }}
         >
-          <AlertTriangle
-            size={13}
-            style={{ color: isDark ? '#fcd34d' : '#d97706', flexShrink: 0 }}
-          />
-          <span style={{ fontSize: 11, color: isDark ? '#fcd34d' : '#92400e', fontWeight: 600 }}>
+          <AlertTriangle size={13} style={{ color: t.warning.text, flexShrink: 0 }} />
+          <span style={{ fontSize: 11, color: t.warning.text, fontWeight: 600 }}>
             {valueAlert}
           </span>
         </div>
@@ -610,13 +601,13 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
             gap: 8,
             padding: '8px 12px',
             borderRadius: 10,
-            background: isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff',
-            border: `1px solid ${isDark ? 'rgba(99,102,241,0.2)' : '#c7d2fe'}`,
+            background: isDark ? 'rgba(92,185,138,0.08)' : t.income.bg,
+            border: `1px solid ${isDark ? 'rgba(92,185,138,0.2)' : t.income.border}`,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <RefreshCw size={12} style={{ color: isDark ? '#a5b4fc' : '#4338ca', flexShrink: 0 }} />
-            <span style={{ fontSize: 11, color: isDark ? '#a5b4fc' : '#4338ca', fontWeight: 600 }}>
+            <RefreshCw size={12} style={{ color: t.income.text, flexShrink: 0 }} />
+            <span style={{ fontSize: 11, color: t.income.text, fontWeight: 600 }}>
               Você lança isso com frequência. Marcar como recorrente?
             </span>
           </div>
@@ -627,11 +618,11 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
               fontSize: 10,
               fontWeight: 700,
               padding: '4px 10px',
-              borderRadius: 8,
+              borderRadius: 999,
               border: 'none',
               cursor: 'pointer',
-              background: isDark ? 'rgba(99,102,241,0.2)' : '#c7d2fe',
-              color: isDark ? '#a5b4fc' : '#3730a3',
+              background: t.income.bgIcon,
+              color: t.income.text,
               flexShrink: 0,
             }}
           >

@@ -30,7 +30,7 @@ interface Props {
 
 export function DayView({ selectedDate, days, onDateChange, onEventClick: _onEventClick }: Props) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
   const today = toKey(new Date());
   const key = toKey(selectedDate);
   const summary = days.find((d) => d.date === key);
@@ -75,7 +75,7 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick: _onEve
           style={{
             background: isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
             border: 'none',
-            borderRadius: 10,
+            borderRadius: 999,
             padding: '8px 10px',
             cursor: 'pointer',
             color: t.text.muted,
@@ -131,7 +131,7 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick: _onEve
           style={{
             background: isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
             border: 'none',
-            borderRadius: 10,
+            borderRadius: 999,
             padding: '8px 10px',
             cursor: 'pointer',
             color: t.text.muted,
@@ -245,7 +245,9 @@ function Chip({
     >
       <span style={{ color }}>{icon}</span>
       <span style={{ fontSize: 11, color, fontWeight: 600 }}>{label}</span>
-      <span style={{ fontSize: 12, fontWeight: 800, color }}>{value}</span>
+      <span style={{ fontSize: 12, fontWeight: 800, color, fontFamily: "'Space Mono', monospace" }}>
+        {value}
+      </span>
     </div>
   );
 }

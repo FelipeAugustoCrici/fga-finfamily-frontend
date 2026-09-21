@@ -25,6 +25,7 @@ export function MonthlySummaryCards({ summary }: Props) {
       icon: ArrowUpCircle,
       color: 'text-success-600',
       bg: 'bg-success-50',
+      mono: true,
     },
     {
       label: 'Saídas previstas',
@@ -32,6 +33,7 @@ export function MonthlySummaryCards({ summary }: Props) {
       icon: ArrowDownCircle,
       color: 'text-danger-600',
       bg: 'bg-danger-50',
+      mono: true,
     },
     {
       label: 'Saldo previsto',
@@ -39,6 +41,7 @@ export function MonthlySummaryCards({ summary }: Props) {
       icon: Wallet,
       color: summary.projectedBalance >= 0 ? 'text-success-600' : 'text-danger-600',
       bg: summary.projectedBalance >= 0 ? 'bg-success-50' : 'bg-danger-50',
+      mono: true,
     },
     {
       label: 'Pendências',
@@ -47,6 +50,7 @@ export function MonthlySummaryCards({ summary }: Props) {
       color: 'text-warning-600',
       bg: 'bg-warning-50',
       sub: `${summary.overdueCount} vencido(s)`,
+      mono: true,
     },
     {
       label: 'Pago/Recebido',
@@ -54,6 +58,7 @@ export function MonthlySummaryCards({ summary }: Props) {
       icon: CheckCircle,
       color: 'text-primary-600',
       bg: 'bg-primary-50',
+      mono: true,
     },
     {
       label: 'Recorrentes',
@@ -76,7 +81,7 @@ export function MonthlySummaryCards({ summary }: Props) {
             <c.icon size={16} className={c.color} />
           </div>
           <p className="text-xs text-primary-500 font-medium leading-tight">{c.label}</p>
-          <p className={cn('text-base font-bold', c.color)}>{c.value}</p>
+          <p className={cn('text-base font-bold', c.color, c.mono && 'font-mono')}>{c.value}</p>
           {c.sub && <p className="text-xs text-primary-400">{c.sub}</p>}
         </div>
       ))}

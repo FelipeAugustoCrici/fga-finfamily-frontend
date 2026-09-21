@@ -70,6 +70,20 @@ export interface Tokens {
     textAlt: string;
     shadow: string;
   };
+  extra: {
+    bg: string;
+    bgIcon: string;
+    border: string;
+    text: string;
+    textAlt: string;
+    shadow: string;
+  };
+  receipt: {
+    paper: string;
+    ink: string;
+    sub: string;
+    line: string;
+  };
   quickInput: {
     bg: string;
     border: string;
@@ -85,69 +99,69 @@ export interface Tokens {
 
 export const LIGHT: Tokens = {
   bg: {
-    page: '#f1f5f9',
+    page: '#f6f4ef',
     card: '#ffffff',
-    cardHover: '#f8fafc',
-    cardSubtle: 'rgba(248,250,252,0.8)',
+    cardHover: '#f8f7f2',
+    cardSubtle: 'rgba(255,255,255,0.8)',
     input: '#ffffff',
-    inputSubtle: '#f8fafc',
+    inputSubtle: '#f8f7f2',
     overlay: 'rgba(255,255,255,0.8)',
-    muted: '#f1f5f9',
-    mutedStrong: '#e2e8f0',
-    icon: '#f8fafc',
+    muted: '#f6f4ef',
+    mutedStrong: '#e4e0d6',
+    icon: '#f8f7f2',
   },
 
   border: {
-    default: 'rgba(0,0,0,0.06)',
-    subtle: 'rgba(0,0,0,0.04)',
-    strong: 'rgba(0,0,0,0.10)',
-    input: '#e2e8f0',
-    focus: '#6366f1',
-    divider: 'rgba(0,0,0,0.04)',
+    default: '#e4e0d6',
+    subtle: 'rgba(28,43,45,0.05)',
+    strong: 'rgba(28,43,45,0.12)',
+    input: '#e4e0d6',
+    focus: '#1c2b2d',
+    divider: '#e4e0d6',
   },
 
   text: {
-    primary: '#0f172a',
-    secondary: '#334155',
-    muted: '#64748b',
-    subtle: '#94a3b8',
-    disabled: '#cbd5e1',
+    primary: '#1c2b2d',
+    secondary: '#3d4d4f',
+    muted: '#5c6b6b',
+    subtle: '#8a9391',
+    disabled: '#c7c2b5',
     onDark: '#ffffff',
-    link: '#6366f1',
+    link: '#2f6f4f',
   },
 
   shadow: {
-    card: '0 8px 24px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)',
-    cardLg: '0 10px 40px rgba(99,102,241,0.10), 0 2px 8px rgba(0,0,0,0.06)',
-    focus: '0 0 0 3px rgba(99,102,241,0.15)',
-    drop: '0 20px 60px rgba(0,0,0,0.12)',
+    card: '0 1px 2px rgba(28,43,45,0.04), 0 8px 24px rgba(28,43,45,0.06)',
+    cardLg: '0 10px 40px rgba(28,43,45,0.10), 0 2px 8px rgba(28,43,45,0.06)',
+    focus: '0 0 0 3px rgba(47,111,79,0.15)',
+    drop: '0 20px 60px rgba(28,43,45,0.12)',
   },
 
   income: {
-    bg: '#ecfdf5',
-    bgIcon: '#a7f3d0',
-    border: '#d1fae5',
-    text: '#166534',
-    textAlt: '#047857',
-    shadow: 'rgba(16,185,129,0.08)',
+    bg: '#e7f0e9',
+    bgIcon: '#bcd7c6',
+    border: '#d3e6d9',
+    text: '#235940',
+    textAlt: '#2f6f4f',
+    shadow: 'rgba(47,111,79,0.08)',
   },
 
   expense: {
-    bg: '#fef2f2',
-    bgIcon: '#fda4af',
-    border: '#fecdd3',
-    text: '#991b1b',
-    textAlt: '#be123c',
-    shadow: 'rgba(244,63,94,0.08)',
+    bg: '#f7e9e5',
+    bgIcon: '#e3b6a8',
+    border: '#f0d4cc',
+    text: '#a84a37',
+    textAlt: '#c65b45',
+    shadow: 'rgba(198,91,69,0.08)',
   },
 
   balance: {
     bg: '#ffffff',
-    bgIcon: '#f1f5f9',
-    border: '#e2e8f0',
-    text: '#1e293b',
-    textAlt: '#334155',
-    shadow: 'rgba(0,0,0,0.06)',
+    bgIcon: '#f0eee4',
+    border: '#e4e0d6',
+    text: '#1c2b2d',
+    textAlt: '#3d4d4f',
+    shadow: 'rgba(28,43,45,0.06)',
   },
 
   investment: {
@@ -160,9 +174,9 @@ export const LIGHT: Tokens = {
   },
 
   warning: {
-    bg: '#fefce8',
-    border: '#fde68a',
-    text: '#92400e',
+    bg: '#f5eedc',
+    border: '#e6d6a8',
+    text: '#96762c',
   },
 
   info: {
@@ -174,23 +188,39 @@ export const LIGHT: Tokens = {
     shadow: 'rgba(99,102,241,0.08)',
   },
 
+  extra: {
+    bg: '#f5eedc',
+    bgIcon: '#e2cd8f',
+    border: '#ecdfbe',
+    text: '#96762c',
+    textAlt: '#b8923a',
+    shadow: 'rgba(184,146,58,0.08)',
+  },
+
+  receipt: {
+    paper: '#fdfdf9',
+    ink: '#2b2b28',
+    sub: '#8a8a80',
+    line: '#cfcfc2',
+  },
+
   quickInput: {
     bg: '#ffffff',
-    border: '#e2e8f0',
-    borderFocus: '#6366f1',
-    shadow: '0 0 0 3px rgba(99,102,241,0.15)',
-    zapBg: '#1e293b',
-    zapBgFocus: '#6366f1',
+    border: '#cddcd2',
+    borderFocus: '#2f6f4f',
+    shadow: '0 0 0 3px rgba(47,111,79,0.15)',
+    zapBg: '#2f6f4f',
+    zapBgFocus: '#2f6f4f',
     dropBg: '#ffffff',
-    dropBorder: 'rgba(0,0,0,0.06)',
-    dropShadow: '0 20px 60px rgba(0,0,0,0.12)',
+    dropBorder: '#d3e3d8',
+    dropShadow: '0 20px 60px rgba(28,43,45,0.12)',
   },
 } as const;
 
 export const DARK: Tokens = {
   bg: {
-    page: '#020617',
-    card: '#0f172a',
+    page: '#12161a',
+    card: '#1a2027',
     cardHover: 'rgba(255,255,255,0.03)',
     cardSubtle: 'rgba(255,255,255,0.04)',
     input: 'rgba(255,255,255,0.06)',
@@ -202,55 +232,55 @@ export const DARK: Tokens = {
   },
 
   border: {
-    default: 'rgba(255,255,255,0.07)',
+    default: '#2a323b',
     subtle: 'rgba(255,255,255,0.04)',
     strong: 'rgba(255,255,255,0.12)',
     input: 'rgba(255,255,255,0.10)',
-    focus: '#6366f1',
-    divider: 'rgba(255,255,255,0.05)',
+    focus: '#5cb98a',
+    divider: '#2a323b',
   },
 
   text: {
-    primary: '#f1f5f9',
-    secondary: '#cbd5e1',
-    muted: '#94a3b8',
-    subtle: '#64748b',
-    disabled: '#475569',
+    primary: '#eef1f2',
+    secondary: '#c3cbcf',
+    muted: '#8b98a1',
+    subtle: '#6b7880',
+    disabled: '#4d5960',
     onDark: '#ffffff',
-    link: '#a5b4fc',
+    link: '#5cb98a',
   },
 
   shadow: {
-    card: '0 4px 20px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3)',
+    card: '0 1px 2px rgba(0,0,0,0.3), 0 8px 28px rgba(0,0,0,0.4)',
     cardLg: '0 10px 40px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2)',
-    focus: '0 0 0 3px rgba(99,102,241,0.25)',
+    focus: '0 0 0 3px rgba(92,185,138,0.25)',
     drop: '0 20px 60px rgba(0,0,0,0.5)',
   },
 
   income: {
-    bg: '#022c22',
-    bgIcon: 'rgba(110,231,183,0.15)',
-    border: 'rgba(110,231,183,0.15)',
-    text: '#6ee7b7',
-    textAlt: '#a7f3d0',
-    shadow: 'rgba(74,222,128,0.08)',
+    bg: '#1c2c26',
+    bgIcon: 'rgba(92,185,138,0.15)',
+    border: 'rgba(92,185,138,0.15)',
+    text: '#5cb98a',
+    textAlt: '#8fd1ac',
+    shadow: 'rgba(92,185,138,0.08)',
   },
 
   expense: {
-    bg: '#2a0b0b',
-    bgIcon: 'rgba(252,165,165,0.15)',
-    border: 'rgba(252,165,165,0.15)',
-    text: '#fca5a5',
-    textAlt: '#fecaca',
-    shadow: 'rgba(248,113,113,0.08)',
+    bg: '#302019',
+    bgIcon: 'rgba(224,134,112,0.15)',
+    border: 'rgba(224,134,112,0.15)',
+    text: '#e08670',
+    textAlt: '#e8a190',
+    shadow: 'rgba(224,134,112,0.08)',
   },
 
   balance: {
-    bg: '#0f172a',
+    bg: '#1a2027',
     bgIcon: 'rgba(255,255,255,0.07)',
     border: 'rgba(255,255,255,0.07)',
-    text: '#f1f5f9',
-    textAlt: '#e2e8f0',
+    text: '#eef1f2',
+    textAlt: '#dde3e5',
     shadow: 'rgba(0,0,0,0.3)',
   },
 
@@ -264,9 +294,9 @@ export const DARK: Tokens = {
   },
 
   warning: {
-    bg: 'rgba(252,211,77,0.08)',
-    border: 'rgba(252,211,77,0.20)',
-    text: '#fcd34d',
+    bg: 'rgba(224,188,107,0.08)',
+    border: 'rgba(224,188,107,0.20)',
+    text: '#e0bc6b',
   },
 
   info: {
@@ -278,15 +308,31 @@ export const DARK: Tokens = {
     shadow: 'rgba(99,102,241,0.15)',
   },
 
+  extra: {
+    bg: '#2f2a1a',
+    bgIcon: 'rgba(224,188,107,0.18)',
+    border: 'rgba(224,188,107,0.18)',
+    text: '#e0bc6b',
+    textAlt: '#eccf8f',
+    shadow: 'rgba(224,188,107,0.08)',
+  },
+
+  receipt: {
+    paper: '#1e242b',
+    ink: '#dfe3e4',
+    sub: '#7b8790',
+    line: '#38414a',
+  },
+
   quickInput: {
-    bg: '#0f172a',
-    border: 'rgba(255,255,255,0.10)',
-    borderFocus: '#6366f1',
-    shadow: '0 0 0 3px rgba(99,102,241,0.20)',
-    zapBg: 'rgba(255,255,255,0.08)',
-    zapBgFocus: 'rgba(99,102,241,0.30)',
-    dropBg: '#0f172a',
-    dropBorder: 'rgba(255,255,255,0.08)',
+    bg: '#1a2027',
+    border: 'rgba(92,185,138,0.18)',
+    borderFocus: '#5cb98a',
+    shadow: '0 0 0 3px rgba(92,185,138,0.20)',
+    zapBg: 'rgba(92,185,138,0.15)',
+    zapBgFocus: 'rgba(92,185,138,0.30)',
+    dropBg: '#1a2027',
+    dropBorder: 'rgba(92,185,138,0.25)',
     dropShadow: '0 20px 60px rgba(0,0,0,0.50)',
   },
 };

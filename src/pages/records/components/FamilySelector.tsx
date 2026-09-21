@@ -8,7 +8,7 @@ export function FamilySelector({ families }: { families: any[] }) {
   const { register, setValue, formState } = useFormContext();
   const familyId = useWatch({ name: 'familyId' });
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const family = families[0];
   const people = family?.members || [];

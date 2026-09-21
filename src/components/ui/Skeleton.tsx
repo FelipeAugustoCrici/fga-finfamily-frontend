@@ -9,7 +9,7 @@ interface SkeletonProps {
 
 export function Skeleton({ width = '100%', height = 16, borderRadius = 8, style }: SkeletonProps) {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   return (
     <div

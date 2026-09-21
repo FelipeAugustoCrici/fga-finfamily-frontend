@@ -6,7 +6,7 @@ export function RecurrenceSection() {
   const { register, setValue } = useFormContext();
   const isRecurring = useWatch({ name: 'isRecurring' });
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

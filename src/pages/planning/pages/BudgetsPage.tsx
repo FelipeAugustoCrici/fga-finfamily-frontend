@@ -61,7 +61,7 @@ export function BudgetsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
@@ -162,7 +162,15 @@ export function BudgetsPage() {
             >
               <div style={{ color: item.color, opacity: 0.8 }}>{item.icon}</div>
               <div>
-                <p style={{ fontSize: 18, fontWeight: 800, color: item.color, lineHeight: 1 }}>
+                <p
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 800,
+                    color: item.color,
+                    lineHeight: 1,
+                    fontFamily: "'Space Mono', monospace",
+                  }}
+                >
                   {item.value}
                 </p>
                 <p style={{ fontSize: 11, color: t.text.muted, marginTop: 3 }}>{item.label}</p>
@@ -323,7 +331,7 @@ export function BudgetsPage() {
                     style={{
                       width: 28,
                       height: 28,
-                      borderRadius: 8,
+                      borderRadius: 999,
                       border: 'none',
                       background: 'transparent',
                       cursor: 'pointer',
@@ -358,16 +366,29 @@ export function BudgetsPage() {
                   }}
                 >
                   <span
-                    style={{ fontSize: 30, fontWeight: 900, color: colors.text, lineHeight: 1 }}
+                    style={{
+                      fontSize: 30,
+                      fontWeight: 900,
+                      color: colors.text,
+                      lineHeight: 1,
+                      fontFamily: "'Space Mono', monospace",
+                    }}
                   >
                     {pct.toFixed(0)}%
                   </span>
                   <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: 12, fontWeight: 700, color: t.text.primary }}>
+                    <p
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: t.text.primary,
+                        fontFamily: "'Space Mono', monospace",
+                      }}
+                    >
                       {fmt(spent)}
                     </p>
                     <p style={{ fontSize: 11, color: t.text.subtle }}>
-                      de {fmt(budget.limitValue)}
+                      de <span style={{ fontFamily: "'Space Mono', monospace" }}>{fmt(budget.limitValue)}</span>
                     </p>
                   </div>
                 </div>

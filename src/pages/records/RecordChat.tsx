@@ -37,7 +37,7 @@ const QUICK_HINTS = [
 
 export function RecordChat() {
   const t = useTokens();
-  const isDark = t.bg.page === '#020617';
+  const isDark = t.bg.page === '#12161a';
 
   const [input, setInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
