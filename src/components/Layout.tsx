@@ -310,7 +310,7 @@ export const Layout = () => {
     <div className="flex min-h-screen bg-slate-50">
       {/* Desktop sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-primary-900 p-6 text-white fixed h-full shadow-2xl z-20">
-        <div className="flex flex-col items-center mb-6 px-2">
+        <Link to="/" className="flex flex-col items-center mb-6 px-2">
           <img
             src={LogoSvg}
             alt="FinFamily"
@@ -318,7 +318,7 @@ export const Layout = () => {
             className="invert"
           />
           <span className="text-xl font-bold tracking-tight">FinFamily AI</span>
-        </div>
+        </Link>
 
         <SidebarNav />
 
@@ -358,10 +358,14 @@ export const Layout = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-8 px-2 text-white">
-              <div className="flex items-center gap-3">
+              <Link
+                to="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3"
+              >
                 <img src={LogoSvg} alt="FinFamily" className="w-10 h-10 invert" />
                 <span className="text-lg font-bold">FinFamily AI</span>
-              </div>
+              </Link>
               <button onClick={() => setIsMobileMenuOpen(false)}>
                 <X size={24} />
               </button>
