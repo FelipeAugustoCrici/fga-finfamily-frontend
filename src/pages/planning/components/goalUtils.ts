@@ -1,4 +1,13 @@
-﻿import { PiggyBank, CreditCard, ShoppingBag, TrendingUp } from 'lucide-react';
+﻿import {
+  PiggyBank,
+  CreditCard,
+  ShoppingBag,
+  TrendingUp,
+  PartyPopper,
+  Flame,
+  Dumbbell,
+  Sprout,
+} from 'lucide-react';
 import type { GoalContribution, GoalType } from '../types/planning.types';
 import moment from 'moment';
 
@@ -38,37 +47,46 @@ export const GOAL_TYPE_META: Record<
 
 export type BadgeLevel = 'iniciante' | 'avancando' | 'quase-la' | 'concluido';
 
-export function getBadge(pct: number): { level: BadgeLevel; label: string; color: string } {
+export function getBadge(pct: number): {
+  level: BadgeLevel;
+  label: string;
+  icon: typeof PartyPopper;
+  color: string;
+} {
   if (pct >= 100)
     return {
       level: 'concluido',
-      label: 'Concluído 🎉',
+      label: 'Concluído',
+      icon: PartyPopper,
       color: 'text-emerald-600 bg-emerald-50 border-emerald-200',
     };
   if (pct >= 75)
     return {
       level: 'quase-la',
-      label: 'Quase lá 🔥',
+      label: 'Quase lá',
+      icon: Flame,
       color: 'text-amber-600 bg-amber-50 border-amber-200',
     };
   if (pct >= 25)
     return {
       level: 'avancando',
-      label: 'Avançando 💪',
+      label: 'Avançando',
+      icon: Dumbbell,
       color: 'text-sky-600 bg-sky-50 border-sky-200',
     };
   return {
     level: 'iniciante',
-    label: 'Iniciante 🌱',
+    label: 'Iniciante',
+    icon: Sprout,
     color: 'text-slate-500 bg-slate-50 border-slate-200',
   };
 }
 
 export function getMotivation(pct: number): string {
-  if (pct >= 100) return 'Meta atingida! Parabéns! 🎉';
-  if (pct >= 75) return 'Quase lá! Continue assim! 🔥';
+  if (pct >= 100) return 'Meta atingida! Parabéns!';
+  if (pct >= 75) return 'Quase lá! Continue assim!';
   if (pct >= 50) return 'Mais da metade! Você está indo bem!';
-  if (pct >= 25) return 'Bom começo! Continue avançando 💪';
+  if (pct >= 25) return 'Bom começo! Continue avançando';
   return 'Você começou, continue! Cada contribuição conta.';
 }
 

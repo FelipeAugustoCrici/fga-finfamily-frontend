@@ -2,30 +2,48 @@ import { useEffect } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { CreditCard as CreditCardIcon } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
+import { useCreditCards } from '@/pages/credit-cards/hooks/useCreditCards';
 import { SmartInput } from './SmartInput';
 import { RecordFormHeader } from './RecordFormHeader';
 import { RecordTypeSelector } from './RecordTypeSelector';
 import { RecordDetailsForm } from './RecordDetailsForm';
 import { ToggleCards } from './ToggleCards';
+import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { RecordReceiptPreview } from './RecordReceiptPreview';
 import { Select } from '@/components/ui/Select';
 import { FormActionBar } from '@/components/ui/FormActionBar';
 import { Record } from '../types/record.types';
 
-const recordSchema = z.object({
-  description: z.string().min(1, 'Descrição é obrigatória'),
-  value: z.string().refine((v) => !isNaN(Number(v)) && Number(v) > 0, 'Valor inválido'),
-  date: z.string().min(1, 'Data é obrigatória'),
-  categoryName: z.string().optional(),
-  categoryId: z.string().optional(),
-  type: z.enum(['expense', 'salary', 'income']),
-  personId: z.string().min(1, 'Responsável é obrigatório'),
-  familyId: z.string().min(1, 'Família é obrigatória'),
-  isRecurring: z.boolean(),
-  durationMonths: z.string().optional(),
-  isShared: z.boolean().default(true),
-});
+const recordSchema = z
+  .object({
+    description: z.string().min(1, 'Descrição é obrigatória'),
+    value: z.string().refine((v) => !isNaN(Number(v)) && Number(v) > 0, 'Valor inválido'),
+    date: z.string().min(1, 'Data é obrigatória'),
+    categoryName: z.string().optional(),
+    categoryId: z.string().optional(),
+    type: z.enum(['expense', 'salary', 'income']),
+    personId: z.string().min(1, 'Responsável é obrigatório'),
+    familyId: z.string().min(1, 'Família é obrigatória'),
+    isRecurring: z.boolean(),
+    durationMonths: z.string().optional(),
+    isShared: z.boolean().default(true),
+    paymentMethod: z.enum(['account', 'credit_card']).default('account'),
+    creditCardId: z.string().optional(),
+    installments: z.string().default('1'),
+  })
+  .refine((data) => data.paymentMethod !== 'credit_card' || !!data.creditCardId, {
+    message: 'Selecione um cartão',
+    path: ['creditCardId'],
+  })
+  .refine(
+    (data) => data.type !== 'expense' || data.paymentMethod !== 'credit_card' || !data.isRecurring,
+    {
+      message: 'Lançamentos no cartão não podem ser recorrentes',
+      path: ['isRecurring'],
+    },
+  );
 
 export type RecordFormData = z.infer<typeof recordSchema>;
 
@@ -59,6 +77,17 @@ export function RecordForm({
     return d?.person?.familyId || d?.person?.family?.id || d?.familyId || families[0]?.id || '';
   };
 
+  // Lançamento já vinculado a uma compra no cartão (parcela) ou é a fatura
+  // agregada de um cartão: só descrição e categoria podem ser editadas
+  // (mesma regra do backend).
+  const isCardLocked = !!(
+    (initialData as any)?.purchaseId || (initialData as any)?.creditCardInvoiceId
+  );
+  const isInvoiceRecord = !!(initialData as any)?.creditCardInvoiceId;
+  // A forma de pagamento só pode ser escolhida na criação — o backend não
+  // suporta trocar conta↔cartão num lançamento já existente.
+  const isEdit = !!initialData?.id;
+
   const methods = useForm<RecordFormData>({
     resolver: zodResolver(recordSchema),
     defaultValues: {
@@ -75,11 +104,16 @@ export function RecordForm({
       isRecurring: !!(initialData as any)?.recurringId,
       durationMonths: '',
       isShared: (initialData as any)?.isShared !== false,
+      paymentMethod:
+        (initialData as any)?.paymentMethod === 'credit_card' ? 'credit_card' : 'account',
+      creditCardId: (initialData as any)?.creditCardId || '',
+      installments: '1',
     },
   });
 
   const { handleSubmit, reset, register, watch, formState } = methods;
   const familyId = watch('familyId');
+  const { data: creditCards = [] } = useCreditCards(familyId);
 
   useEffect(() => {
     if (initialData) {
@@ -96,6 +130,9 @@ export function RecordForm({
         isRecurring: !!d.recurringId,
         durationMonths: '',
         isShared: d.isShared !== false,
+        paymentMethod: d.paymentMethod === 'credit_card' ? 'credit_card' : 'account',
+        creditCardId: d.creditCardId || '',
+        installments: '1',
       });
     }
   }, [initialData, families, reset]);
@@ -143,8 +180,32 @@ export function RecordForm({
               gap: 22,
             }}
           >
+            {isCardLocked && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 8,
+                  padding: '10px 12px',
+                  borderRadius: 10,
+                  background: t.bg.muted,
+                  border: `1px solid ${t.border.default}`,
+                }}
+              >
+                <CreditCardIcon
+                  size={14}
+                  style={{ color: t.text.muted, marginTop: 1, flexShrink: 0 }}
+                />
+                <p style={{ fontSize: 12, color: t.text.muted, lineHeight: 1.5 }}>
+                  {isInvoiceRecord
+                    ? 'Esta é a fatura do cartão, gerada automaticamente. Só descrição e categoria podem ser alteradas aqui — marque como paga na listagem quando quitar o cartão.'
+                    : 'Este lançamento é uma parcela de uma compra no cartão, já paga. Só descrição e categoria podem ser alteradas aqui — para mudar valor, data, parcelas ou cartão, exclua e lance de novo.'}
+                </p>
+              </div>
+            )}
+
             {/* Smart input */}
-            <SmartInput categories={categories} familyId={familyId} />
+            {!isCardLocked && <SmartInput categories={categories} familyId={familyId} />}
 
             {/* Tipo */}
             <div>
@@ -167,7 +228,17 @@ export function RecordForm({
             <div style={{ height: 1, background: t.border.divider }} />
 
             {/* Detalhes */}
-            <RecordDetailsForm categories={categories} />
+            <RecordDetailsForm categories={categories} financialsDisabled={isCardLocked} />
+
+            {watch('type') === 'expense' && (
+              <>
+                <div style={{ height: 1, background: t.border.divider }} />
+                <PaymentMethodSelector
+                  creditCards={creditCards}
+                  disabled={isCardLocked || isEdit}
+                />
+              </>
+            )}
 
             {/* Divider */}
             <div style={{ height: 1, background: t.border.divider }} />
@@ -187,7 +258,7 @@ export function RecordForm({
                     options={memberOptions}
                     value={field.value}
                     onChange={field.onChange}
-                    disabled={memberOptions.length === 0}
+                    disabled={memberOptions.length === 0 || isCardLocked}
                     error={formState.errors.personId?.message as string}
                   />
                 )}
@@ -213,12 +284,16 @@ export function RecordForm({
             <div style={{ height: 1, background: t.border.divider }} />
 
             {/* Toggle cards: Compartilhada + Recorrente */}
-            <ToggleCards showShared={watch('type') === 'expense'} />
+            <ToggleCards showShared={watch('type') === 'expense'} disabled={isCardLocked} />
           </div>
 
           {/* Right column — sticky preview */}
           <div className="record-form-preview">
-            <RecordReceiptPreview people={people} categories={categories} />
+            <RecordReceiptPreview
+              people={people}
+              categories={categories}
+              creditCards={creditCards}
+            />
           </div>
         </div>
 

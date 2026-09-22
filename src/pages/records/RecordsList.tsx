@@ -16,6 +16,8 @@ import {
   Loader2,
   Eye,
   MessageSquarePlus,
+  Undo2,
+  CreditCard,
 } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import { ActionButton } from '@/components/ui/ActionButton';
@@ -24,6 +26,7 @@ import { RecordsFilters } from './components/RecordsFilters';
 import { StatusBadge } from './components/StatusBadge';
 import { IncomeSummaryCards } from './components/IncomeSummaryCards';
 import { RecordsResumoCards } from './components/RecordsResumoCards';
+import { CreditCardLimitCards } from './components/CreditCardLimitCards';
 import { MobileRecordsList } from './components/MobileRecordsList';
 import { QuickLaunchInput } from './components/QuickLaunch/QuickLaunchInput';
 import { PartialPaymentModal } from './components/PartialPaymentModal';
@@ -37,6 +40,7 @@ import { formatCurrency } from './utils/formatters';
 import { UnifiedRecord, RecordStatus } from './types/record.types';
 import { familyService } from '@/pages/families/services/families.service';
 import { formatShortDate } from '@/common/utils/date';
+import { useCreditCards } from '@/pages/credit-cards/hooks/useCreditCards';
 
 export function RecordsList() {
   const navigate = useNavigate();
@@ -57,6 +61,9 @@ export function RecordsList() {
   });
 
   const familyId = families[0]?.id;
+  const { data: creditCards = [] } = useCreditCards(familyId);
+  const getCardName = (id?: string | null) =>
+    creditCards.find((c) => c.id === id)?.name || 'Cartão';
 
   const { records, isLoading, pagination } = useRecords(
     filters.month,
@@ -94,9 +101,19 @@ export function RecordsList() {
 
   useEffect(() => {
     filters.setPage(1);
-  }, [filters.month, filters.year, filters.status, filters.search,
-      filters.categoryId, filters.personId, filters.tipo,
-      filters.valorMin, filters.valorMax, filters.dataInicio, filters.dataFim]);
+  }, [
+    filters.month,
+    filters.year,
+    filters.status,
+    filters.search,
+    filters.categoryId,
+    filters.personId,
+    filters.tipo,
+    filters.valorMin,
+    filters.valorMax,
+    filters.dataInicio,
+    filters.dataFim,
+  ]);
 
   const getPersonName = (personId: string) => {
     for (const family of families) {
@@ -164,6 +181,9 @@ export function RecordsList() {
         activeStatus={filters.status}
         onStatusFilter={filters.setStatus}
       />
+
+      {}
+      <CreditCardLimitCards familyId={familyId} />
 
       {}
       <IncomeSummaryCards
@@ -370,9 +390,31 @@ export function RecordsList() {
                             >
                               {tx.description}
                             </button>
+                            {tx.creditCardId && (
+                              <span
+                                title={`Pago no cartão ${getCardName(tx.creditCardId)}`}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 3,
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  padding: '2px 6px',
+                                  borderRadius: 5,
+                                  background: 'rgba(99,102,241,0.12)',
+                                  color: '#6366f1',
+                                  border: '1px solid rgba(99,102,241,0.25)',
+                                  whiteSpace: 'nowrap',
+                                  marginLeft: 4,
+                                }}
+                              >
+                                <CreditCard size={10} />
+                                {getCardName(tx.creditCardId)}
+                              </span>
+                            )}
                             {tx.originExpenseId && (
                               <span
-                                title={`Saldo transferido de ${String(tx.originMonth).padStart(2,'0')}/${tx.originYear}`}
+                                title={`Saldo transferido de ${String(tx.originMonth).padStart(2, '0')}/${tx.originYear}`}
                                 style={{
                                   display: 'inline-flex',
                                   alignItems: 'center',
@@ -388,7 +430,8 @@ export function RecordsList() {
                                   marginLeft: 4,
                                 }}
                               >
-                                ↩ {String(tx.originMonth).padStart(2,'0')}/{tx.originYear}
+                                <Undo2 size={9} style={{ display: 'inline', verticalAlign: -1 }} />{' '}
+                                {String(tx.originMonth).padStart(2, '0')}/{tx.originYear}
                               </span>
                             )}
                           </div>
@@ -439,8 +482,18 @@ export function RecordsList() {
                           <StatusBadge
                             status={tx.status || 'PENDING'}
                             onChange={(newStatus) => handleStatusChange(tx.id, newStatus)}
-                            onPartialPayment={tx.originalType === 'expense' ? () => setPaymentRecord(tx) : undefined}
-                            disabled={updateStatus.isPending || tx.originalType !== 'expense'}
+                            onPartialPayment={
+                              tx.originalType === 'expense' && !tx.creditCardId
+                                ? () => setPaymentRecord(tx)
+                                : undefined
+                            }
+                            disabled={
+                              updateStatus.isPending ||
+                              tx.originalType !== 'expense' ||
+                              // Parcela: já nasce paga, não muda por aqui. Fatura
+                              // (creditCardInvoiceId): pode ser marcada como paga.
+                              !!tx.purchaseId
+                            }
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -463,10 +516,7 @@ export function RecordsList() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <div
-                            className="flex items-center justify-end gap-1.5 transition-all duration-200"
-                            style={{ opacity: hoveredRow === idx ? 1 : 0 }}
-                          >
+                          <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => navigate(`/record/detail/${tx.id}`)}
                               className="p-1.5 rounded-lg transition-all duration-200"
@@ -554,6 +604,7 @@ export function RecordsList() {
             <MobileRecordsList
               records={paginatedRecords}
               getPersonName={getPersonName}
+              getCardName={getCardName}
               onDelete={handleDeleteClick}
               deleteLoading={deleteRecord.isPending}
               onStatusChange={(id, status) => handleStatusChange(id, status)}
@@ -581,7 +632,13 @@ export function RecordsList() {
         onClose={() => setRecordToDelete(null)}
         onConfirm={handleConfirmDelete}
         title="Excluir Lançamento"
-        description={`Tem certeza que deseja excluir o lançamento "${recordToDelete?.description}"? Esta ação não pode ser desfeita.`}
+        description={
+          recordToDelete?.purchaseId
+            ? `"${recordToDelete?.description}" é uma parcela de uma compra no cartão ${getCardName(recordToDelete.creditCardId)}. Excluir remove a compra inteira, com todas as parcelas ainda não pagas. Esta ação não pode ser desfeita.`
+            : recordToDelete?.creditCardInvoiceId
+              ? `"${recordToDelete?.description}" é a fatura do cartão ${getCardName(recordToDelete.creditCardId)}. Faturas não podem ser excluídas — marque como paga quando quitar o cartão.`
+              : `Tem certeza que deseja excluir o lançamento "${recordToDelete?.description}"? Esta ação não pode ser desfeita.`
+        }
         confirmText="Excluir"
         cancelText="Cancelar"
         variant="danger"

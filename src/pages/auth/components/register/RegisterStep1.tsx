@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Mail, Lock, Eye, EyeOff, ChevronRight } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, ChevronRight, Check } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import { TextInput } from '@/components/ui/TextInput';
 import type { Step1Props } from './types';
@@ -120,11 +120,7 @@ export function RegisterStep1({
                       transition: 'background 0.2s',
                     }}
                   >
-                    {ok && (
-                      <span style={{ color: '#fff', fontSize: 9, fontWeight: 700, lineHeight: 1 }}>
-                        ✓
-                      </span>
-                    )}
+                    {ok && <Check size={9} color="#fff" strokeWidth={3} />}
                   </div>
                   <span
                     style={{

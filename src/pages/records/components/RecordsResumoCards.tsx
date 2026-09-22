@@ -40,7 +40,7 @@ function VariacaoIndicador({ variacao }: { variacao?: number }) {
   );
 }
 
-interface CardProps {
+export interface CardProps {
   icon: React.ReactNode;
   label: string;
   value: string;
@@ -54,7 +54,7 @@ interface CardProps {
   onStatusFilter?: (status: RecordStatus | 'ALL') => void;
 }
 
-function ResumoCard({
+export function ResumoCard({
   icon,
   label,
   value,
@@ -90,9 +90,7 @@ function ResumoCard({
       className="rounded-2xl p-4 flex flex-col gap-2 transition-all duration-200"
       style={{
         background: isActive ? `${accentColor}18` : t.bg.card,
-        border: isActive
-          ? `1.5px solid ${accentColor}55`
-          : `1px solid ${t.border.default}`,
+        border: isActive ? `1.5px solid ${accentColor}55` : `1px solid ${t.border.default}`,
         boxShadow: isActive ? `0 0 0 3px ${accentColor}18` : t.shadow.card,
         cursor: isClickable ? 'pointer' : 'default',
         userSelect: 'none',
@@ -104,8 +102,7 @@ function ResumoCard({
             : t.bg.cardHover;
       }}
       onMouseLeave={(e) => {
-        if (!isActive)
-          (e.currentTarget as HTMLElement).style.background = t.bg.card;
+        if (!isActive) (e.currentTarget as HTMLElement).style.background = t.bg.card;
       }}
     >
       <div className="flex items-center justify-between">
@@ -166,7 +163,13 @@ function SkeletonCards() {
   );
 }
 
-export function RecordsResumoCards({ data, isLoading, isError, activeStatus, onStatusFilter }: Props) {
+export function RecordsResumoCards({
+  data,
+  isLoading,
+  isError,
+  activeStatus,
+  onStatusFilter,
+}: Props) {
   const t = useTokens();
 
   if (isLoading) return <SkeletonCards />;

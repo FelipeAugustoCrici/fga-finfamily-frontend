@@ -23,11 +23,14 @@ import {
   AlertCircle,
   CreditCard,
   SplitSquareHorizontal,
+  Undo2,
 } from 'lucide-react';
 import { formatMediumDate, formatShortDate } from '@/common/utils/date';
 import { PartialPaymentModal } from './components/PartialPaymentModal';
 import { PaymentHistory } from './components/PaymentHistory';
 import { useExpensePayments } from './hooks/useExpensePayments';
+import { useUpdateRecordStatus } from './hooks/useUpdateRecordStatus';
+import { useCreditCardById } from '@/pages/credit-cards/hooks/useCreditCards';
 
 const TYPE_CONFIG = {
   expense: {
@@ -177,6 +180,8 @@ export function RecordsDetail() {
   const paidAmount = record?.paidAmount ?? 0;
   const remaining = isExpense ? (record?.value ?? 0) - paidAmount : 0;
   const { data: payments = [] } = useExpensePayments(isExpense ? id : undefined);
+  const { data: card } = useCreditCardById(record?.creditCardId || '');
+  const updateStatus = useUpdateRecordStatus();
 
   if (isLoading) {
     return <SkeletonDetail t={t} />;
@@ -387,6 +392,26 @@ export function RecordsDetail() {
                           Compartilhado
                         </span>
                       )}
+                      {}
+                      {record.creditCardId && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 700,
+                            padding: '3px 10px',
+                            borderRadius: 999,
+                            background: isDark ? 'rgba(99,102,241,0.12)' : '#eef2ff',
+                            color: isDark ? '#a5b4fc' : '#4338ca',
+                            border: `1px solid ${isDark ? 'rgba(99,102,241,0.25)' : '#c7d2fe'}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 4,
+                          }}
+                        >
+                          <CreditCard size={10} />
+                          {card?.name || 'Cartão'}
+                        </span>
+                      )}
                       {/* Origin badge — transferred balance from previous month */}
                       {record.originExpenseId && (
                         <span
@@ -403,7 +428,8 @@ export function RecordsDetail() {
                             gap: 4,
                           }}
                         >
-                          ↩ Saldo de {String(record.originMonth).padStart(2,'0')}/{record.originYear}
+                          <Undo2 size={10} />
+                          Saldo de {String(record.originMonth).padStart(2, '0')}/{record.originYear}
                         </span>
                       )}
                     </div>
@@ -504,11 +530,7 @@ export function RecordsDetail() {
 
           {/* Payment history */}
           {isExpense && payments.length > 0 && (
-            <PaymentHistory
-              expenseId={id!}
-              payments={payments}
-              totalValue={record.value}
-            />
+            <PaymentHistory expenseId={id!} payments={payments} totalValue={record.value} />
           )}
 
           {}
@@ -670,11 +692,26 @@ export function RecordsDetail() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {[
-                  { label: 'Valor total', value: formatCurrency(record.value), color: t.text.primary },
+                  {
+                    label: 'Valor total',
+                    value: formatCurrency(record.value),
+                    color: t.text.primary,
+                  },
                   { label: 'Total pago', value: formatCurrency(paidAmount), color: '#10b981' },
-                  { label: 'Saldo pendente', value: formatCurrency(Math.max(0, remaining)), color: remaining <= 0.001 ? t.text.muted : '#f59e0b' },
+                  {
+                    label: 'Saldo pendente',
+                    value: formatCurrency(Math.max(0, remaining)),
+                    color: remaining <= 0.001 ? t.text.muted : '#f59e0b',
+                  },
                 ].map((row) => (
-                  <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div
+                    key={row.label}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
                     <span style={{ fontSize: 12, color: t.text.muted }}>{row.label}</span>
                     <span
                       style={{
@@ -715,8 +752,8 @@ export function RecordsDetail() {
               Ações
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {/* Payment button — only for expenses with pending balance */}
-              {isExpense && remaining > 0.001 && (
+              {/* Payment button — normal expenses only */}
+              {isExpense && remaining > 0.001 && !record.creditCardId && (
                 <button
                   onClick={() => setShowPaymentModal(true)}
                   style={{
@@ -735,6 +772,44 @@ export function RecordsDetail() {
                   }}
                 >
                   <CreditCard size={15} /> Registrar pagamento
+                </button>
+              )}
+              {/* Parcela: já nasce paga, nada a pagar aqui */}
+              {isExpense && remaining > 0.001 && record.purchaseId && (
+                <p
+                  style={{
+                    fontSize: 12,
+                    color: t.text.muted,
+                    padding: '10px 14px',
+                    lineHeight: 1.4,
+                  }}
+                >
+                  Já paga com o cartão {card?.name || ''} no momento da compra.
+                </p>
+              )}
+              {/* Fatura: pode ser marcada como paga aqui */}
+              {isExpense && remaining > 0.001 && record.creditCardInvoiceId && (
+                <button
+                  onClick={() => updateStatus.mutate({ id: id!, status: 'PAID' })}
+                  disabled={updateStatus.isPending}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    padding: '10px 14px',
+                    borderRadius: 999,
+                    cursor: updateStatus.isPending ? 'not-allowed' : 'pointer',
+                    opacity: updateStatus.isPending ? 0.6 : 1,
+                    background: isDark ? 'rgba(16,185,129,0.12)' : '#f0fdf4',
+                    border: `1px solid ${isDark ? 'rgba(16,185,129,0.30)' : '#a7f3d0'}`,
+                    color: isDark ? '#6ee7b7' : '#166534',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <CreditCard size={15} />
+                  {updateStatus.isPending ? 'Marcando...' : 'Marcar fatura como paga'}
                 </button>
               )}
               <button
@@ -800,6 +875,24 @@ export function RecordsDetail() {
               Contexto
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {record.creditCardId && (
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                  <CreditCard
+                    size={13}
+                    color={isDark ? '#a5b4fc' : '#6366f1'}
+                    style={{ marginTop: 1, flexShrink: 0 }}
+                  />
+                  <p
+                    style={{ fontSize: 12, color: isDark ? '#c7d2fe' : '#4338ca', lineHeight: 1.5 }}
+                  >
+                    {record.purchaseId
+                      ? `Parcela de uma compra no cartão ${card?.name || ''}, já paga. Excluir remove a compra inteira, com todas as parcelas ainda não pagas.`
+                      : record.creditCardInvoiceId
+                        ? `Fatura do cartão ${card?.name || ''}. Não pode ser excluída — marque como paga quando quitar o cartão.`
+                        : `Vinculado ao cartão ${card?.name || ''}.`}
+                  </p>
+                </div>
+              )}
               {record.recurringId && (
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                   <RefreshCw
@@ -853,7 +946,13 @@ export function RecordsDetail() {
           setShowDeleteModal(false);
         }}
         title="Excluir Lançamento"
-        description={`Tem certeza que deseja excluir "${record.description}"? Esta ação não pode ser desfeita.`}
+        description={
+          record.purchaseId
+            ? `"${record.description}" é uma parcela de uma compra no cartão ${card?.name || ''}, já paga. Excluir remove a compra inteira, com todas as parcelas ainda não pagas. Esta ação não pode ser desfeita.`
+            : record.creditCardInvoiceId
+              ? `"${record.description}" é a fatura do cartão ${card?.name || ''}. Faturas não podem ser excluídas — marque como paga quando quitar o cartão.`
+              : `Tem certeza que deseja excluir "${record.description}"? Esta ação não pode ser desfeita.`
+        }
         confirmText="Excluir"
         cancelText="Cancelar"
         variant="danger"

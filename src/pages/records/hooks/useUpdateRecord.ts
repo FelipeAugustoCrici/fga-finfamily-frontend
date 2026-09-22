@@ -24,8 +24,18 @@ export function useUpdateRecord() {
     mutationFn: ({ id, data: formData }: { id: string; data: RecordFormData }) => {
       const backendType = mapFormTypeToBackendType(formData.type, formData.isRecurring);
 
+      // paymentMethod/creditCardId/installments só valem na criação — o
+      // backend não suporta trocar a forma de pagamento de um lançamento
+      // existente, então não fazem parte do payload de update.
+      const {
+        paymentMethod: _paymentMethod,
+        creditCardId: _creditCardId,
+        installments: _installments,
+        ...rest
+      } = formData as any;
+
       const data: any = {
-        ...formData,
+        ...rest,
         formType: formData.type,
         type: backendType,
         value: Number(formData.value),
@@ -48,10 +58,10 @@ export function useUpdateRecord() {
         variant: 'success',
       });
     },
-    onError: () => {
+    onError: (error: any) => {
       showToast({
         title: 'Erro',
-        description: 'Erro ao atualizar lançamento',
+        description: error?.response?.data?.message || 'Erro ao atualizar lançamento',
         variant: 'error',
       });
     },

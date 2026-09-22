@@ -202,7 +202,12 @@ function CreditCardItem({
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 12px' }}>
               {[
-                { label: 'Total', value: fmt(openInvoice.totalAmount), highlight: true, mono: true },
+                {
+                  label: 'Total',
+                  value: fmt(openInvoice.totalAmount),
+                  highlight: true,
+                  mono: true,
+                },
                 { label: 'Vencimento', value: formatShortDate(openInvoice.dueDate) },
                 { label: 'Fechamento', value: formatShortDate(openInvoice.closingDate) },
                 { label: 'Limite total', value: fmt(card.limitAmount), mono: true },
@@ -303,80 +308,22 @@ function CreditCardItem({
             padding: '14px 18px 16px',
             marginTop: 'auto',
             display: 'flex',
+            flexDirection: 'column',
             gap: 8,
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <button
-            onClick={() => onNavigate(card.id)}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              borderRadius: 999,
-              border: `1px solid ${t.border.default}`,
-              background: 'transparent',
-              color: t.text.secondary,
-              fontSize: 12,
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 6,
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = t.bg.muted;
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'transparent';
-            }}
-          >
-            <Eye size={13} /> Ver fatura
-          </button>
-
-          <button
-            onClick={() => onPurchase(card.id)}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              borderRadius: 999,
-              border: 'none',
-              background: isDark ? 'rgba(99,102,241,0.18)' : 'rgba(99,102,241,0.10)',
-              color: t.text.link,
-              fontSize: 12,
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 6,
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = isDark
-                ? 'rgba(99,102,241,0.28)'
-                : 'rgba(99,102,241,0.18)';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = isDark
-                ? 'rgba(99,102,241,0.18)'
-                : 'rgba(99,102,241,0.10)';
-            }}
-          >
-            <ShoppingBag size={13} /> Nova compra
-          </button>
-
-          {openInvoice && openInvoice.status !== 'paid' && (
+          <div style={{ display: 'flex', gap: 8 }}>
             <button
-              onClick={() => setPayInvoice(openInvoice)}
+              onClick={() => onNavigate(card.id)}
               style={{
                 flex: 1,
-                padding: '8px 0',
+                minWidth: 0,
+                padding: '9px 0',
                 borderRadius: 999,
-                border: 'none',
-                background: isDark ? 'rgba(34,197,94,0.15)' : 'rgba(34,197,94,0.10)',
-                color: t.income.text,
+                border: `1px solid ${t.border.default}`,
+                background: 'transparent',
+                color: t.text.secondary,
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -384,53 +331,124 @@ function CreditCardItem({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 6,
+                whiteSpace: 'nowrap',
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = t.bg.muted;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = 'transparent';
+              }}
+            >
+              <Eye size={13} /> Ver fatura
+            </button>
+
+            <button
+              onClick={() => onPurchase(card.id)}
+              style={{
+                flex: 1,
+                minWidth: 0,
+                padding: '9px 0',
+                borderRadius: 999,
+                border: 'none',
+                background: isDark ? 'rgba(99,102,241,0.18)' : 'rgba(99,102,241,0.10)',
+                color: t.text.link,
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6,
+                whiteSpace: 'nowrap',
                 transition: 'all 0.15s',
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.background = isDark
-                  ? 'rgba(34,197,94,0.25)'
-                  : 'rgba(34,197,94,0.18)';
+                  ? 'rgba(99,102,241,0.28)'
+                  : 'rgba(99,102,241,0.18)';
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.background = isDark
-                  ? 'rgba(34,197,94,0.15)'
-                  : 'rgba(34,197,94,0.10)';
+                  ? 'rgba(99,102,241,0.18)'
+                  : 'rgba(99,102,241,0.10)';
               }}
             >
-              <Receipt size={13} /> Pagar
+              <ShoppingBag size={13} /> Nova compra
             </button>
-          )}
+          </div>
 
-          <button
-            onClick={() => onDelete(card.id)}
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 999,
-              border: `1px solid ${t.border.default}`,
-              background: 'transparent',
-              color: t.text.muted,
-              fontSize: 12,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = t.expense.bgIcon;
-              (e.currentTarget as HTMLElement).style.color = t.expense.text;
-              (e.currentTarget as HTMLElement).style.borderColor = t.expense.border;
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'transparent';
-              (e.currentTarget as HTMLElement).style.color = t.text.muted;
-              (e.currentTarget as HTMLElement).style.borderColor = t.border.default;
-            }}
-          >
-            <Trash2 size={14} />
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {openInvoice && openInvoice.status !== 'paid' && (
+              <button
+                onClick={() => setPayInvoice(openInvoice)}
+                style={{
+                  flex: 1,
+                  minWidth: 0,
+                  padding: '9px 0',
+                  borderRadius: 999,
+                  border: 'none',
+                  background: isDark ? 'rgba(34,197,94,0.15)' : 'rgba(34,197,94,0.10)',
+                  color: t.income.text,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.15s',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = isDark
+                    ? 'rgba(34,197,94,0.25)'
+                    : 'rgba(34,197,94,0.18)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = isDark
+                    ? 'rgba(34,197,94,0.15)'
+                    : 'rgba(34,197,94,0.10)';
+                }}
+              >
+                <Receipt size={13} /> Pagar fatura
+              </button>
+            )}
+
+            <button
+              onClick={() => onDelete(card.id)}
+              title="Excluir cartão"
+              style={{
+                width: 36,
+                height: 36,
+                marginLeft: openInvoice && openInvoice.status !== 'paid' ? 0 : 'auto',
+                borderRadius: 999,
+                border: `1px solid ${t.border.default}`,
+                background: 'transparent',
+                color: t.text.muted,
+                fontSize: 12,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = t.expense.bgIcon;
+                (e.currentTarget as HTMLElement).style.color = t.expense.text;
+                (e.currentTarget as HTMLElement).style.borderColor = t.expense.border;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = 'transparent';
+                (e.currentTarget as HTMLElement).style.color = t.text.muted;
+                (e.currentTarget as HTMLElement).style.borderColor = t.border.default;
+              }}
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
         </div>
       </div>
 

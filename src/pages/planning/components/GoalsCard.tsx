@@ -1,6 +1,16 @@
 ﻿import { useState } from 'react';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { Target, Plus, Trash2, PlusCircle, Eye, TrendingUp, Calendar, Minus } from 'lucide-react';
+import {
+  Target,
+  Plus,
+  Trash2,
+  PlusCircle,
+  Eye,
+  TrendingUp,
+  Calendar,
+  Minus,
+  PartyPopper,
+} from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
@@ -55,10 +65,21 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
           </Button>
 
           {goals.length === 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 0', gap: 8 }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '32px 0',
+                gap: 8,
+              }}
+            >
               <Target size={40} style={{ opacity: 0.3, color: '#94a3b8' }} />
               <p style={{ fontSize: 13, color: '#94a3b8', margin: 0 }}>Nenhuma meta ainda</p>
-              <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>Crie sua primeira meta financeira!</p>
+              <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>
+                Crie sua primeira meta financeira!
+              </p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -99,8 +120,9 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                             {goal.description}
                           </p>
                           <span
-                            className={`text-xs font-medium px-2 py-0.5 rounded-full border ${badge.color}`}
+                            className={`text-xs font-medium px-2 py-0.5 rounded-full border ${badge.color} inline-flex items-center gap-1`}
                           >
+                            <badge.icon size={11} />
                             {badge.label}
                           </span>
                         </div>
@@ -196,7 +218,8 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                         <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-violet-50 border border-violet-100 rounded-lg mb-3">
                           <Calendar size={11} className="text-violet-500 shrink-0" />
                           <p className="text-xs text-violet-700">
-                            Guardar <span className="font-mono">{fmt(insights.suggestedMonthly)}</span>
+                            Guardar{' '}
+                            <span className="font-mono">{fmt(insights.suggestedMonthly)}</span>
                             /mês para bater o prazo
                           </p>
                         </div>
@@ -212,7 +235,8 @@ export function GoalsCard({ onCreateNew }: { onCreateNew: () => void }) {
                       </button>
                     ) : (
                       <div className="flex items-center justify-center gap-2 py-2 rounded-lg bg-emerald-100 text-emerald-700 text-xs font-semibold">
-                        🎉 Meta concluída!
+                        <PartyPopper size={13} />
+                        Meta concluída!
                       </div>
                     )}
                   </div>

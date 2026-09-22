@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { ChevronLeft, ChevronRight, Sparkles, Moon, Sun } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sparkles, Moon, Sun, Hand } from 'lucide-react';
 import { useUserInfo, useUserFamily } from '@/hooks/useUserInfo';
 import { useTheme } from '@/hooks/useTheme';
 
@@ -69,8 +69,9 @@ export function DashboardHeader({ month, year, setMonth, setYear }: Props) {
           <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-success-500 rounded-full border-2 border-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-primary-900">
-            {getGreeting()}, {userInfo?.name?.split(' ')[0] || 'Felipe'} 👋
+          <h1 className="text-2xl font-bold text-primary-900 flex items-center gap-2">
+            {getGreeting()}, {userInfo?.name?.split(' ')[0] || 'Felipe'}
+            <Hand size={20} className="text-primary-500" />
           </h1>
           <p className="text-sm text-primary-500 capitalize">{dateStr}</p>
         </div>

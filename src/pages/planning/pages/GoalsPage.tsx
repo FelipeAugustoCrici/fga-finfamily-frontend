@@ -1,6 +1,16 @@
 ﻿import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Target, Plus, Trash2, PlusCircle, Eye, TrendingUp, Calendar, Minus } from 'lucide-react';
+import {
+  Target,
+  Plus,
+  Trash2,
+  PlusCircle,
+  Eye,
+  TrendingUp,
+  Calendar,
+  Minus,
+  PartyPopper,
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -58,7 +68,9 @@ export function GoalsPage() {
   const { data: goals = [], isLoading } = useGoals();
   const deleteGoal = useDeleteGoal();
 
-  const _active = goals.filter((g) => g.status !== 'archived' && g.currentValue / g.targetValue < 1);
+  const _active = goals.filter(
+    (g) => g.status !== 'archived' && g.currentValue / g.targetValue < 1,
+  );
   const _completed = goals.filter(
     (g) => g.status === 'completed' || g.currentValue / g.targetValue >= 1,
   );
@@ -246,7 +258,9 @@ export function GoalsPage() {
                       {}
                       <span
                         style={{
-                          display: 'inline-block',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 3,
                           fontSize: 10,
                           fontWeight: 700,
                           padding: '2px 8px',
@@ -257,6 +271,7 @@ export function GoalsPage() {
                           border: `1px solid ${isDark ? barColors.glow : barColors.from + '40'}`,
                         }}
                       >
+                        <badge.icon size={10} />
                         {badge.label}
                       </span>
                     </div>
@@ -555,6 +570,10 @@ export function GoalsPage() {
                 ) : (
                   <div
                     style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6,
                       padding: '10px 0',
                       borderRadius: 12,
                       textAlign: 'center',
@@ -565,7 +584,8 @@ export function GoalsPage() {
                       fontWeight: 700,
                     }}
                   >
-                    🎉 Meta concluída!
+                    <PartyPopper size={14} />
+                    Meta concluída!
                   </div>
                 )}
               </div>

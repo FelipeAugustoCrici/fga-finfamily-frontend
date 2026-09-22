@@ -14,6 +14,9 @@ type RecordFormData = {
   isRecurring: boolean;
   durationMonths?: string;
   isShared?: boolean;
+  paymentMethod?: 'account' | 'credit_card';
+  creditCardId?: string;
+  installments?: string;
 };
 
 const mapFormTypeToBackendType = (formType: string, isRecurring: boolean): string => {
@@ -31,6 +34,8 @@ export function useCreateRecord() {
     mutationFn: (formData: RecordFormData) => {
       const backendType = mapFormTypeToBackendType(formData.type, formData.isRecurring);
 
+      const isCreditCard = formData.type === 'expense' && formData.paymentMethod === 'credit_card';
+
       const data: any = {
         ...formData,
         formType: formData.type,
@@ -38,6 +43,9 @@ export function useCreateRecord() {
         value: Number(formData.value),
         durationMonths: formData.durationMonths ? Number(formData.durationMonths) : undefined,
         status: 'PENDING' as const,
+        paymentMethod: isCreditCard ? 'credit_card' : undefined,
+        creditCardId: isCreditCard ? formData.creditCardId : undefined,
+        installments: isCreditCard ? Number(formData.installments || 1) : undefined,
       };
 
       if (!data.categoryName || data.categoryName.trim() === '') {
@@ -63,10 +71,10 @@ export function useCreateRecord() {
         variant: 'success',
       });
     },
-    onError: () => {
+    onError: (error: any) => {
       showToast({
         title: 'Erro',
-        description: 'Erro ao criar lançamento',
+        description: error?.response?.data?.message || 'Erro ao criar lançamento',
         variant: 'error',
       });
     },

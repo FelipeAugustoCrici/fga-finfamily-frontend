@@ -2,6 +2,8 @@ export type RecordKind = 'income' | 'expense';
 
 export type RecordStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'PARTIALLY_PAID';
 
+export type PaymentMethod = 'account' | 'credit_card';
+
 export type RecordOrigin =
   | 'expenses'
   | 'salaries'
@@ -46,6 +48,12 @@ export type UnifiedRecord = {
   originExpenseId?: string | null;
   originMonth?: number | null;
   originYear?: number | null;
+  paymentMethod?: PaymentMethod;
+  isCreditCard?: boolean;
+  creditCardId?: string | null;
+  purchaseId?: string | null;
+  installmentId?: string | null;
+  creditCardInvoiceId?: string | null;
 };
 
 export interface Record {
@@ -62,6 +70,11 @@ export interface Record {
   status?: RecordStatus;
   createdAt?: string;
   updatedAt?: string;
+  paymentMethod?: PaymentMethod;
+  creditCardId?: string | null;
+  purchaseId?: string | null;
+  installmentId?: string | null;
+  creditCardInvoiceId?: string | null;
 }
 
 export interface CreateRecordDTO {
@@ -74,6 +87,9 @@ export interface CreateRecordDTO {
   familyId?: string;
   recurringId?: string;
   status?: RecordStatus;
+  paymentMethod?: PaymentMethod;
+  creditCardId?: string;
+  installments?: number;
 }
 
 export interface UpdateRecordDTO {

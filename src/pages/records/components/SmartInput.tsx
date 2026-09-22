@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   RefreshCw,
   ChevronRight,
+  Check,
 } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import { parseSmartInput, saveUserPattern } from '../hooks/useSmartParser';
@@ -565,7 +566,8 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
             gap: 6,
           }}
         >
-          ✓ Campos preenchidos automaticamente
+          <Check size={13} strokeWidth={3} />
+          Campos preenchidos automaticamente
         </div>
       )}
 
@@ -584,9 +586,7 @@ export function SmartInput({ categories, familyId }: SmartInputProps) {
           }}
         >
           <AlertTriangle size={13} style={{ color: t.warning.text, flexShrink: 0 }} />
-          <span style={{ fontSize: 11, color: t.warning.text, fontWeight: 600 }}>
-            {valueAlert}
-          </span>
+          <span style={{ fontSize: 11, color: t.warning.text, fontWeight: 600 }}>{valueAlert}</span>
         </div>
       )}
 

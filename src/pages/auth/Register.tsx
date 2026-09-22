@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Sparkles, Sun, Moon } from 'lucide-react';
+import { Sparkles, Sun, Moon, Check } from 'lucide-react';
 import { useSignUp } from './hooks/useSignUp';
 import { registerStep1Schema, type RegisterStep1Data } from './schemas/register.schema';
 import { translateAuthError } from './services/auth.errors';
@@ -185,7 +185,7 @@ export function Register() {
                         transition: 'all 0.2s',
                       }}
                     >
-                      {isDone ? '✓' : idx}
+                      {isDone ? <Check size={13} strokeWidth={3} /> : idx}
                     </div>
                     <span
                       style={{

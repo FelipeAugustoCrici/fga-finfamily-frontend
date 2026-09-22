@@ -1,4 +1,4 @@
-﻿import { ChevronLeft, ChevronRight, Moon, Sun, Sparkles } from 'lucide-react';
+﻿import { ChevronLeft, ChevronRight, Moon, Sun, Sparkles, Hand } from 'lucide-react';
 import { useUserInfo, useUserFamily } from '@/hooks/useUserInfo';
 import { useTheme } from '@/hooks/useTheme';
 import { useTokens } from '@/hooks/useTokens';
@@ -69,8 +69,12 @@ export function PageHeader({
           <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success-500 rounded-full border-2 border-white" />
         </div>
         <div>
-          <h1 className="text-xl font-bold" style={{ color: t.text.primary }}>
-            {getGreeting()}, {userInfo?.name?.split(' ')[0] || 'Usuário'} 👋
+          <h1
+            className="text-xl font-bold flex items-center gap-1.5"
+            style={{ color: t.text.primary }}
+          >
+            {getGreeting()}, {userInfo?.name?.split(' ')[0] || 'Usuário'}
+            <Hand size={16} style={{ color: t.text.muted }} />
           </h1>
           <p className="text-xs capitalize" style={{ color: t.text.muted }}>
             {dateStr}

@@ -6,6 +6,7 @@
   User,
   DollarSign,
   FileText,
+  Check,
 } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import type { ParsedLaunch } from './quickLaunch.parser';
@@ -60,8 +61,12 @@ export function QuickLaunchPreview({
           {typeLabel}
         </span>
         {parsed.confidence >= 0.7 && (
-          <span className="ml-auto text-xs font-medium" style={{ color: t.income.text }}>
-            ✓ pronto para salvar
+          <span
+            className="ml-auto text-xs font-medium flex items-center gap-1"
+            style={{ color: t.income.text }}
+          >
+            <Check size={12} strokeWidth={3} />
+            pronto para salvar
           </span>
         )}
       </div>

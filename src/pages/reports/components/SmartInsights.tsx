@@ -5,6 +5,7 @@ import {
   Target,
   Sparkles,
   CheckCircle2,
+  Lightbulb,
 } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import type { SummaryData } from '../types/reports.types';
@@ -176,10 +177,10 @@ function buildInsights(
   return insights.slice(0, 8);
 }
 
-const GROUP_LABELS: Record<string, string> = {
-  alerta: '⚠ Alertas',
-  oportunidade: '💡 Oportunidades',
-  evolucao: '📈 Evolução',
+const GROUP_META: Record<string, { label: string; icon: typeof AlertTriangle }> = {
+  alerta: { label: 'Alertas', icon: AlertTriangle },
+  oportunidade: { label: 'Oportunidades', icon: Lightbulb },
+  evolucao: { label: 'Evolução', icon: TrendingUp },
 };
 
 export function SmartInsights({ summaries, current, previous }: Props) {
@@ -220,7 +221,8 @@ export function SmartInsights({ summaries, current, previous }: Props) {
   const grouped = groups
     .map((g) => ({
       key: g,
-      label: GROUP_LABELS[g],
+      label: GROUP_META[g].label,
+      icon: GROUP_META[g].icon,
       items: insights.filter((i) => i.group === g),
     }))
     .filter((g) => g.items.length > 0);
@@ -245,10 +247,13 @@ export function SmartInsights({ summaries, current, previous }: Props) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {grouped.map(({ key, label, items }) => (
+        {grouped.map(({ key, label, icon: GroupIcon, items }) => (
           <div key={key}>
             <p
               style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
                 fontSize: 11,
                 fontWeight: 700,
                 color: t.text.muted,
@@ -257,6 +262,7 @@ export function SmartInsights({ summaries, current, previous }: Props) {
                 marginBottom: 8,
               }}
             >
+              <GroupIcon size={12} />
               {label}
             </p>
             <div

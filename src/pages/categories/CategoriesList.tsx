@@ -1,7 +1,18 @@
 ﻿import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Loader2, Trash2, Tag, TrendingDown, TrendingUp, Layers, Pencil, Check, X } from 'lucide-react';
+import {
+  Plus,
+  Loader2,
+  Trash2,
+  Tag,
+  TrendingDown,
+  TrendingUp,
+  Layers,
+  Pencil,
+  Check,
+  X,
+} from 'lucide-react';
 import { SkeletonList } from '@/components/ui/Skeleton';
 import { ActionButton } from '@/components/ui/ActionButton';
 
@@ -61,7 +72,10 @@ export function CategoriesList() {
 
   const confirmEdit = (cat: Category) => {
     const trimmed = editingName.trim();
-    if (!trimmed || trimmed === cat.name) { cancelEdit(); return; }
+    if (!trimmed || trimmed === cat.name) {
+      cancelEdit();
+      return;
+    }
     updateCategory.mutate(
       { id: cat.id, data: { name: trimmed, type: cat.type } },
       { onSuccess: cancelEdit, onError: cancelEdit },
@@ -258,7 +272,8 @@ export function CategoriesList() {
                 gap: 6,
               }}
             >
-              ✓ Categoria criada com sucesso
+              <Check size={13} strokeWidth={3} />
+              Categoria criada com sucesso
             </div>
           )}
 
@@ -277,8 +292,16 @@ export function CategoriesList() {
               <Select
                 label="Tipo"
                 options={[
-                  { value: 'expense', label: '💸 Despesa' },
-                  { value: 'income', label: '💰 Receita' },
+                  {
+                    value: 'expense',
+                    label: 'Despesa',
+                    icon: <TrendingDown size={14} />,
+                  },
+                  {
+                    value: 'income',
+                    label: 'Receita',
+                    icon: <TrendingUp size={14} />,
+                  },
                 ]}
                 value={selectedType}
                 onChange={(val) => setValue('type', val as 'expense' | 'income')}
@@ -376,7 +399,7 @@ export function CategoriesList() {
             }}
           >
             <button style={tabActiveStyle('expense')} onClick={() => setActiveTab('expense')}>
-              <span style={{ marginRight: 6 }}>💸</span>
+              <TrendingDown size={14} style={{ marginRight: 6 }} />
               Despesas
               <span
                 style={{
@@ -392,7 +415,7 @@ export function CategoriesList() {
               </span>
             </button>
             <button style={tabActiveStyle('income')} onClick={() => setActiveTab('income')}>
-              <span style={{ marginRight: 6 }}>💰</span>
+              <TrendingUp size={14} style={{ marginRight: 6 }} />
               Receitas
               <span
                 style={{
@@ -431,20 +454,36 @@ export function CategoriesList() {
                         padding: '13px 18px',
                         borderBottom: isLast ? 'none' : `1px solid ${t.border.divider}`,
                         background: isEditing
-                          ? isDark ? 'rgba(99,102,241,0.06)' : '#f5f3ff'
-                          : isHovered ? t.bg.cardHover : 'transparent',
+                          ? isDark
+                            ? 'rgba(99,102,241,0.06)'
+                            : '#f5f3ff'
+                          : isHovered
+                            ? t.bg.cardHover
+                            : 'transparent',
                         transition: 'background 0.15s ease',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 12,
+                          flex: 1,
+                          minWidth: 0,
+                        }}
+                      >
                         <div
                           style={{
                             width: 36,
                             height: 36,
                             borderRadius: 10,
                             background: isExpense
-                              ? isDark ? 'rgba(239,68,68,0.12)' : '#fef2f2'
-                              : isDark ? 'rgba(16,185,129,0.12)' : '#ecfdf5',
+                              ? isDark
+                                ? 'rgba(239,68,68,0.12)'
+                                : '#fef2f2'
+                              : isDark
+                                ? 'rgba(16,185,129,0.12)'
+                                : '#ecfdf5',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -453,7 +492,15 @@ export function CategoriesList() {
                         >
                           <Tag
                             size={16}
-                            color={isExpense ? (isDark ? '#fca5a5' : '#dc2626') : (isDark ? '#6ee7b7' : '#166534')}
+                            color={
+                              isExpense
+                                ? isDark
+                                  ? '#fca5a5'
+                                  : '#dc2626'
+                                : isDark
+                                  ? '#6ee7b7'
+                                  : '#166534'
+                            }
                           />
                         </div>
 
@@ -510,25 +557,40 @@ export function CategoriesList() {
                               onClick={() => confirmEdit(cat)}
                               disabled={updateCategory.isPending}
                               style={{
-                                display: 'flex', alignItems: 'center', gap: 5,
-                                padding: '6px 12px', borderRadius: 8, border: 'none',
-                                background: '#6366f1', color: '#fff',
-                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 5,
+                                padding: '6px 12px',
+                                borderRadius: 8,
+                                border: 'none',
+                                background: '#6366f1',
+                                color: '#fff',
+                                fontSize: 12,
+                                fontWeight: 600,
+                                cursor: 'pointer',
                               }}
                             >
-                              {updateCategory.isPending
-                                ? <Loader2 size={12} className="animate-spin" />
-                                : <Check size={12} />}
+                              {updateCategory.isPending ? (
+                                <Loader2 size={12} className="animate-spin" />
+                              ) : (
+                                <Check size={12} />
+                              )}
                               Salvar
                             </button>
                             <button
                               onClick={cancelEdit}
                               style={{
-                                display: 'flex', alignItems: 'center', gap: 5,
-                                padding: '6px 10px', borderRadius: 8,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 5,
+                                padding: '6px 10px',
+                                borderRadius: 8,
                                 border: `1px solid ${t.border.default}`,
-                                background: 'transparent', color: t.text.muted,
-                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                                background: 'transparent',
+                                color: t.text.muted,
+                                fontSize: 12,
+                                fontWeight: 600,
+                                cursor: 'pointer',
                               }}
                             >
                               <X size={12} />
@@ -540,12 +602,17 @@ export function CategoriesList() {
                             <button
                               onClick={() => startEdit(cat)}
                               style={{
-                                display: 'flex', alignItems: 'center', gap: 5,
-                                padding: '6px 12px', borderRadius: 8,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 5,
+                                padding: '6px 12px',
+                                borderRadius: 8,
                                 border: `1px solid ${isDark ? 'rgba(99,102,241,0.25)' : '#c7d2fe'}`,
                                 background: isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff',
                                 color: isDark ? '#a5b4fc' : '#4338ca',
-                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                                fontSize: 12,
+                                fontWeight: 600,
+                                cursor: 'pointer',
                               }}
                             >
                               <Pencil size={12} />
@@ -554,12 +621,17 @@ export function CategoriesList() {
                             <button
                               onClick={() => setCategoryToDelete(cat)}
                               style={{
-                                display: 'flex', alignItems: 'center', gap: 5,
-                                padding: '6px 12px', borderRadius: 8,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 5,
+                                padding: '6px 12px',
+                                borderRadius: 8,
                                 border: `1px solid ${isDark ? 'rgba(239,68,68,0.25)' : '#fecaca'}`,
                                 background: isDark ? 'rgba(239,68,68,0.08)' : '#fef2f2',
                                 color: isDark ? '#fca5a5' : '#dc2626',
-                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                                fontSize: 12,
+                                fontWeight: 600,
+                                cursor: 'pointer',
                               }}
                             >
                               <Trash2 size={12} />

@@ -10,9 +10,10 @@ interface ToggleCardProps {
   description: string;
   checked: boolean;
   onToggle: () => void;
+  disabled?: boolean;
 }
 
-function ToggleCard({ icon, title, description, checked, onToggle }: ToggleCardProps) {
+function ToggleCard({ icon, title, description, checked, onToggle, disabled }: ToggleCardProps) {
   const t = useTokens();
   const [hovered, setHovered] = useState(false);
 
@@ -20,6 +21,7 @@ function ToggleCard({ icon, title, description, checked, onToggle }: ToggleCardP
     <button
       type="button"
       onClick={onToggle}
+      disabled={disabled}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -30,7 +32,8 @@ function ToggleCard({ icon, title, description, checked, onToggle }: ToggleCardP
         borderRadius: 12,
         border: `1px solid ${checked ? t.text.primary : hovered ? t.border.strong : t.border.default}`,
         background: checked ? t.bg.cardHover : t.bg.card,
-        cursor: 'pointer',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.6 : 1,
         textAlign: 'left',
         width: '100%',
         transition: 'all 0.15s ease',
@@ -96,9 +99,10 @@ function ToggleCard({ icon, title, description, checked, onToggle }: ToggleCardP
 
 interface ToggleCardsProps {
   showShared?: boolean;
+  disabled?: boolean;
 }
 
-export function ToggleCards({ showShared = true }: ToggleCardsProps) {
+export function ToggleCards({ showShared = true, disabled }: ToggleCardsProps) {
   const { register, setValue } = useFormContext();
   const isShared = useWatch({ name: 'isShared' });
   const isRecurring = useWatch({ name: 'isRecurring' });
@@ -119,6 +123,7 @@ export function ToggleCards({ showShared = true }: ToggleCardsProps) {
             title="Compartilhada"
             description="Dividir entre membros"
             checked={!!isShared}
+            disabled={disabled}
             onToggle={() => setValue('isShared', !isShared)}
           />
         )}
@@ -127,6 +132,7 @@ export function ToggleCards({ showShared = true }: ToggleCardsProps) {
           title="Recorrente"
           description="Repetir mensalmente"
           checked={!!isRecurring}
+          disabled={disabled}
           onToggle={() => setValue('isRecurring', !isRecurring)}
         />
       </div>

@@ -1,5 +1,17 @@
 ﻿import { useState, useRef, useEffect, useCallback } from 'react';
-import { Sparkles, Loader2, X, ArrowRight, Pencil } from 'lucide-react';
+import {
+  Sparkles,
+  Loader2,
+  X,
+  ArrowRight,
+  Pencil,
+  Check,
+  ShoppingCart,
+  Fuel,
+  Wallet,
+  UtensilsCrossed,
+  Car,
+} from 'lucide-react';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { useCategories } from '@/pages/categories/hooks/useCategories';
@@ -21,11 +33,11 @@ const PLACEHOLDERS = [
 ];
 
 const QUICK_HINTS = [
-  { label: '🛒 Mercado', text: 'mercado 120' },
-  { label: '⛽ Gasolina', text: 'gasolina 80' },
-  { label: '💰 Salário', text: 'recebi salário 3000' },
-  { label: '🍔 iFood', text: 'ifood 45' },
-  { label: '🚗 Uber', text: 'uber 18' },
+  { icon: ShoppingCart, label: 'Mercado', text: 'mercado 120' },
+  { icon: Fuel, label: 'Gasolina', text: 'gasolina 80' },
+  { icon: Wallet, label: 'Salário', text: 'recebi salário 3000' },
+  { icon: UtensilsCrossed, label: 'iFood', text: 'ifood 45' },
+  { icon: Car, label: 'Uber', text: 'uber 18' },
 ];
 
 export function QuickLaunchInput() {
@@ -213,7 +225,10 @@ export function QuickLaunchInput() {
             transform: isActive ? 'scale(1.05)' : 'scale(1)',
           }}
         >
-          <Sparkles size={16} color={isActive ? '#fff' : isDark ? t.income.textAlt : t.income.text} />
+          <Sparkles
+            size={16}
+            color={isActive ? '#fff' : isDark ? t.income.textAlt : t.income.text}
+          />
         </div>
 
         {/* Label + input stacked */}
@@ -276,13 +291,17 @@ export function QuickLaunchInput() {
         {saved ? (
           <span
             style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 4,
               fontSize: 12,
               fontWeight: 700,
               color: isDark ? '#6ee7b7' : '#059669',
               flexShrink: 0,
             }}
           >
-            ✓ Salvo!
+            <Check size={13} strokeWidth={3} />
+            Salvo!
           </span>
         ) : text.length > 0 ? (
           <button
@@ -460,6 +479,9 @@ export function QuickLaunchInput() {
                 inputRef.current?.focus();
               }}
               style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
                 fontSize: 11,
                 padding: '4px 10px',
                 borderRadius: 999,
@@ -485,6 +507,7 @@ export function QuickLaunchInput() {
                   : t.income.border;
               }}
             >
+              <hint.icon size={11} />
               {hint.label}
             </button>
           ))}

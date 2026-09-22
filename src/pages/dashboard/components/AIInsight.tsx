@@ -28,52 +28,51 @@ function buildInsight({
   const insights: string[] = [];
 
   if (balance > 0) {
-    insights.push(`Você manteve um saldo positivo de ${fmt(balance)} este mês 👏`);
+    insights.push(`Você manteve um saldo positivo de ${fmt(balance)} este mês`);
   } else if (balance < 0) {
-    insights.push(`Atenção: seu saldo está negativo em ${fmt(Math.abs(balance))} este mês ⚠️`);
+    insights.push(`Atenção: seu saldo está negativo em ${fmt(Math.abs(balance))} este mês`);
   }
 
   if (prevExpenses !== undefined && prevExpenses > 0) {
     const diff = expenses - prevExpenses;
     const pct = Math.abs((diff / prevExpenses) * 100).toFixed(0);
-    if (diff < 0)
-      insights.push(`Você gastou ${pct}% menos que no mês passado — ótimo controle! 📉`);
-    else if (diff > 0) insights.push(`Seus gastos aumentaram ${pct}% em relação ao mês passado 📈`);
+    if (diff < 0) insights.push(`Você gastou ${pct}% menos que no mês passado — ótimo controle!`);
+    else if (diff > 0) insights.push(`Seus gastos aumentaram ${pct}% em relação ao mês passado`);
   }
 
   if (prevIncomes !== undefined && prevIncomes > 0) {
     const diff = incomes - prevIncomes;
     const pct = Math.abs((diff / prevIncomes) * 100).toFixed(0);
-    if (diff > 0) insights.push(`Sua renda cresceu ${pct}% comparado ao mês anterior 💰`);
+    if (diff > 0) insights.push(`Sua renda cresceu ${pct}% comparado ao mês anterior`);
   }
 
   if (incomes > 0) {
     const ratio = (expenses / incomes) * 100;
     if (ratio < 50)
       insights.push(
-        `Você comprometeu apenas ${ratio.toFixed(0)}% da sua renda com gastos — excelente! 🎯`,
+        `Você comprometeu apenas ${ratio.toFixed(0)}% da sua renda com gastos — excelente!`,
       );
     else if (ratio > 90)
       insights.push(
-        `Seus gastos representam ${ratio.toFixed(0)}% da renda. Considere revisar o orçamento 🔍`,
+        `Seus gastos representam ${ratio.toFixed(0)}% da renda. Considere revisar o orçamento`,
       );
   }
 
-  if (topCategory) insights.push(`Seu maior gasto foi com ${topCategory} 🏷️`);
+  if (topCategory) insights.push(`Seu maior gasto foi com ${topCategory}`);
 
   if (healthScore !== undefined) {
     if (healthScore >= 90)
-      insights.push(`Sua saúde financeira está em ${healthScore}% — continue assim! 🌟`);
+      insights.push(`Sua saúde financeira está em ${healthScore}% — continue assim!`);
     else if (healthScore < 50)
       insights.push(
-        `Sua saúde financeira está em ${healthScore}%. Pequenos ajustes fazem grande diferença 💡`,
+        `Sua saúde financeira está em ${healthScore}%. Pequenos ajustes fazem grande diferença`,
       );
   }
 
   return (
     insights[0] ??
     message ??
-    'Seus dados financeiros estão sendo analisados. Continue registrando seus lançamentos! 📊'
+    'Seus dados financeiros estão sendo analisados. Continue registrando seus lançamentos!'
   );
 }
 

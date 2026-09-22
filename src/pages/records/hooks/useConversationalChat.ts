@@ -123,7 +123,7 @@ export function useConversationalChat(
     setPendingMsgId(null);
     addMessage({
       role: 'system',
-      text: '✓ Lançamentos salvos com sucesso! Pode continuar registrando.',
+      text: 'Lançamentos salvos com sucesso! Pode continuar registrando.',
     });
   }, [pendingMsgId, updateMessage, addMessage]);
 

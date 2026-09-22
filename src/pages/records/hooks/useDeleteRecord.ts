@@ -22,10 +22,10 @@ export function useDeleteRecord() {
         variant: 'success',
       });
     },
-    onError: () => {
+    onError: (error: any) => {
       showToast({
         title: 'Erro',
-        description: 'Erro ao excluir lançamento',
+        description: error?.response?.data?.message || 'Erro ao excluir lançamento',
         variant: 'error',
       });
     },

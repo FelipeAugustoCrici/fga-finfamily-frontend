@@ -89,7 +89,7 @@ export function CategoryTrends({ summaries }: Props) {
 
           const Icon = isUp ? TrendingUp : isDown ? TrendingDown : Minus;
 
-          const statusLabel = isUp ? '↑ Aumentando' : isDown ? '↓ Diminuindo' : '→ Estável';
+          const statusLabel = isUp ? 'Aumentando' : isDown ? 'Diminuindo' : 'Estável';
 
           return (
             <div

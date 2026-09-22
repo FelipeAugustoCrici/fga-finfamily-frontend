@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, Wallet, Inbox } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import { CalendarEventItem } from './CalendarEventItem';
 import type { CalendarDaySummary } from '../types/calendar.types';
@@ -210,7 +210,7 @@ export function DayView({ selectedDate, days, onDateChange, onEventClick: _onEve
               padding: '40px 0',
             }}
           >
-            <span style={{ fontSize: 32 }}>📭</span>
+            <Inbox size={32} style={{ color: t.text.muted }} strokeWidth={1.5} />
             <p style={{ fontSize: 14, color: t.text.muted }}>Nenhum lançamento neste dia</p>
           </div>
         )}

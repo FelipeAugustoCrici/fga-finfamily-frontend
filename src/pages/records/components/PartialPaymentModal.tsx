@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTokens } from '@/hooks/useTokens';
 import { Button } from '@/components/ui/Button';
 import { CurrencyInput } from '@/components/ui/CurrencyInput';
-import { X, CreditCard, Loader2, AlertCircle, CalendarArrowUp } from 'lucide-react';
+import { X, CreditCard, Loader2, AlertCircle, CalendarArrowUp, Pin } from 'lucide-react';
 import { useAddPayment } from '../hooks/useExpensePayments';
 
 interface Props {
@@ -46,7 +46,20 @@ export function PartialPaymentModal({
   // Next month label
   const nextMonth = expenseMonth === 12 ? 1 : expenseMonth + 1;
   const nextYear = expenseMonth === 12 ? expenseYear + 1 : expenseYear;
-  const MONTHS_PT = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const MONTHS_PT = [
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez',
+  ];
   const nextMonthLabel = `${MONTHS_PT[nextMonth - 1]}/${nextYear}`;
 
   const validate = () => {
@@ -76,9 +89,7 @@ export function PartialPaymentModal({
 
   const percentPaid = totalValue > 0 ? ((paidAmount / totalValue) * 100).toFixed(0) : '0';
   const percentAfter =
-    totalValue > 0
-      ? (((paidAmount + numericAmount) / totalValue) * 100).toFixed(0)
-      : '0';
+    totalValue > 0 ? (((paidAmount + numericAmount) / totalValue) * 100).toFixed(0) : '0';
 
   return (
     <div
@@ -343,13 +354,13 @@ export function PartialPaymentModal({
                     value: false,
                     label: 'Manter no mês atual',
                     sub: `Saldo de ${fmt(remainingAfterPayment)} permanece neste mês · Status: Parc. Pago`,
-                    icon: '📌',
+                    icon: Pin,
                   },
                   {
                     value: true,
                     label: 'Transferir para próximo mês',
                     sub: `Nova conta de ${fmt(remainingAfterPayment)} criada em ${nextMonthLabel} · Status: Pendente`,
-                    icon: '📅',
+                    icon: CalendarArrowUp,
                   },
                 ].map((opt) => (
                   <label
@@ -363,7 +374,9 @@ export function PartialPaymentModal({
                       border: `1.5px solid ${transferToNextMonth === opt.value ? '#6366f1' : t.border.default}`,
                       background:
                         transferToNextMonth === opt.value
-                          ? isDark ? 'rgba(99,102,241,0.08)' : '#eef2ff'
+                          ? isDark
+                            ? 'rgba(99,102,241,0.08)'
+                            : '#eef2ff'
                           : 'transparent',
                       cursor: 'pointer',
                       transition: 'all 0.15s',
@@ -376,10 +389,23 @@ export function PartialPaymentModal({
                       style={{ accentColor: '#6366f1', marginTop: 2, flexShrink: 0 }}
                     />
                     <div>
-                      <p style={{ fontSize: 13, fontWeight: 600, color: t.text.primary, margin: 0 }}>
-                        {opt.icon} {opt.label}
+                      <p
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: t.text.primary,
+                          margin: 0,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                        }}
+                      >
+                        <opt.icon size={13} />
+                        {opt.label}
                       </p>
-                      <p style={{ fontSize: 11, color: t.text.muted, margin: '2px 0 0' }}>{opt.sub}</p>
+                      <p style={{ fontSize: 11, color: t.text.muted, margin: '2px 0 0' }}>
+                        {opt.sub}
+                      </p>
                     </div>
                   </label>
                 ))}
@@ -390,7 +416,13 @@ export function PartialPaymentModal({
           {/* Note */}
           <div>
             <label
-              style={{ fontSize: 12, fontWeight: 600, color: t.text.secondary, display: 'block', marginBottom: 6 }}
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: t.text.secondary,
+                display: 'block',
+                marginBottom: 6,
+              }}
             >
               Observação <span style={{ color: t.text.muted, fontWeight: 400 }}>(opcional)</span>
             </label>

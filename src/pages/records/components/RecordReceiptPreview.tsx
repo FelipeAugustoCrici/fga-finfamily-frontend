@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { Check, RotateCw, CreditCard } from 'lucide-react';
 import { Person } from '@/types';
 import { formatShortDate, formatMonthYear } from '@/common/utils/date';
 import { useTokens } from '@/hooks/useTokens';
@@ -8,6 +9,7 @@ import { Tokens } from '@/theme/tokens';
 type RecordReceiptPreviewProps = {
   people: Person[];
   categories?: any[];
+  creditCards?: any[];
 };
 
 function getTypeMeta(t: Tokens) {
@@ -30,7 +32,11 @@ function zigStyle(paper: string, flip: boolean): React.CSSProperties {
   };
 }
 
-export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptPreviewProps) {
+export function RecordReceiptPreview({
+  people,
+  categories = [],
+  creditCards = [],
+}: RecordReceiptPreviewProps) {
   const { control } = useFormContext();
   const t = useTokens();
   const meta = getTypeMeta(t);
@@ -44,9 +50,14 @@ export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptP
   const isShared = useWatch({ control, name: 'isShared' });
   const categoryId = useWatch({ control, name: 'categoryId' });
   const durationMonths = useWatch({ control, name: 'durationMonths' });
+  const paymentMethod = useWatch({ control, name: 'paymentMethod' });
+  const creditCardId = useWatch({ control, name: 'creditCardId' });
+  const installments = useWatch({ control, name: 'installments' });
 
   const personName = _.find(people, { id: personId })?.name || '';
   const categoryName = _.find(categories, { id: categoryId })?.name || '';
+  const cardName = _.find(creditCards, { id: creditCardId })?.name || '';
+  const isCreditCard = type === 'expense' && paymentMethod === 'credit_card';
   const shortDate = date ? formatShortDate(date) : '';
   const refDate = date ? formatMonthYear(date) : '';
 
@@ -105,7 +116,13 @@ export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptP
             </div>
           </div>
 
-          <hr style={{ border: 'none', borderTop: `1.5px dashed ${t.receipt.line}`, margin: '14px 0' }} />
+          <hr
+            style={{
+              border: 'none',
+              borderTop: `1.5px dashed ${t.receipt.line}`,
+              margin: '14px 0',
+            }}
+          />
 
           {/* Type + description */}
           <div
@@ -162,7 +179,13 @@ export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptP
             {formattedValue}
           </div>
 
-          <hr style={{ border: 'none', borderTop: `1.5px dashed ${t.receipt.line}`, margin: '14px 0' }} />
+          <hr
+            style={{
+              border: 'none',
+              borderTop: `1.5px dashed ${t.receipt.line}`,
+              margin: '14px 0',
+            }}
+          />
 
           {/* Detail lines */}
           <div style={{ fontSize: 12 }}>
@@ -177,17 +200,27 @@ export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptP
             {type === 'expense' && (
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0' }}>
                 <span style={{ color: t.receipt.sub }}>Categoria</span>
-                <span style={{ fontWeight: 700, color: t.text.primary }}>{categoryName || '—'}</span>
+                <span style={{ fontWeight: 700, color: t.text.primary }}>
+                  {categoryName || '—'}
+                </span>
               </div>
             )}
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0' }}>
               <span style={{ color: t.receipt.sub }}>Responsável</span>
               <span style={{ fontWeight: 700, color: t.text.primary }}>{personName || '—'}</span>
             </div>
+            {type === 'expense' && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0' }}>
+                <span style={{ color: t.receipt.sub }}>Pagamento</span>
+                <span style={{ fontWeight: 700, color: t.text.primary }}>
+                  {isCreditCard ? cardName || 'Cartão' : 'Conta'}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Stamps */}
-          {(isRecurring || (type === 'expense' && isShared)) && (
+          {(isRecurring || isCreditCard || (type === 'expense' && isShared)) && (
             <div
               style={{
                 display: 'flex',
@@ -200,6 +233,9 @@ export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptP
               {type === 'expense' && isShared && (
                 <span
                   style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
                     fontSize: 9.5,
                     fontWeight: 700,
                     letterSpacing: '0.08em',
@@ -209,15 +245,17 @@ export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptP
                     color: t.income.textAlt,
                     borderRadius: 3,
                     transform: 'rotate(-2deg)',
-                    display: 'inline-block',
                   }}
                 >
-                  ✓ compartilhada
+                  <Check size={10} strokeWidth={3} /> compartilhada
                 </span>
               )}
               {isRecurring && (
                 <span
                   style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
                     fontSize: 9.5,
                     fontWeight: 700,
                     letterSpacing: '0.08em',
@@ -227,16 +265,43 @@ export function RecordReceiptPreview({ people, categories = [] }: RecordReceiptP
                     color: t.extra.textAlt,
                     borderRadius: 3,
                     transform: 'rotate(1.5deg)',
-                    display: 'inline-block',
                   }}
                 >
-                  ↻ recorrente{durationMonths ? ` · ${durationMonths}m` : ''}
+                  <RotateCw size={10} strokeWidth={3} /> recorrente
+                  {durationMonths ? ` · ${durationMonths}m` : ''}
+                </span>
+              )}
+              {isCreditCard && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    fontSize: 9.5,
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    padding: '4px 9px',
+                    border: `1.5px solid ${t.text.primary}`,
+                    color: t.text.primary,
+                    borderRadius: 3,
+                    transform: 'rotate(-1deg)',
+                  }}
+                >
+                  <CreditCard size={10} strokeWidth={3} />{' '}
+                  {Number(installments) > 1 ? `${installments}x` : 'cartão'}
                 </span>
               )}
             </div>
           )}
 
-          <hr style={{ border: 'none', borderTop: `1.5px dashed ${t.receipt.line}`, margin: '14px 0' }} />
+          <hr
+            style={{
+              border: 'none',
+              borderTop: `1.5px dashed ${t.receipt.line}`,
+              margin: '14px 0',
+            }}
+          />
 
           {/* Footer */}
           <div style={{ textAlign: 'center', padding: '14px 0 20px' }}>

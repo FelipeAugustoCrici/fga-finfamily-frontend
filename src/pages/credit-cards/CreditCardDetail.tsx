@@ -60,7 +60,7 @@ export function CreditCardDetail() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {}
         <div className="space-y-4">
           <CardVisual card={card} />
@@ -68,7 +68,9 @@ export function CreditCardDetail() {
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-primary-500">Limite Total</span>
-                <span className="font-bold text-primary-800 font-mono">{fmt(card.limitAmount)}</span>
+                <span className="font-bold text-primary-800 font-mono">
+                  {fmt(card.limitAmount)}
+                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-primary-500">Limite Usado</span>
@@ -76,7 +78,9 @@ export function CreditCardDetail() {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-primary-500">Disponível</span>
-                <span className="font-bold text-success-600 font-mono">{fmt(card.availableLimit)}</span>
+                <span className="font-bold text-success-600 font-mono">
+                  {fmt(card.availableLimit)}
+                </span>
               </div>
               <div className="w-full bg-primary-100 rounded-full h-2">
                 <div
@@ -99,7 +103,9 @@ export function CreditCardDetail() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-primary-500">Valor</span>
-                  <span className="font-bold text-primary-800 font-mono">{fmt(nextInvoice.totalAmount)}</span>
+                  <span className="font-bold text-primary-800 font-mono">
+                    {fmt(nextInvoice.totalAmount)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-primary-500">Status</span>
@@ -202,7 +208,9 @@ export function CreditCardDetail() {
                         <p className="text-xs text-primary-400">{inst.purchase.category.name}</p>
                       )}
                     </div>
-                    <span className="text-sm font-bold text-primary-800 font-mono">{fmt(inst.amount)}</span>
+                    <span className="text-sm font-bold text-primary-800 font-mono">
+                      {fmt(inst.amount)}
+                    </span>
                   </div>
                 ))}
               </div>

@@ -11,6 +11,8 @@ import {
   Trash2,
   Check,
   Loader2,
+  Undo2,
+  CreditCard,
 } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import { StatusBadge } from './StatusBadge';
@@ -65,13 +67,16 @@ function ActionMenu({
   const navigate = useNavigate();
   const t = useTokens();
   const isDark = t.bg.page === '#12161a';
+  // Parcela de compra no cartão já nasce paga; a fatura agregada é que pode
+  // ser marcada como paga por aqui.
+  const canMarkPaid = record.status !== 'PAID' && !record.purchaseId;
 
   const handleOpen = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
-      // itens (~39px cada) + divisor + bordas; "Marcar como pago" some quando já está pago
-      const menuHeight = (record.status !== 'PAID' ? 4 : 3) * 39 + 6;
+      // itens (~39px cada) + divisor + bordas; "Marcar como pago" some quando já está pago ou é do cartão
+      const menuHeight = (canMarkPaid ? 4 : 3) * 39 + 6;
       const right = window.innerWidth - rect.right;
       const spaceBelow = window.innerHeight - rect.bottom;
       // Sem espaço abaixo: abre para cima, acima do botão
@@ -155,7 +160,7 @@ function ActionMenu({
                 }}
                 t={t}
               />
-              {record.status !== 'PAID' && (
+              {canMarkPaid && (
                 <MenuItem
                   icon={<Check size={14} />}
                   label="Marcar como pago"
@@ -243,6 +248,7 @@ function MenuItem({
 function RecordCard({
   record,
   getPersonName,
+  getCardName,
   onDelete,
   deleteLoading,
   onStatusChange,
@@ -251,6 +257,7 @@ function RecordCard({
 }: {
   record: UnifiedRecord;
   getPersonName: (id: string) => string;
+  getCardName: (id?: string | null) => string;
   onDelete: (r: UnifiedRecord) => void;
   deleteLoading: boolean;
   onStatusChange: (id: string, status: RecordStatus) => void;
@@ -313,7 +320,7 @@ function RecordCard({
           {record.description}
           {record.originExpenseId && (
             <span
-              title={`Saldo transferido de ${String(record.originMonth).padStart(2,'0')}/${record.originYear}`}
+              title={`Saldo transferido de ${String(record.originMonth).padStart(2, '0')}/${record.originYear}`}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -329,7 +336,8 @@ function RecordCard({
                 verticalAlign: 'middle',
               }}
             >
-              ↩ {String(record.originMonth).padStart(2,'0')}/{record.originYear}
+              <Undo2 size={9} style={{ display: 'inline', verticalAlign: -1 }} />{' '}
+              {String(record.originMonth).padStart(2, '0')}/{record.originYear}
             </span>
           )}
         </p>
@@ -352,14 +360,45 @@ function RecordCard({
           <span style={{ fontSize: 11, color: t.text.muted, whiteSpace: 'nowrap' }}>
             {formatShortDate(record.date)}
           </span>
+          {record.creditCardId && (
+            <span
+              title={`Pago no cartão ${getCardName(record.creditCardId)}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 3,
+                fontSize: 10,
+                fontWeight: 700,
+                padding: '2px 7px',
+                borderRadius: 999,
+                background: 'rgba(99,102,241,0.12)',
+                color: isDark ? '#a5b4fc' : '#4338ca',
+                border: '1px solid rgba(99,102,241,0.15)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <CreditCard size={10} />
+              {getCardName(record.creditCardId)}
+            </span>
+          )}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
           <StatusBadge
             status={record.status || 'PENDING'}
             onChange={(s) => onStatusChange(record.id, s)}
-            onPartialPayment={record.originalType === 'expense' ? () => onPartialPayment?.(record) : undefined}
-            disabled={updateLoading || record.originalType !== 'expense'}
+            onPartialPayment={
+              record.originalType === 'expense' && !record.creditCardId
+                ? () => onPartialPayment?.(record)
+                : undefined
+            }
+            disabled={
+              updateLoading ||
+              record.originalType !== 'expense' ||
+              // Parcela: já nasce paga, não muda por aqui. Fatura
+              // (creditCardInvoiceId): pode ser marcada como paga.
+              !!record.purchaseId
+            }
           />
           <span
             style={{
@@ -416,6 +455,7 @@ function RecordCard({
 interface Props {
   records: UnifiedRecord[];
   getPersonName: (id: string) => string;
+  getCardName?: (id?: string | null) => string;
   onDelete: (r: UnifiedRecord) => void;
   deleteLoading: boolean;
   onStatusChange: (id: string, status: RecordStatus) => void;
@@ -426,6 +466,7 @@ interface Props {
 export function MobileRecordsList({
   records,
   getPersonName,
+  getCardName = () => 'Cartão',
   onDelete,
   deleteLoading,
   onStatusChange,
@@ -491,6 +532,7 @@ export function MobileRecordsList({
                 key={record.id}
                 record={record}
                 getPersonName={getPersonName}
+                getCardName={getCardName}
                 onDelete={onDelete}
                 deleteLoading={deleteLoading}
                 onStatusChange={onStatusChange}

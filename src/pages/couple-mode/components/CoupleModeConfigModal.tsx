@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Settings2, Users } from 'lucide-react';
+import { Settings2, Users, AlertTriangle } from 'lucide-react';
 import { useSaveCoupleModeConfig } from '../hooks/useCoupleMode';
 import { CoupleModeConfig, SplitType } from '../types/couple-mode.types';
 import { FamilyMember } from '@/pages/families/types/family.types';
@@ -230,8 +230,9 @@ export function CoupleModeConfigModal({
               })}
             </div>
             {incomesMissing && (
-              <p className="text-xs text-amber-600 mt-2">
-                ⚠️ Preencha a renda de todos os participantes para usar a divisão proporcional.
+              <p className="text-xs text-amber-600 mt-2 flex items-center gap-1">
+                <AlertTriangle size={12} />
+                Preencha a renda de todos os participantes para usar a divisão proporcional.
               </p>
             )}
           </div>

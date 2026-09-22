@@ -3,11 +3,17 @@ import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { DatePicker } from '@/components/ui/DatePicker';
 import { CurrencyInput } from '@/components/ui/CurrencyInput';
-import { Tag } from 'lucide-react';
+import { Tag, Wallet, Sparkles } from 'lucide-react';
 import { useTokens } from '@/hooks/useTokens';
 import _ from 'lodash';
 
-export function RecordDetailsForm({ categories }: { categories: any[] }) {
+export function RecordDetailsForm({
+  categories,
+  financialsDisabled,
+}: {
+  categories: any[];
+  financialsDisabled?: boolean;
+}) {
   const { register, setValue, formState, control } = useFormContext();
   const type = useWatch({ name: 'type' });
   const categoryId = useWatch({ name: 'categoryId' });
@@ -45,6 +51,7 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
               placeholder="0,00"
               value={field.value}
               onChange={field.onChange}
+              disabled={financialsDisabled}
               error={formState.errors.value?.message as string}
               icon={
                 <span
@@ -92,8 +99,18 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
           </div>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ fontSize: 12, color: t.text.muted, textAlign: 'center' }}>
-              {type === 'salary' ? '💰 Sem categoria' : '✨ Sem categoria'}
+            <p
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+                fontSize: 12,
+                color: t.text.muted,
+                textAlign: 'center',
+              }}
+            >
+              {type === 'salary' ? <Wallet size={13} /> : <Sparkles size={13} />}
+              Sem categoria
             </p>
           </div>
         )}
@@ -106,6 +123,7 @@ export function RecordDetailsForm({ categories }: { categories: any[] }) {
               label="Data"
               value={field.value}
               onChange={field.onChange}
+              disabled={financialsDisabled}
               error={formState.errors.date?.message as string}
             />
           )}
